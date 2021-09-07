@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/imgTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/hospital" />
+
+    <TextView
+        android:id="@+id/tvID"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="@string/Equ_num"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:id="@+id/spID"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="@string/equ_inform"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:id="@+id/tvuuid"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvrssi"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+        <TextView
+            android:id="@+id/tvmajor"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+        <TextView
+            android:id="@+id/tvminor"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetLeft="60dp"
+            android:text="@string/swt" />
+
+        <Button
+            android:id="@+id/btMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetLeft="140dp"
+            android:text="@string/map" />
+    </LinearLayout>>
+
+</LinearLayout>
