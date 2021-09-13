@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/imgTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="242dp"
         app:srcCompat="@drawable/hospital" />
 
     <TextView
@@ -47,17 +47,68 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvrssi"
+            android:id="@+id/tvrssi_1"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="0.25" />
+
+        <TextView
+            android:id="@+id/tvrssi_2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+
+        <TextView
+            android:id="@+id/tvrssi_3"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/distance_1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+
+        <TextView
+            android:id="@+id/distance_2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+
+        <TextView
+            android:id="@+id/distance_3"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/tvmajor"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="0.25" />
+
         <TextView
             android:id="@+id/tvminor"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.25" />
+
+        <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="0.25" />
