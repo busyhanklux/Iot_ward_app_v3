@@ -105,11 +105,21 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View v){
                 //RSSI判定
+                //規則1：基礎版本，rssi值越大，就接近於哪個esp32(尚未建構=)
                 try{
                     int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
                     int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
                     int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
-                    conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
+                    //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
+                    if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                        conclude.setText("你要找的beacon靠近第一個esp32");
+                    }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                        conclude.setText("你要找的beacon靠近第二個esp32");
+                    }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                        conclude.setText("你要找的beacon靠近第三個esp32");
+                    }else{
+                        conclude.setText("資料有誤，或是未建構這項規則");
+                    }
                 }catch(Exception RSSI_not_found){
                     conclude.setText("這是一條找不到的測試用訊息");
 
@@ -195,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (Exception RSSI_not_found) {
                         tvrssi_1.setText("RSSI找不到，請再試一次");
+                        invisible_rssi_1.setText("-150");
                     }}
                 @Override
                 public void onCancelled(DatabaseError error) {
@@ -212,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (Exception RSSI_not_found) {
                         tvrssi_2.setText("RSSI找不到，請再試一次");
-
+                        invisible_rssi_2.setText("-150");
                     }}
 
                 @Override
@@ -232,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (Exception RSSI_not_found) {
                         tvrssi_3.setText("RSSI找不到，請再試一次");
+                        invisible_rssi_3.setText("-150");
                     }}
 
                 @Override
