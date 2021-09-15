@@ -22,11 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvID,tvResult,tvuuid,tvrssi_1,tvrssi_2,tvrssi_3,distance_1,distance_2,distance_3,tvmajor,tvminor,tv_time;
+    private TextView tvID,tvResult,tvuuid,tvrssi_1,tvrssi_2,tvrssi_3,distance_1,distance_2,distance_3,tvmajor,tvminor;
+    private TextView tv_time_1,tv_time_2,tv_time_3,invisible_rssi_1,invisible_rssi_2,invisible_rssi_3,conclude;
     private Spinner spID;
     private ImageView imgTitle;
     private Button btMap,btStatus;
@@ -78,7 +78,17 @@ public class MainActivity extends AppCompatActivity {
         tvminor = (TextView)findViewById(R.id.tvminor);
 
         //顯示time
-        tv_time = (TextView)findViewById(R.id.time);
+        tv_time_1 = (TextView)findViewById(R.id.time_1);
+        tv_time_2 = (TextView)findViewById(R.id.time_2);
+        tv_time_3 = (TextView)findViewById(R.id.time_3);
+
+        //文字的位置判定
+        conclude = (TextView)findViewById(R.id.conclude);
+
+        //純粹放數字用的，別理他
+        invisible_rssi_1 = (TextView)findViewById(R.id.invisible_rssi_1);
+        invisible_rssi_2 = (TextView)findViewById(R.id.invisible_rssi_2);
+        invisible_rssi_3 = (TextView)findViewById(R.id.invisible_rssi_3);
 
         //Spinner
         ArrayAdapter<String> adapternumber = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,number);
@@ -86,40 +96,26 @@ public class MainActivity extends AppCompatActivity {
         spID.setAdapter(adapternumber);    //設定資料來源
         spID.setOnItemSelectedListener(spIDListener);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        //命名 myRef 的 DatabaseReference。路徑，child為路徑的分支
-        //DatabaseReference esp32_no1_RSSI = database.getReference("esp32 no_0").child(spID.toString()).child("RSSI");
-
-        //測試用，寫資料至資料庫
-        //myRef.setValue("-35");
-
-        // Read from the database(從資料庫讀資料)
-
-        //使用 myRef 的 DatabaseReference
-        /*
-        esp32_no1_RSSI.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                //注意資料型態、注意資料型態、注意資料型態，不然會崩潰
-
-                //String value = dataSnapshot.getValue(String.class);
-                double num = dataSnapshot.getValue(double.class); //distance用浮點數(也可以用double)
-                //Log.d("TAG", "Value is: " + value);
-                Log.d("TAG", "Value is: " + num);
-                tvrssi_1.setText(Double.toString(num));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("TAG", "Failed to read value.", error.toException());
-                }
-            })*/;
+        //button
+        btStatus = (Button)findViewById(R.id.btStatus);
+        btStatus.setOnClickListener(btStatusListener);
         }
+
+        private  View.OnClickListener btStatusListener = new View.OnClickListener()
+        {
+            public void onClick(View v){
+                //RSSI判定
+                try{
+                    int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
+                    int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
+                    int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
+                    conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
+                }catch(Exception RSSI_not_found){
+                    conclude.setText("這是一條找不到的測試用訊息");
+
+                }
+            }
+        };
 
     private Spinner.OnItemSelectedListener spIDListener = new Spinner.OnItemSelectedListener(){
         @Override
@@ -186,12 +182,17 @@ public class MainActivity extends AppCompatActivity {
             });
 */
             //顯示RSSI(有三個)
+
             esp32_no1_RSSI.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot){
                     try {
                         Integer rssi1 = dataSnapshot.getValue(Integer.class);
-                        tvrssi_1.setText("RSSI: " + rssi1.toString());
+
+                        invisible_rssi_1.setText(rssi1.toString());
+                        //tvrssi_1.setText("RSSI: " + rssi1.toString());
+                        tvrssi_1.setText(rssi1.toString());
+
                     } catch (Exception RSSI_not_found) {
                         tvrssi_1.setText("RSSI找不到，請再試一次");
                     }}
@@ -201,14 +202,19 @@ public class MainActivity extends AppCompatActivity {
                 }});
 
             esp32_no2_RSSI.addValueEventListener(new ValueEventListener() {
-                @Override
                 public void onDataChange(DataSnapshot dataSnapshot){
                     try {
                         Integer rssi2 = dataSnapshot.getValue(Integer.class);
-                        tvrssi_2.setText("RSSI: " + rssi2.toString());
+
+                        invisible_rssi_2.setText(rssi2.toString());
+                        //tvrssi_2.setText("RSSI: " + rssi2.toString());
+                        tvrssi_2.setText(rssi2.toString());
+
                     } catch (Exception RSSI_not_found) {
                         tvrssi_2.setText("RSSI找不到，請再試一次");
+
                     }}
+
                 @Override
                 public void onCancelled(DatabaseError error) {
                     Log.w(TAG, "Failed to read value.", error.toException());
@@ -219,7 +225,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot){
                     try {
                         Integer rssi3 = dataSnapshot.getValue(Integer.class);
-                        tvrssi_3.setText("RSSI: " + rssi3.toString());
+
+                        invisible_rssi_3.setText(rssi3.toString());
+                        //tvrssi_3.setText("RSSI: " + rssi3.toString());
+                        tvrssi_3.setText(rssi3.toString());
+
                     } catch (Exception RSSI_not_found) {
                         tvrssi_3.setText("RSSI找不到，請再試一次");
                     }}
@@ -228,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError error) {
                     Log.w(TAG, "Failed to read value.", error.toException());
                 }});
+
+
 
             //顯示距離
             esp32_no1_distance.addValueEventListener(new ValueEventListener() {
@@ -283,10 +295,10 @@ public class MainActivity extends AppCompatActivity {
                         long time_switech = Long.valueOf(time)*1000;// its need to be in milisecond
                         Date day_month_year = new Date(time_switech);
                         String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                        tv_time.setText("組1偵測時間: \n" + format);
 
+                        tv_time_1.setText("組1偵測時間: \n" + format);
                     } catch (Exception time_not_found) {
-                        tv_time.setText("時間找不到，請再試一次");
+                        tv_time_1.setText("組1時間找不到，請再試一次");
                     }}
                 @Override
                 public void onCancelled(DatabaseError error) {
@@ -302,11 +314,9 @@ public class MainActivity extends AppCompatActivity {
                         Date day_month_year = new Date(time_switech);
                         String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
 
-                        String storing_string = (String) tv_time.getText();
-                        tv_time.setText(storing_string +"\n組2偵測時間: \n" + format);
-
+                        tv_time_2.setText("組2偵測時間: \n" + format);
                     } catch (Exception time_not_found) {
-                        tv_time.setText("時間找不到，請再試一次");
+                        tv_time_2.setText("組2時間找不到，請再試一次");
                     }}
                 @Override
                 public void onCancelled(DatabaseError error) {
@@ -322,11 +332,10 @@ public class MainActivity extends AppCompatActivity {
                         Date day_month_year = new Date(time_switech);
                         String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
 
-                        String storing_string = (String) tv_time.getText();
-                        tv_time.setText(storing_string +"\n組3偵測時間: \n" + format);
+                        tv_time_3.setText("組3偵測時間: \n" + format);
 
                     } catch (Exception time_not_found) {
-                        tv_time.setText("時間找不到，請再試一次");
+                        tv_time_3.setText("組3時間找不到，請再試一次");
                     }}
                 @Override
                 public void onCancelled(DatabaseError error) {
@@ -341,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
                         Integer major = dataSnapshot.getValue(Integer.class);
                         tvmajor.setText("Major : " + major.toString());
                     }catch (Exception RSSI_not_found) {
-                        tvmajor.setText("Major找不到，請再試一次");
+                        tvmajor.setText("Major找不到，\n請再試一次");
                     }}
                 @Override
                 public void onCancelled(DatabaseError error) {
@@ -357,20 +366,23 @@ public class MainActivity extends AppCompatActivity {
                         Integer minor = dataSnapshot.getValue(Integer.class);
                         tvminor.setText("Minor : " + minor.toString());
                     }catch (Exception RSSI_not_found) {
-                        tvminor.setText("Minor找不到，請再試一次");
+                        tvminor.setText("Minor找不到，\n請再試一次");
                     }}
                 @Override
                 public void onCancelled(DatabaseError error) {
                     Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
+                }});
+
+
 
         }
         @Override
         public void onNothingSelected(AdapterView<?>parent){
-
         }
     };
+
+
+
     /*
     myRef.addValueEventListener(new ValueEventListener() {
         @Override
