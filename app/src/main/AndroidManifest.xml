@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Iot_ward_app_v3">
         <activity
+            android:name=".Map"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -99,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         //button
         btStatus = (Button)findViewById(R.id.btStatus);
         btStatus.setOnClickListener(btStatusListener);
+        btMap = (Button)findViewById(R.id.btMap);
+        btMap.setOnClickListener(btMapListener);
         }
 
         private  View.OnClickListener btStatusListener = new View.OnClickListener()
@@ -126,6 +130,45 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+    private  View.OnClickListener btMapListener = new View.OnClickListener()
+    {
+        public void onClick(View v){
+
+            try{
+
+                int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
+                int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
+                int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
+                /*
+                //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
+                if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                    conclude.setText("你要找的beacon靠近第一個esp32");
+                }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                    conclude.setText("你要找的beacon靠近第二個esp32");
+                }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                    conclude.setText("你要找的beacon靠近第三個esp32");
+                }else{
+                    conclude.setText("資料有誤，或是未建構這項規則");
+                }*/
+
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putInt("rssi_1",rssi_1);
+                bundle.putInt("rssi_2",rssi_2);
+                bundle.putInt("rssi_3",rssi_3);
+
+                intent.setClass(MainActivity.this,Map.class);
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }catch(Exception RSSI_not_found){
+                Toast error = Toast.makeText(MainActivity.this,"資料有誤",Toast.LENGTH_SHORT);
+                error.show();
+            }
+        }
+    };
 
     private Spinner.OnItemSelectedListener spIDListener = new Spinner.OnItemSelectedListener(){
         @Override
