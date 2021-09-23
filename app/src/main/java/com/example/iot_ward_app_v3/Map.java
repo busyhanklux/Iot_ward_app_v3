@@ -35,6 +35,8 @@ public class Map extends AppCompatActivity {
 
             //利用判斷規則決定原點的位置
             //版本1：套用規則一
+            //規則一：純粹的比rssi哪個為最小，它就是最靠近的
+            //規則二：延伸規則一，套用但出現兩者rssi相同之情形
             if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
                 Toast test = Toast.makeText(Map.this,"第一個esp32",Toast.LENGTH_SHORT);
                 test.show();

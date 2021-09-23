@@ -108,19 +108,33 @@ public class MainActivity extends AppCompatActivity {
         private  View.OnClickListener btStatusListener = new View.OnClickListener()
         {
             public void onClick(View v){
-                //RSSI判定
-                //規則1：基礎版本，rssi值越大，就接近於哪個esp32(尚未建構=)
+                //RSSI判定(版本2，規則一和二)
+                //規則一：純粹的比rssi哪個為最小，它就是最靠近的
+                //規則二：延伸規則一，但出現兩者rssi相同之情形(兩者相同距為遠方)
+                //規則三：延伸規則二，但出現兩者rssi相同之情形(兩者相同距為近方)
                 try{
                     int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
                     int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
                     int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
                     //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
                     if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                        conclude.setText("你要找的beacon靠近第一個esp32");
+                        if((rssi_2 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                            conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相等");
+                        }else{
+                            conclude.setText("你要找的beacon靠近第一個esp32");
+                        }
                     }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                        conclude.setText("你要找的beacon靠近第二個esp32");
+                        if((rssi_1 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                            conclude.setText("你要找的beacon靠近第二個esp32，但離第一與第三的距離相等");
+                        }else {
+                            conclude.setText("你要找的beacon靠近第二個esp32");
+                        }
                     }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                        conclude.setText("你要找的beacon靠近第三個esp32");
+                        if((rssi_1 == rssi_2)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                            conclude.setText("你要找的beacon靠近第三個esp32，但離第一與第二的距離相等");
+                        }else {
+                            conclude.setText("你要找的beacon靠近第三個esp32");
+                        }
                     }else{
                         conclude.setText("資料有誤，或是未建構這項規則");
                     }
