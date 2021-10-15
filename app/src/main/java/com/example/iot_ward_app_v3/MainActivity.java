@@ -484,11 +484,32 @@ public class MainActivity extends AppCompatActivity {
             String pos_B = (String) tvuuid.getText();
 
             try {
-                String S_tvrssi = (String) tvrssi_1.getText(); //rssi
-                String S_distance = (String) distance_1.getText(); //距離
-                String S_time = (String)  tv_time_1.getText(); //時間
+                String condition = (String) sw_number.getText();
+                switch (condition){
+                    case "0":
+                    String S_tvrssi_1 = (String) tvrssi_1.getText(); //rssi
+                    String S_distance_1 = (String) distance_1.getText(); //距離
+                    String S_time_1 = (String)  tv_time_1.getText(); //時間
 
-                detail.setText("RSSI："+S_tvrssi + "，"+ S_distance + " " + "\n" + tvmajor.getText() + "，" + tvminor.getText()  + S_time  );
+                    detail.setText("RSSI："+S_tvrssi_1 + "，"+ S_distance_1 + " " + "\n" + tvmajor.getText() + "，" + tvminor.getText()  + S_time_1  );
+                    break;
+
+                    case "1":
+                    String S_tvrssi_2 = (String) tvrssi_2.getText(); //rssi
+                    String S_distance_2 = (String) distance_2.getText(); //距離
+                    String S_time_2 = (String)  tv_time_2.getText(); //時間
+
+                    detail.setText("RSSI："+S_tvrssi_2 + "，"+ S_distance_2 + " " + "\n" + tvmajor.getText() + "，" + tvminor.getText()  + S_time_2  );
+                    break;
+
+                    case "2":
+                    String S_tvrssi_3 = (String) tvrssi_3.getText(); //rssi
+                    String S_distance_3 = (String) distance_3.getText(); //距離
+                    String S_time_3 = (String)  tv_time_3.getText(); //時間
+
+                    detail.setText("RSSI："+S_tvrssi_3 + "，"+ S_distance_3 + " " + "\n" + tvmajor.getText() + "，" + tvminor.getText()  + S_time_3  );
+                    break;
+                }
             } catch (Exception RSSI_not_found) {
                 detail.setText("資料有誤");
             }}};
