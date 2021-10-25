@@ -651,4 +651,4 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-//來源https://mnya.tw/cc/word/1495.html
+//firebase讀取來源https://mnya.tw/cc/word/1495.html
