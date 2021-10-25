@@ -25,7 +25,31 @@
         android:id="@+id/spID"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/Input_major"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_weight="0.25"
+            android:ems="10"
+            android:hint="請輸入編號(目前版本為1~16)"
+            android:inputType="number"
+            android:textDirection="ltr" />
+
+        <Button
+            android:id="@+id/find_major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:text="查找beacon" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvResult"
@@ -36,14 +60,14 @@
 
 
     <TextView
-        android:id="@+id/tvuuid"
+        android:id="@+id/EI_tv"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:orientation="horizontal">
 
         <Spinner
@@ -79,7 +103,7 @@
 
         <Button
             android:id="@+id/esp32_switch"
-            android:layout_width="130dp"
+            android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layoutDirection="rtl"
             android:text="切換esp32"
@@ -113,31 +137,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="invisible"
+        android:visibility="gone"
         tools:visibility="gone">
 
         <TextView
             android:id="@+id/distance_1"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="1dp"
             android:layout_weight="0.25"
-            android:visibility="invisible"
+            android:visibility="gone"
             tools:visibility="gone" />
 
         <TextView
             android:id="@+id/distance_2"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="1dp"
             android:layout_weight="0.25"
-            android:visibility="invisible"
+            android:visibility="gone"
             tools:visibility="gone" />
 
         <TextView
             android:id="@+id/distance_3"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="1dp"
             android:layout_weight="0.25"
-            android:visibility="invisible"
+            android:visibility="gone"
             tools:visibility="gone" />
     </LinearLayout>
 
@@ -152,7 +176,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:scrollbars="none"
-            android:text="請先選擇要查詢的beacon"
+            android:text="請先輸入要查詢的beacon編號"
             android:textAlignment="center"
             android:textDirection="ltr"
             android:textSize="20sp" />
@@ -162,22 +186,48 @@
             android:layout_height="match_parent"
             android:layout_weight="0.15"
             android:orientation="vertical"
-            android:visibility="invisible"
+            android:visibility="gone"
             tools:visibility="gone">
 
             <TextView
-                android:id="@+id/tvmajor"
+                android:id="@+id/tvmajor1"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="0.15"
                 android:visibility="invisible"
                 tools:visibility="gone" />
 
             <TextView
-                android:id="@+id/tvminor"
+                android:id="@+id/tvmajor2"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="0.15"
+                android:visibility="invisible"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvmajor3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="invisible"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvminor1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="invisible"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvminor2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="invisible"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvminor3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:visibility="invisible"
                 tools:visibility="gone" />
         </LinearLayout>
@@ -191,27 +241,45 @@
             tools:visibility="gone">
 
             <TextView
+                android:id="@+id/time_check_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/time_check_2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/time_check_3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                tools:visibility="gone" />
+
+            <TextView
                 android:id="@+id/time_1"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="0.5"
-                android:visibility="invisible"
+                android:visibility="gone"
                 tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/time_2"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="0.5"
-                android:visibility="invisible"
+                android:visibility="gone"
                 tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/time_3"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="0.5"
-                android:visibility="invisible"
+                android:layout_height="1dp"
+                android:visibility="gone"
                 tools:visibility="gone" />
         </LinearLayout>
 
