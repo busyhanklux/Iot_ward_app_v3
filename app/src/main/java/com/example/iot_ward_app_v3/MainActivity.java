@@ -584,9 +584,8 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putInt("rssi_2",rssi_2);
                 bundle.putInt("rssi_3",rssi_3);
 
-                intent.setClass(MainActivity.this,Map.class);
-
                 intent.putExtras(bundle);
+                intent.setClass(MainActivity.this,Map.class);
                 startActivity(intent);
 
             }catch(Exception RSSI_not_found){
