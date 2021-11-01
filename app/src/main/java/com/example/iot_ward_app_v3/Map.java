@@ -28,6 +28,7 @@ public class Map extends AppCompatActivity {
     private RadioGroup  select_door;
     private Button pre_display;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
