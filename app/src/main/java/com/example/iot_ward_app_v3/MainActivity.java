@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     int select_major = Integer.parseInt(String.valueOf(Input_major.getText()));
                     if((select_major > 0)&(select_major < 20)){
                         //搜尋有沒有該major，沒有就換找下一個
-                            DatabaseReference major1 = database_get.getReference("esp32 no_0").child(String.valueOf(select_major)).child("Major");
+                            DatabaseReference major1 = database_get.getReference("esp32 no_1").child(String.valueOf(select_major)).child("Major");
                             major1.addValueEventListener(new ValueEventListener() {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                                         try { throw new Exception(); }
                                         catch (Exception major_esp1_notfound) {
 
-                                            DatabaseReference major2 = database_get.getReference("esp32 no_1").child(String.valueOf(select_major)).child("Major");
+                                            DatabaseReference major2 = database_get.getReference("esp32 no_2").child(String.valueOf(select_major)).child("Major");
                                             major2.addValueEventListener(new ValueEventListener() {
                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                                         try { throw new Exception(); }
                                                         catch (Exception major_esp2_notfound) {
 
-                                                            DatabaseReference major3 = database_get.getReference("esp32 no_2").child(String.valueOf(select_major)).child("Major");
+                                                            DatabaseReference major3 = database_get.getReference("esp32 no_3").child(String.valueOf(select_major)).child("Major");
                                                             major3.addValueEventListener(new ValueEventListener() {
                                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -167,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
                                 public void onCancelled(DatabaseError error) { }});
 
                         FirebaseDatabase database_sw = FirebaseDatabase.getInstance();
-                        DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_0").child((Input_major.getText()).toString()).child("RSSI");
-                        DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_1").child((Input_major.getText()).toString()).child("RSSI");
-                        DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_2").child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_1").child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_2").child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_3").child((Input_major.getText()).toString()).child("RSSI");
 
                         esp32_no1_RSSI.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -262,12 +262,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
-                        DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_0").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no3_unix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no1_unix_fix = database_sw.getReference("esp32 no_0").child(String.valueOf(Input_major.getText())).child("time");
-                        DatabaseReference esp32_no2_unix_fix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("time");
-                        DatabaseReference esp32_no3_unix_fix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
+                        DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
+                        DatabaseReference esp32_no3_unix = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
+                        DatabaseReference esp32_no1_unix_fix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no2_unix_fix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no3_unix_fix = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("time");
 
                         esp32_no1_unix.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -378,12 +378,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
-                        DatabaseReference esp32_no1_minor = database_sw.getReference("esp32 no_0").child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no2_minor = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no3_minor = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no1_major = database_sw.getReference("esp32 no_0").child(String.valueOf(Input_major.getText())).child("Major");
-                        DatabaseReference esp32_no2_major = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("Major");
-                        DatabaseReference esp32_no3_major = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no1_minor = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("Minor");
+                        DatabaseReference esp32_no2_minor = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("Minor");
+                        DatabaseReference esp32_no3_minor = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("Minor");
+                        DatabaseReference esp32_no1_major = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no2_major = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no3_major = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("Major");
 
                         //major
                         esp32_no1_major.addValueEventListener(new ValueEventListener() {

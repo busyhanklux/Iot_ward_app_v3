@@ -8,15 +8,16 @@
     tools:context=".Map">
 
 
-    <ImageView
-        android:id="@+id/pre_place"
-        android:layout_width="397dp"
-        android:layout_height="288dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+    <LinearLayout
+        android:id="@+id/draw_pic"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/place_ask" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/back"
@@ -25,7 +26,7 @@
         android:text="返回首頁"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.85" />
@@ -34,11 +35,10 @@
         android:id="@+id/linearLayout"
         android:layout_width="409dp"
         android:layout_height="130dp"
-        android:layout_marginTop="6dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pre_place">
+        app:layout_constraintTop_toBottomOf="@+id/draw_pic">
 
         <TextView
             android:id="@+id/choice_place"
@@ -80,30 +80,6 @@
 
         </RadioGroup>
 
-        <TextView
-            android:id="@+id/door_keep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="409dp"
-            android:layout_marginRight="409dp"
-            android:layout_marginBottom="130dp"
-            android:text="TextView"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/rule_keep"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
     </LinearLayout>
 
     <Button
@@ -113,7 +89,7 @@
         android:text="展示"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.85" />
