@@ -84,6 +84,8 @@ public class Map extends AppCompatActivity {
                 rule = 3;
             }else{
                 //test1.setText("沒有這東西");
+                rule_keep.setText("0");
+                rule = 0;
             }
 
 
@@ -167,10 +169,8 @@ public class Map extends AppCompatActivity {
             int door2 = Integer.parseInt((String) door_keep.getText());
             bundle2.putInt("door2",door2);
 
-            /*
-            rule = Integer.parseInt((String) rule_keep.getText());
-            bundle2.putInt("rule",rule);
-             */
+            int rule2 = Integer.parseInt((String) rule_keep.getText());
+            bundle2.putInt("rule2",rule2);
 
             intent_2.putExtras(bundle2);
 

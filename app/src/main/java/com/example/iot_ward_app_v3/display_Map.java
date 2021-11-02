@@ -32,8 +32,8 @@ public class display_Map extends AppCompatActivity {
         door_number = (TextView)findViewById(R.id.door_number);
         door_number.setText(String.valueOf(door));
 
-        rule = bundle2.getInt("rule");
-        Toast test = Toast.makeText(display_Map.this,door2+""+rule,Toast.LENGTH_SHORT);
+        rule = bundle2.getInt("rule2");
+        Toast test = Toast.makeText(display_Map.this,door+""+rule,Toast.LENGTH_SHORT);
         test.show();
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
