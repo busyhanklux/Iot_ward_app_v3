@@ -511,40 +511,44 @@ public class MainActivity extends AppCompatActivity {
                     Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
 
                     long time_now=System.currentTimeMillis() / 1000; //獲取app系統時間
-                    //Toast time = Toast.makeText(MainActivity.this, ""+time_now,Toast.LENGTH_SHORT);
-                    //time.show();
-                    if((time_now - check1 > 600) || (time_now - check2 > 600) || (time_now - check3 > 600)){
-                        conclude.setText("你要找的beacon，可能不在該範圍一段時間，或著esp32一段時間未啟動");
-                        //Toast overtime = Toast.makeText(MainActivity.this, "超時了",Toast.LENGTH_SHORT);
-                        //overtime.show();
-                    }else{
-                        //Toast overtime = Toast.makeText(MainActivity.this, "還沒過",Toast.LENGTH_SHORT);
-                        //overtime.show();
+
+                    //三個同時7分鐘
+                    if((time_now - check1 > 420) & (time_now - check2 > 420) & (time_now - check3 > 420)){
+                        conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp32同時一段時間未啟動");
+
+                    }else if ((time_now - check1 > 300) & (time_now - check2 > 300)) { //1.2同時五分鐘
+                        conclude.setText("esp裝置一和二未啟動或未偵測到一段時間，因此可能位於第三個esp32附近");
+                    }else if ((time_now - check2 > 300) & (time_now - check3 > 300)) { //2.3同時五分鐘
+                        conclude.setText("esp裝置二和三未啟動或未偵測到一段時間，因此可能位於第一個esp32附近");
+                    }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時五分鐘
+                        conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
+                    }else {
+
                         if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
                             if((rssi_2 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
-                                conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相等");
+                                conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相似");
                             }else{
                                 conclude.setText("你要找的beacon靠近第一個esp32");
                             }
                         }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(2最近)
                             if((rssi_1 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
-                                conclude.setText("你要找的beacon靠近第二個esp32，但離第一與第三的距離相等");
+                                conclude.setText("你要找的beacon靠近第二個esp32，但離第一與第三的距離相似");
                             }else {
                                 conclude.setText("你要找的beacon靠近第二個esp32");
                             }
                         }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { //1(3最近)
                             if ((rssi_1 == rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { //2
-                                conclude.setText("你要找的beacon靠近第三個esp32，但離第一與第二的距離相等");
+                                conclude.setText("你要找的beacon靠近第三個esp32，但離第一與第二的距離相似");
                             } else {
                                 conclude.setText("你要找的beacon靠近第三個esp32");
                             }
                             //此時1,2檢查完畢
                         }else if((rssi_1 < rssi_2) & (rssi_1 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 == rssi_3)){ //3(1最遠)
-                            conclude.setText("你要找的beacon遠離第一個esp32，離第二與第三的距離相等");
+                            conclude.setText("你要找的beacon遠離第一個esp32，離第二與第三的距離相似");
                         }else if((rssi_2 < rssi_1) & (rssi_2 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140) & (rssi_1 == rssi_3)){ //3(2最遠)
-                            conclude.setText("你要找的beacon遠離第二個esp32，離第一與第三的距離相等");
+                            conclude.setText("你要找的beacon遠離第二個esp32，離第一與第三的距離相似");
                         }else if((rssi_3 < rssi_2) & (rssi_3 < rssi_1) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 == rssi_1)){ //3(3最遠)
-                            conclude.setText("你要找的beacon遠離第三個esp32，離第一與第二的距離相等");
+                            conclude.setText("你要找的beacon遠離第三個esp32，離第一與第二的距離相似");
                         }else{
                             conclude.setText("資料有誤，或是未建構這項規則");
                         }
