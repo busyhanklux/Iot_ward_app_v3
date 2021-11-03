@@ -512,18 +512,22 @@ public class MainActivity extends AppCompatActivity {
 
                     long time_now=System.currentTimeMillis() / 1000; //獲取app系統時間
 
-                    //三個同時7分鐘
+                    //三個同時超過7分鐘
                     if((time_now - check1 > 420) & (time_now - check2 > 420) & (time_now - check3 > 420)){
                         conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp32同時一段時間未啟動");
-
-                    }else if ((time_now - check1 > 300) & (time_now - check2 > 300)) { //1.2同時五分鐘
+                    }else if ((time_now - check1 > 300) & (time_now - check2 > 300)) { //1.2同時超過五分鐘
                         conclude.setText("esp裝置一和二未啟動或未偵測到一段時間，因此可能位於第三個esp32附近");
-                    }else if ((time_now - check2 > 300) & (time_now - check3 > 300)) { //2.3同時五分鐘
+                    }else if ((time_now - check2 > 300) & (time_now - check3 > 300)) { //2.3同時超過五分鐘
                         conclude.setText("esp裝置二和三未啟動或未偵測到一段時間，因此可能位於第一個esp32附近");
-                    }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時五分鐘
+                    }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時超過五分鐘
                         conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
+                    }else if (time_now - check1 > 300)  { //只有1超過五分鐘
+                            conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個和第三個esp32附近");
+                    }else if (time_now - check2 > 300)  { //只有2超過五分鐘
+                        conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個和第三個esp32附近");
+                    }else if (time_now - check3 > 300)  { //只有1超過五分鐘
+                        conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個和第二個esp32附近");
                     }else {
-
                         if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
                             if((rssi_2 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
                                 conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相似");
