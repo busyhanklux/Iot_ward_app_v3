@@ -39,7 +39,7 @@
             android:layout_height="48dp"
             android:layout_weight="0.25"
             android:ems="10"
-            android:hint="請輸入編號(目前版本為1~16)"
+            android:hint="請輸入編號(目前版本為1~17)"
             android:inputType="number"
             android:textDirection="ltr" />
 

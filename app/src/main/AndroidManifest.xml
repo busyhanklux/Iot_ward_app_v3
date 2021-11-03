@@ -11,13 +11,16 @@
         android:theme="@style/Theme.Iot_ward_app_v3">
         <activity
             android:name=".display_Map"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/> //保持直的
         <activity
             android:name=".Map"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

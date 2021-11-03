@@ -48,7 +48,6 @@ public class display_Map extends AppCompatActivity {
     public class DrawView extends View {
         public Paint mPaint;
         public Canvas mCanvas;
-        private int rule;
 
         public DrawView(display_Map context) {
             super(context);
@@ -59,8 +58,9 @@ public class display_Map extends AppCompatActivity {
 
             Paint p = new Paint();                            // 創建畫筆
             Paint rect = new Paint(); //畫方形的畫筆
+            Paint circle = new Paint();
 
-            //canvas.drawText(String.valueOf(door), 50, 100, p);        // 寫文字
+            //canvas.drawText("String.valueOf(door)", 50, 100, p);        // 寫文字
 
             // 三角形繪圖
             p.setColor(Color.parseColor("#FF8C00"));
@@ -70,10 +70,10 @@ public class display_Map extends AppCompatActivity {
             //canvas.drawText("三角形：",350,100,p);
 
             Path Room = new Path(); //畫長方
-            Room.moveTo(190, 40);
-            Room.lineTo(610, 40);
-            Room.lineTo(610, 460);
-            Room.lineTo(190, 460);
+            Room.moveTo(190, 40);//左上
+            Room.lineTo(610, 40);//右上
+            Room.lineTo(610, 460);//右下
+            Room.lineTo(190, 460);//左下
             Room.close(); // 使這些點構成封閉的多邊形
             canvas.drawPath(Room, rect);
 
@@ -87,10 +87,25 @@ public class display_Map extends AppCompatActivity {
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
 
-                p.setAntiAlias(true);
-                p.setColor(Color.RED);
-                canvas.drawCircle(500, 750, 20, p);
+                //根據規則有不同的動作
+                //cx,cy為圓的圓心位置
+                if (rule == 1) {
+                    circle.setAntiAlias(true);
+                    circle.setColor(Color.RED);
+                    canvas.drawCircle(300, 100, 20, circle);
+                }
+                if (rule == 2) {
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(500, 150, 20, circle);
+                }
+                if (rule == 3) {
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(500, 400, 20, circle);
+                }
             }
+
             if (door == 2) {//右門
 
                 Path path = new Path();
@@ -101,28 +116,26 @@ public class display_Map extends AppCompatActivity {
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
 
-                p.setAntiAlias(true);
-                p.setColor(Color.RED);
-                canvas.drawCircle(700, 1050, 20, p);
+                //根據規則有不同的動作
+                //cx,cy為圓的圓心位置
+                if (rule == 1) {
+                    circle.setAntiAlias(true);
+                    circle.setColor(Color.RED);
+                    canvas.drawCircle(500, 100, 20, circle);
+                }
+                if (rule == 2) {
+                    circle.setAntiAlias(true);
+                    circle.setColor(Color.RED);
+                    canvas.drawCircle(300, 150, 20, circle);
+                }
+                if (rule == 3) {
+                    circle.setAntiAlias(true);
+                    circle.setColor(Color.RED);
+                    canvas.drawCircle(300, 400, 20, circle);
+                }
             }
 
-            //根據規則有不同的動作
-            //cx,cy為圓的圓心位置
-            if (rule == 1) {
-                p.setAntiAlias(true);
-                p.setColor(Color.RED);
-                canvas.drawCircle(300, 100, 20, p);
-            }
-            if (rule == 2) {
-                p.setAntiAlias(true);
-                p.setColor(Color.RED);
-                canvas.drawCircle(500, 100, 20, p);
-            }
-            if (rule == 3) {
-                p.setAntiAlias(true);
-                p.setColor(Color.RED);
-                canvas.drawCircle(500, 300, 20, p);
-            }
+
         }
     }
 }
