@@ -23,8 +23,9 @@ public class Map extends AppCompatActivity {
 
     //畫板參考https://lowren.pixnet.net/blog/post/92267045
     Button bt_back;
-    int rule,door;
-    private TextView test1,rule_keep,door_keep;
+    int rule,door,select_number;
+    String select_room;
+    private TextView test1,rule_keep,door_keep,remind_text;
     private RadioButton left_door,right_door;
     private RadioGroup  select_door;
     private Button pre_display,display;
@@ -38,6 +39,7 @@ public class Map extends AppCompatActivity {
         test1 = (TextView) findViewById(R.id.choice_place);
         rule_keep = (TextView) findViewById(R.id.rule_keep);
         door_keep = (TextView) findViewById(R.id.door_keep);
+        remind_text = (TextView) findViewById(R.id.remind_text); //提醒訊息
 
         //單選按鈕
         left_door  = (RadioButton)findViewById(R.id.left_door);
@@ -62,6 +64,8 @@ public class Map extends AppCompatActivity {
             int rssi_1 = bundle.getInt("rssi_1");
             int rssi_2 = bundle.getInt("rssi_2");
             int rssi_3 = bundle.getInt("rssi_3");
+            select_number = bundle.getInt("select_number");
+            select_room = bundle.getString("select_room");
 
             //利用判斷規則決定原點的位置
             //版本1：套用規則一
@@ -109,8 +113,9 @@ public class Map extends AppCompatActivity {
             if (checkedId == R.id.left_door){ //左側門
                 door = 1;
                 door_keep.setText("1");
-                Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                test.show();
+                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
+                //test.show();
+                remind_text.setText("提醒訊息：點擊「展示」按鈕，以觀看\n"+select_number+" 號在 "+select_room+" 的情形");
             }
             if (checkedId == R.id.right_door){ //右側門
                 door = 2;

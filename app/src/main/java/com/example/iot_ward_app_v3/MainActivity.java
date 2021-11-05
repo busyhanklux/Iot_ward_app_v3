@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvID,tvResult,tv_ei,tvrssi_1,tvrssi_2,tvrssi_3,distance_1,distance_2,distance_3;
     private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3;
     private TextView tv_time_1,tv_time_2,tv_time_3,invisible_rssi_1,invisible_rssi_2,invisible_rssi_3,conclude;
-    private TextView detail,sw_number,sw_distance,sw_time,sw_room,Input_major;
+    private TextView detail,sw_number,sw_distance,sw_time,sw_room,Input_major,number_decided;
     private Spinner  sp_esp32_choice,beacon_spinner;
     private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         sw_room = (TextView)findViewById(R.id.sw_room);     //放下拉sp_room_choice的選擇
         sw_distance = (TextView)findViewById(R.id.sw_distance);
         sw_time = (TextView)findViewById(R.id.sw_time);
-
+        number_decided = (TextView)findViewById(R.id.number_decided); //1.用來丟入下一頁使用 2.防呆
 
         //設備編號(外觀文字)
         tvID = (TextView)findViewById(R.id.tvID);
@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseDatabase database_get = FirebaseDatabase.getInstance();
                 try {
                     int select_major = Integer.parseInt(String.valueOf(Input_major.getText()));
+                    number_decided.setText(Input_major.getText());
+
                     if((select_major > 0)&(select_major < 20)){
                         //搜尋有沒有該major，沒有就換找下一個
                             DatabaseReference major1 = database_get.getReference("esp32 no_1").child(String.valueOf(select_major)).child("Major");
@@ -239,9 +241,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { Log.w(TAG, "Failed to read value.", error.toException()); }
                         });
                         esp32_no3_RSSI.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -269,10 +269,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
-                        });
+                            public void onCancelled(DatabaseError error) { Log.w(TAG, "Failed to read value.", error.toException()); }});
 
                         DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
                         DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
@@ -596,6 +593,10 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
+                int select_number = Integer.parseInt(String.valueOf(number_decided.getText()));
+                bundle.putInt("select_number",select_number);
+                String select_room = String.valueOf(sw_room.getText());
+                bundle.putString("select_room", select_room);
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
                 bundle.putInt("rssi_3",rssi_3);
