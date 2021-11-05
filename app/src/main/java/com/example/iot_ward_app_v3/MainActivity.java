@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvID,tvResult,tv_ei,tvrssi_1,tvrssi_2,tvrssi_3,distance_1,distance_2,distance_3;
     private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3;
     private TextView tv_time_1,tv_time_2,tv_time_3,invisible_rssi_1,invisible_rssi_2,invisible_rssi_3,conclude;
-    private TextView detail,sw_number,sw_distance,sw_time,Input_major;
-    private Spinner  sp_esp32_choice;
+    private TextView detail,sw_number,sw_distance,sw_time,sw_room,Input_major;
+    private Spinner  sp_esp32_choice,beacon_spinner;
     private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
     private TextView time_check1,time_check2,time_check3;
@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
     //下拉式選單
     String[] esp32_num = new String[]{
             "1","2","3"
+    };
+
+    String[] environment_choice = new String[]{
+      "1.大型空間","2.喜樂兒產房","3.ICU"
     };
 
     @Override
@@ -58,12 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
         //下拉式選單
         sp_esp32_choice = (Spinner)findViewById(R.id.sp_esp32_choice); //選擇該esp32的哪一個
+        beacon_spinner  = (Spinner)findViewById(R.id.environment_choice); //選擇環境
 
         //細節(外觀文字)
         detail = (TextView)findViewById(R.id.detail);
         sw_number = (TextView)findViewById(R.id.sw_number); //放下拉sp_esp32_choice的選擇
+        sw_room = (TextView)findViewById(R.id.sw_room);     //放下拉sp_room_choice的選擇
         sw_distance = (TextView)findViewById(R.id.sw_distance);
         sw_time = (TextView)findViewById(R.id.sw_time);
+
 
         //設備編號(外觀文字)
         tvID = (TextView)findViewById(R.id.tvID);
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         tvResult = (TextView)findViewById(R.id.tvResult);
 
         //顯示要尋找的beacon的uuid值
-        tv_ei = (TextView)findViewById(R.id.EI_tv);
+        tv_ei = (TextView)findViewById(R.id.equipment_information_tv);
 
         //顯示三個esp32的RSSI值
         tvrssi_1 = (TextView)findViewById(R.id.tvrssi_1);
@@ -108,11 +115,16 @@ public class MainActivity extends AppCompatActivity {
         invisible_rssi_2 = (TextView)findViewById(R.id.invisible_rssi_2);
         invisible_rssi_3 = (TextView)findViewById(R.id.invisible_rssi_3);
 
-        //Spinner
+        //Spinner(sp_esp32_choice)
         ArrayAdapter<String> adapternumber2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,esp32_num);
         adapternumber2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_esp32_choice.setAdapter(adapternumber2);    //設定資料來源
         sp_esp32_choice.setOnItemSelectedListener(sp_esp32_choice_Listener);
+        //Spinner(environment_choice)
+        ArrayAdapter<String> adapternumber_environment_choice = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,environment_choice);
+        adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
+        beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
 
         //button
         btStatus = (Button)findViewById(R.id.btStatus);
@@ -501,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
                 //規則一：純粹的比rssi哪個為最小，它就是最靠近的
                 //規則二：延伸規則1，但出現兩者rssi相同之情形(兩者相同距為遠方)
                 //規則三：出現兩者rssi相同之情形(兩者相同距為近方)，如果不符合一二，執行之
-                //條件一：設定10分鐘，如果其中一個時間超過該值，那就代表它不在該位或未啟動
+                //條件一：三個同時7分內，或其中兩個5分內
                 try{
                     int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
                     int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
@@ -561,16 +573,12 @@ public class MainActivity extends AppCompatActivity {
                 }catch(Exception RSSI_not_found){
                     conclude.setText("這是一條找不到的測試用訊息");
 
-                }
-            }
-        };
+                }}};
 
-    private  View.OnClickListener btMapListener = new View.OnClickListener()
-    {
+    //按下按鈕，跳轉至第二頁
+    private  View.OnClickListener btMapListener = new View.OnClickListener() {
         public void onClick(View v){
-
             try{
-
                 int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
                 int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
                 int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
@@ -595,24 +603,42 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 intent.setClass(MainActivity.this,Map.class);
                 startActivity(intent);
+                finish();
 
             }catch(Exception RSSI_not_found){
-                Toast error = Toast.makeText(MainActivity.this,"資料有誤",Toast.LENGTH_SHORT);
+                Toast error = Toast.makeText(MainActivity.this,"請先在上方輸入編號",Toast.LENGTH_SHORT);
                 error.show();
             }
         }
     };
+
+    //選擇第幾個esp32的資料
     Spinner.OnItemSelectedListener sp_esp32_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String pos_A_2 = String.valueOf(position);
             sw_number.setText(pos_A_2);
-            String pos_B = parent.getItemAtPosition(position).toString();
-            String Input = (Input_major.getText()).toString();
-
+            //String pos_B = parent.getItemAtPosition(position).toString();
+            //String Input = (Input_major.getText()).toString();
         }
         @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }};
+        public void onNothingSelected(AdapterView<?> parent) { }};
+
+    //選擇哪個環境
+    Spinner.OnItemSelectedListener environment_choice_Listener = new Spinner.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int position2, long id2) {
+            //String room_place = String.valueOf(position2);
+            String room_place = parent.getItemAtPosition(position2).toString();;
+            //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
+            int Position_string = 1;
+            room_place = room_place.substring(Position_string+1);
+
+            sw_room.setText(room_place);
+            Toast test = Toast.makeText(MainActivity.this,sw_room.getText(),Toast.LENGTH_SHORT);
+            test.show();
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) { }};
+
 
     private View.OnClickListener esp32_switchListener = new View.OnClickListener() {
         public void onClick(View v) {

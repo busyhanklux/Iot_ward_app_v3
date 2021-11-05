@@ -78,7 +78,7 @@ public class MainActivity_old extends AppCompatActivity {
         tvResult = (TextView)findViewById(R.id.tvResult);
 
         //顯示要尋找的beacon的uuid值
-        tvuuid = (TextView)findViewById(R.id.EI_tv);
+        tvuuid = (TextView)findViewById(R.id.equipment_information_tv);
 
         //顯示三個esp32的RSSI值
         tvrssi_1 = (TextView)findViewById(R.id.tvrssi_1);

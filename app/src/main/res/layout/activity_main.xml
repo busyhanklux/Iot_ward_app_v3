@@ -18,7 +18,7 @@
         android:id="@+id/tvID"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:text="@string/Equ_num"
+        android:text="查詢輸入(左為設備編號，右為環境選擇)"
         android:textSize="20sp" />
 
     <Spinner
@@ -35,32 +35,39 @@
 
         <EditText
             android:id="@+id/Input_major"
-            android:layout_width="300dp"
+            android:layout_width="30dp"
             android:layout_height="48dp"
             android:layout_weight="0.25"
             android:ems="10"
-            android:hint="請輸入編號(目前版本為1~17)"
+            android:hint="1~17"
             android:inputType="number"
             android:textDirection="ltr" />
+
+        <Spinner
+            android:id="@+id/environment_choice"
+            android:layout_width="75dp"
+            android:layout_height="48dp"
+            android:layout_weight="0.25"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
             android:id="@+id/find_major"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layoutDirection="rtl"
-            android:text="查找beacon" />
+            android:text="查找" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvResult"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:text="@string/equ_inform"
+        android:text="設備編號資訊"
         android:textSize="20sp" />
 
 
     <TextView
-        android:id="@+id/EI_tv"
+        android:id="@+id/equipment_information_tv"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 
@@ -111,6 +118,13 @@
 
         <TextView
             android:id="@+id/sw_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/sw_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
