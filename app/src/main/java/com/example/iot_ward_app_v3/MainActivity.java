@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
     private TextView time_check1,time_check2,time_check3;
+    int room_choice;
 
     //下拉式選單
     String[] esp32_num = new String[]{
@@ -144,10 +145,14 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     int select_major = Integer.parseInt(String.valueOf(Input_major.getText()));
                     number_decided.setText(Input_major.getText());
+                    //當我選擇環境時，他們的room_choice會被選項跟著改動
+                    int firebase_number_1 = room_choice*3 + 1;
+                    int firebase_number_2 = room_choice*3 + 2;
+                    int firebase_number_3 = room_choice*3 + 3;
 
                     if((select_major > 0)&(select_major < 20)){
                         //搜尋有沒有該major，沒有就換找下一個
-                            DatabaseReference major1 = database_get.getReference("esp32 no_1").child(String.valueOf(select_major)).child("Major");
+                            DatabaseReference major1 = database_get.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("Major");
                             major1.addValueEventListener(new ValueEventListener() {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -156,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                         try { throw new Exception(); }
                                         catch (Exception major_esp1_notfound) {
 
-                                            DatabaseReference major2 = database_get.getReference("esp32 no_2").child(String.valueOf(select_major)).child("Major");
+                                            DatabaseReference major2 = database_get.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("Major");
                                             major2.addValueEventListener(new ValueEventListener() {
                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -165,25 +170,33 @@ public class MainActivity extends AppCompatActivity {
                                                         try { throw new Exception(); }
                                                         catch (Exception major_esp2_notfound) {
 
-                                                            DatabaseReference major3 = database_get.getReference("esp32 no_3").child(String.valueOf(select_major)).child("Major");
+                                                            DatabaseReference major3 = database_get.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("Major");
                                                             major3.addValueEventListener(new ValueEventListener() {
                                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                                     Integer major = dataSnapshot.getValue(Integer.class);
-                                                                    if(major == null){ tv_ei.setText("三個esp32都沒有"+ select_major +"號，請換編號查詢"); }
-                                                                    else{ tv_ei.setText("至少有一個esp32有"+select_major+"號的資料，請接續後續步驟"); }
+                                                                    if(major == null){
+                                                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"這三個esp32都沒有"+ select_major +"號，請換編號查詢");
+                                                                        detail.setText("請重新輸入要查詢的beacon編號");}
+                                                                    else{
+                                                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                                                        detail.setText("查找完畢");}
                                                             }
                                                                 public void onCancelled(DatabaseError error) { }});}
-                                                        }else{ tv_ei.setText("至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                                        }else{
+                                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                                        detail.setText("查找完畢");
                                                     }}
                                                 public void onCancelled(DatabaseError error) { }});
-
-                                                }}else{ tv_ei.setText("至少有一個esp32有"+select_major+"號的資料，請接續後續步驟"); }}
+                                                }}else{
+                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                        detail.setText("查找完畢");
+                                    }}
                                 public void onCancelled(DatabaseError error) { }});
 
                         FirebaseDatabase database_sw = FirebaseDatabase.getInstance();
-                        DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_1").child((Input_major.getText()).toString()).child("RSSI");
-                        DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_2").child((Input_major.getText()).toString()).child("RSSI");
-                        DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_3").child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_" + firebase_number_1).child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_" + firebase_number_2).child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_" + firebase_number_3).child((Input_major.getText()).toString()).child("RSSI");
 
                         esp32_no1_RSSI.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -195,8 +208,20 @@ public class MainActivity extends AppCompatActivity {
                                     //tvrssi_1.setText("RSSI: " + rssi1.toString());
                                     tvrssi_1.setText(rssi1.toString());
 
-                                    double A = 59.00;
-                                    double n = 3.60;
+                                    double A = 0, n = 0;
+                                    if(room_choice == 0) {
+                                        A = 59.00; n = 3.40;
+                                    }
+                                    if(room_choice == 1) {
+                                        A = 65.00; n = 3.40;
+                                    }
+                                    if(room_choice == 2) {
+                                        A = 75.00; n = 3.40;
+                                    }
+                                    Toast test = Toast.makeText(MainActivity.this,A +""+n,Toast.LENGTH_SHORT);
+                                    test.show();
+
+                                    //這個蠻有趣的，這邊0/0 = 無限大
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -271,12 +296,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onCancelled(DatabaseError error) { Log.w(TAG, "Failed to read value.", error.toException()); }});
 
-                        DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no3_unix = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no1_unix_fix = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("time");
-                        DatabaseReference esp32_no2_unix_fix = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("time");
-                        DatabaseReference esp32_no3_unix_fix = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("epochTime_temp");
+                        DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("epochTime_temp");
+                        DatabaseReference esp32_no3_unix = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("epochTime_temp");
+                        DatabaseReference esp32_no1_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no2_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no3_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("time");
 
                         esp32_no1_unix.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -306,8 +331,7 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (Exception time_not_found) {
                                     tv_time_1.setText("\n組1時間找不到，請再試一次");
                                     time_check1.setText(Long.toString(0));
-                                }
-                            }
+                                }}
 
                             @Override
                             public void onCancelled(DatabaseError error) {
@@ -387,12 +411,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
-                        DatabaseReference esp32_no1_minor = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no2_minor = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no3_minor = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no1_major = database_sw.getReference("esp32 no_1").child(String.valueOf(Input_major.getText())).child("Major");
-                        DatabaseReference esp32_no2_major = database_sw.getReference("esp32 no_2").child(String.valueOf(Input_major.getText())).child("Major");
-                        DatabaseReference esp32_no3_major = database_sw.getReference("esp32 no_3").child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no1_minor = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("Minor");
+                        DatabaseReference esp32_no2_minor = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("Minor");
+                        DatabaseReference esp32_no3_minor = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("Minor");
+                        DatabaseReference esp32_no1_major = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no2_major = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no3_major = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("Major");
 
                         //major
                         esp32_no1_major.addValueEventListener(new ValueEventListener() {
@@ -627,15 +651,14 @@ public class MainActivity extends AppCompatActivity {
     //選擇哪個環境
     Spinner.OnItemSelectedListener environment_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position2, long id2) {
-            //String room_place = String.valueOf(position2);
+            room_choice = position2 ; //選項1時，使他輸出為0
             String room_place = parent.getItemAtPosition(position2).toString();;
             //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
             int Position_string = 1;
             room_place = room_place.substring(Position_string+1);
-
             sw_room.setText(room_place);
-            Toast test = Toast.makeText(MainActivity.this,sw_room.getText(),Toast.LENGTH_SHORT);
-            test.show();
+            //Toast test = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
+            //test.show();
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
