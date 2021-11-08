@@ -603,6 +603,11 @@ public class MainActivity extends AppCompatActivity {
                 int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
                 int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
                 int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
+
+                Long check1 = Long.parseLong(String.valueOf(time_check1.getText()));
+                Long check2 = Long.parseLong(String.valueOf(time_check2.getText()));
+                Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
+
                 /*
                 //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
                 if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
@@ -617,13 +622,20 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
+
                 int select_number = Integer.parseInt(String.valueOf(number_decided.getText()));
                 bundle.putInt("select_number",select_number);
+
                 String select_room = String.valueOf(sw_room.getText());
                 bundle.putString("select_room", select_room);
+
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
                 bundle.putInt("rssi_3",rssi_3);
+
+                bundle.putLong("check_time1",check1);
+                bundle.putLong("check_time2",check2);
+                bundle.putLong("check_time3",check3);
 
                 intent.putExtras(bundle);
                 intent.setClass(MainActivity.this,Map.class);

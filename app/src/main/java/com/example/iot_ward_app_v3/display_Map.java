@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,10 +18,14 @@ public class display_Map extends AppCompatActivity {
 
     int door,rule,door2;
     TextView door_number;
+    Button BT_home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_map);
+
+        BT_home = findViewById(R.id.BT_home);
+        BT_home.setOnClickListener(BT_home_L);
 
         Intent intent2 = this.getIntent();
         Bundle bundle2 = intent2.getExtras();
@@ -70,10 +75,10 @@ public class display_Map extends AppCompatActivity {
             //canvas.drawText("三角形：",350,100,p);
 
             Path Room = new Path(); //畫長方
-            Room.moveTo(190, 40);//左上
-            Room.lineTo(610, 40);//右上
-            Room.lineTo(610, 460);//右下
-            Room.lineTo(190, 460);//左下
+            Room.moveTo(190, 90);//左上
+            Room.lineTo(610, 90);//右上
+            Room.lineTo(610, 510);//右下
+            Room.lineTo(190, 510);//左下
             Room.close(); // 使這些點構成封閉的多邊形
             canvas.drawPath(Room, rect);
 
@@ -81,28 +86,44 @@ public class display_Map extends AppCompatActivity {
 
                 Path path = new Path();
                 //(0,0)左上、等腰直角三角 或 直角三角
-                path.moveTo(200, 50);// 此點為多邊形的起點
-                path.lineTo(600, 50);
-                path.lineTo(600, 450);
+                // 此點為多邊形的起點
+                path.moveTo(200, 100); //1號
+                path.lineTo(600, 100); //2號
+                path.lineTo(600, 500);//3號
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
 
                 //根據規則有不同的動作
                 //cx,cy為圓的圓心位置
-                if (rule == 1) {
+                if (rule == -1) { //只有第一個esp
                     circle.setAntiAlias(true);
                     circle.setColor(Color.RED);
-                    canvas.drawCircle(300, 100, 20, circle);
+                    canvas.drawCircle(200-100, 100-50, 20, circle); //-100 -50
                 }
-                if (rule == 2) {
+                if (rule == -2) { //只有第二個esp
                     p.setAntiAlias(true);
                     p.setColor(Color.RED);
-                    canvas.drawCircle(500, 150, 20, circle);
+                    canvas.drawCircle(600+100, 100-100, 20, circle); //+100 -100
                 }
-                if (rule == 3) {
+                if (rule == -3) { //只有第三個esp
                     p.setAntiAlias(true);
                     p.setColor(Color.RED);
-                    canvas.drawCircle(500, 400, 20, circle);
+                    canvas.drawCircle(600+100, 500+50, 20, circle); //+100 +50
+                }
+                if (rule == 1) { //第一個esp近
+                    circle.setAntiAlias(true);
+                    circle.setColor(Color.RED);
+                    canvas.drawCircle(200+100, 100+50, 20, circle); //+100 +50
+                }
+                if (rule == 2) { //第二個esp近
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(600-100, 100+100, 20, circle); //-100 +100
+                }
+                if (rule == 3) { //第三個esp近
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(600-100, 500-50, 20, circle); //-100 -50
                 }
             }
 
@@ -110,32 +131,59 @@ public class display_Map extends AppCompatActivity {
 
                 Path path = new Path();
                 //(0,0)左上、等腰直角三角 或 直角三角
-                path.moveTo(600, 50);// 此點為多邊形的起點
-                path.lineTo(200, 50);
-                path.lineTo(200, 450);
+                path.moveTo(600, 100);// 此點為多邊形的起點
+                path.lineTo(200, 100);
+                path.lineTo(200, 500);
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
 
                 //根據規則有不同的動作
                 //cx,cy為圓的圓心位置
+                if (rule == -1) { //只有第一個esp
+                    circle.setAntiAlias(true);
+                    circle.setColor(Color.RED);
+                    canvas.drawCircle(600+100, 100-50, 20, circle); //+100 -50
+                }
+                if (rule == -2) { //只有第二個esp
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(200-100, 100-100, 20, circle); //-100 -100
+                }
+                if (rule == -3) { //只有第三個esp
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(200-100, 500+50, 20, circle); //-100 +50
+                }
                 if (rule == 1) {
                     circle.setAntiAlias(true);
                     circle.setColor(Color.RED);
-                    canvas.drawCircle(500, 100, 20, circle);
+                    canvas.drawCircle(600-100, 100+50, 20, circle); //-100 +50
                 }
                 if (rule == 2) {
                     circle.setAntiAlias(true);
                     circle.setColor(Color.RED);
-                    canvas.drawCircle(300, 150, 20, circle);
+                    canvas.drawCircle(200+100, 100+100, 20, circle); //+100 +100
                 }
                 if (rule == 3) {
                     circle.setAntiAlias(true);
                     circle.setColor(Color.RED);
-                    canvas.drawCircle(300, 400, 20, circle);
+                    canvas.drawCircle(200+100, 500-50, 20, circle); //+100 -50
                 }
             }
 
 
         }
     }
+
+    //回到首頁重新查詢
+    private  View.OnClickListener BT_home_L = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(display_Map.this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    };
 }

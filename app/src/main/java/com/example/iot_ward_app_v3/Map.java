@@ -64,13 +64,106 @@ public class Map extends AppCompatActivity {
             int rssi_1 = bundle.getInt("rssi_1");
             int rssi_2 = bundle.getInt("rssi_2");
             int rssi_3 = bundle.getInt("rssi_3");
+
+            Long check1 = bundle.getLong("check_time1");
+            Long check2 = bundle.getLong("check_time2");
+            Long check3 = bundle.getLong("check_time3");
+
             select_number = bundle.getInt("select_number");
             select_room = bundle.getString("select_room");
 
+            long time_now=System.currentTimeMillis() / 1000; //獲取app系統時間
+
+            //RSSI判定(版本2，規則一和二)
+            //規則一：純粹的比rssi哪個為最小，它就是最靠近的
+            //規則二：延伸規則1，但出現兩者rssi相同之情形(兩者相同距為遠方)
+            //規則三：出現兩者rssi相同之情形(兩者相同距為近方)，如果不符合一二，執行之
+            //條件一：三個同時7分內，或其中兩個5分內
+
+            //三個同時超過7分鐘
+            if((time_now - check1 > 420) & (time_now - check2 > 420) & (time_now - check3 > 420)){
+                //conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp32同時一段時間未啟動");
+                rule = 0;
+                rule_keep.setText("0");
+            }else if ((time_now - check1 > 300) & (time_now - check2 > 300)) { //1.2同時超過五分鐘
+                //conclude.setText("esp裝置一和二未啟動或未偵測到一段時間，因此可能位於第三個esp32附近");
+                rule = -3;
+                rule_keep.setText("-3");
+            }else if ((time_now - check2 > 300) & (time_now - check3 > 300)) { //2.3同時超過五分鐘
+                //conclude.setText("esp裝置二和三未啟動或未偵測到一段時間，因此可能位於第一個esp32附近");
+                rule = -1;
+                rule_keep.setText("-1");
+            }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時超過五分鐘
+                //conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
+                rule = -2;
+                rule_keep.setText("-2");
+            }else if (time_now - check1 > 300)  { //只有1超過五分鐘
+                //conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個和第三個esp32附近");
+                rule = -23;
+                rule_keep.setText("-23");
+            }else if (time_now - check2 > 300)  { //只有2超過五分鐘
+                //conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個和第三個esp32附近");
+                rule = -13;
+                rule_keep.setText("-13");
+            }else if (time_now - check3 > 300)  { //只有1超過五分鐘
+                //conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個和第二個esp32附近");
+                rule = -12;
+                rule_keep.setText("-12");
+            }else {
+                if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
+                    if((rssi_2 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
+                        //conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相似");
+                        rule = 11;
+                        rule_keep.setText("11");
+                    }else{
+                        //conclude.setText("你要找的beacon靠近第一個esp32");
+                        rule = 1;
+                        rule_keep.setText("1");
+                    }
+                }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(2最近)
+                    if((rssi_1 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
+                        //conclude.setText("你要找的beacon靠近第二個esp32，但離第一與第三的距離相似");
+                        rule = 21;
+                        rule_keep.setText("21");
+                    }else {
+                        //conclude.setText("你要找的beacon靠近第二個esp32");
+                        rule = 2;
+                        rule_keep.setText("2");
+                    }
+                }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { //1(3最近)
+                    if ((rssi_1 == rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { //2
+                        //conclude.setText("你要找的beacon靠近第三個esp32，但離第一與第二的距離相似");
+                        rule = 31;
+                        rule_keep.setText("31");
+                    } else {
+                        //conclude.setText("你要找的beacon靠近第三個esp32");
+                        rule = 3;
+                        rule_keep.setText("3");
+                    }
+                    //此時1,2檢查完畢
+                }else if((rssi_1 < rssi_2) & (rssi_1 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 == rssi_3)){ //3(1最遠)
+                    //conclude.setText("你要找的beacon遠離第一個esp32，離第二與第三的距離相似");
+                    rule = 12;
+                    rule_keep.setText("12");
+                }else if((rssi_2 < rssi_1) & (rssi_2 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140) & (rssi_1 == rssi_3)){ //3(2最遠)
+                    //conclude.setText("你要找的beacon遠離第二個esp32，離第一與第三的距離相似");
+                    rule = 22;
+                    rule_keep.setText("22");
+                }else if((rssi_3 < rssi_2) & (rssi_3 < rssi_1) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 == rssi_1)){ //3(3最遠)
+                    //conclude.setText("你要找的beacon遠離第三個esp32，離第一與第二的距離相似");
+                    rule = 32;
+                    rule_keep.setText("32");
+                }else{
+                    //conclude.setText("資料有誤，或是未建構這項規則");
+                    rule = 0;
+                    rule_keep.setText("0");
+                }
+            }
             //利用判斷規則決定原點的位置
             //版本1：套用規則一
             //規則一：純粹的比rssi哪個為最小，它就是最靠近的
             //規則二：延伸規則一，套用但出現兩者rssi相同之情形
+            /*
             if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
                 Toast test = Toast.makeText(Map.this,"第一個esp32",Toast.LENGTH_SHORT);
                 test.show();
@@ -92,13 +185,17 @@ public class Map extends AppCompatActivity {
                 rule = 0;
             }
 
+             */
 
-            Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
-            test2.show();
+
+            //Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
+            //test2.show();
 
         }catch (Exception intent_error){
             Intent intent = new Intent();
             intent.setClass(Map.this,MainActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         //button
@@ -151,6 +248,7 @@ public class Map extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setClass(Map.this,MainActivity.class);
             startActivity(intent);
+            finish();
         }
     };
 
@@ -181,6 +279,7 @@ public class Map extends AppCompatActivity {
 
             intent_2.setClass(Map.this,display_Map.class);
             startActivity(intent_2);
+            finish();
         }
     };
 }
