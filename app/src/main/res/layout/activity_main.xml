@@ -18,7 +18,7 @@
         android:id="@+id/tvID"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:text="查詢輸入(上為設備編號，下為環境選擇)"
+        android:text="查詢選擇(上為設備編號，下為環境選擇)"
         android:textSize="20sp" />
 
     <Spinner
