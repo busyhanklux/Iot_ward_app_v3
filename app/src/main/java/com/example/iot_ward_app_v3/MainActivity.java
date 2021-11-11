@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
     private TextView time_check1,time_check2,time_check3;
-    int room_choice;
+    int room_choice,beacon_number_choice;
 
     //下拉式選單
     String[] esp32_num = new String[]{
@@ -680,7 +680,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner.OnItemSelectedListener environment_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position2, long id2) {
             room_choice = position2 ; //選項1時，使他輸出為0
-            String room_place = parent.getItemAtPosition(position2).toString();;
+            String room_place = parent.getItemAtPosition(position2).toString();
             //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
             int Position_string = 1;
             room_place = room_place.substring(Position_string+1);
@@ -695,16 +695,11 @@ public class MainActivity extends AppCompatActivity {
     Spinner.OnItemSelectedListener beacon_id_spinner_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int beacon_num, long id3) {
 
-            /*
-            room_choice = position2 ; //選項1時，使他輸出為0
-            String room_place = parent.getItemAtPosition(position2).toString();;
-            //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
-            int Position_string = 1;
-            room_place = room_place.substring(Position_string+1);
-            sw_room.setText(room_place);
-            //Toast test = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
-            //test.show();
-             */
+            beacon_number_choice = beacon_num + 1; //當我選16號時，beacon_num = 15，+1是為了textview方便設定
+            Toast beacon_number_Toast = Toast.makeText(MainActivity.this,beacon_number_choice+"",Toast.LENGTH_SHORT);
+            beacon_number_Toast.show();
+
+            Input_major.setText(String.valueOf(beacon_number_choice)); //由此控制原本的輸入文字
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
