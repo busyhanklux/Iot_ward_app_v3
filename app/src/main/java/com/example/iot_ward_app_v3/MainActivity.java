@@ -696,9 +696,8 @@ public class MainActivity extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int beacon_num, long id3) {
 
             beacon_number_choice = beacon_num + 1; //當我選16號時，beacon_num = 15，+1是為了textview方便設定
-            Toast beacon_number_Toast = Toast.makeText(MainActivity.this,beacon_number_choice+"",Toast.LENGTH_SHORT);
-            beacon_number_Toast.show();
-
+            //Toast beacon_number_Toast = Toast.makeText(MainActivity.this,beacon_number_choice+"",Toast.LENGTH_SHORT);
+            //beacon_number_Toast.show();
             Input_major.setText(String.valueOf(beacon_number_choice)); //由此控制原本的輸入文字
         }
         @Override
