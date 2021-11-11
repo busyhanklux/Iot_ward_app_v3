@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Iot_ward_app_v3</string>
+    <string name="app_name">尋定</string> //app名稱
     <string name="uuid">UUID</string>
     <string name="Equ_num">Equipment number</string>
     <string name="equ_inform">Equipment Information</string>

@@ -11,14 +11,14 @@
     <ImageView
         android:id="@+id/imgTitle"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        app:srcCompat="@drawable/hospital" />
+        android:layout_height="160dp"
+        app:srcCompat="@drawable/logo2" />
 
     <TextView
         android:id="@+id/tvID"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:text="查詢輸入(左為設備編號，右為環境選擇)"
+        android:text="查詢輸入(上為設備編號，下為環境選擇)"
         android:textSize="20sp" />
 
     <Spinner
@@ -33,29 +33,56 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/Input_major"
-            android:layout_width="30dp"
-            android:layout_height="48dp"
-            android:layout_weight="0.25"
-            android:ems="10"
-            android:hint="1~17"
-            android:inputType="number"
-            android:textDirection="ltr" />
-
-        <Spinner
-            android:id="@+id/environment_choice"
-            android:layout_width="75dp"
-            android:layout_height="48dp"
-            android:layout_weight="0.25"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <Button
-            android:id="@+id/find_major"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layoutDirection="rtl"
-            android:text="查找" />
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/Input_major"
+                android:layout_width="30dp"
+                android:layout_height="48dp"
+                android:ems="10"
+                android:hint="1~17"
+                android:inputType="number"
+                android:textDirection="ltr"
+                android:visibility="gone"
+                tools:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/beacon_id_spinner"
+                android:layout_width="300dp"
+                android:layout_height="48dp"
+                android:layout_weight="0.25"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Spinner
+                android:id="@+id/environment_choice"
+                android:layout_width="300dp"
+                android:layout_height="48dp"
+                android:layout_weight="0.25"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/find_major"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:layoutDirection="rtl"
+                android:text="查找"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 
     <TextView

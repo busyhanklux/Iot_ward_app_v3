@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3;
     private TextView tv_time_1,tv_time_2,tv_time_3,invisible_rssi_1,invisible_rssi_2,invisible_rssi_3,conclude;
     private TextView detail,sw_number,sw_distance,sw_time,sw_room,Input_major,number_decided;
-    private Spinner  sp_esp32_choice,beacon_spinner;
+    private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
     private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
     private TextView time_check1,time_check2,time_check3;
@@ -48,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
     String[] environment_choice = new String[]{
       "1.大型空間","2.喜樂兒產房","3.ICU"
+    };
+
+    String[] beacon_id_spinner_choice = new String[]{
+            "1.暫無使用之設備","2.","3.","4.嬰兒推車","5.",
+            "6.暫無使用之設備","7.暫無使用之設備","8." ,"9.暫無使用之設備","10.暫無使用之設備",
+            "11.","12.","13.","14.","15.",
+            "16.點滴架","17.調試用編號，僅供測試使用"
     };
 
     @Override
@@ -64,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         //下拉式選單
         sp_esp32_choice = (Spinner)findViewById(R.id.sp_esp32_choice); //選擇該esp32的哪一個
         beacon_spinner  = (Spinner)findViewById(R.id.environment_choice); //選擇環境
+        beacon_idnum_spinner = (Spinner)findViewById(R.id.beacon_id_spinner); //用選擇編號替代寫入編號
 
         //細節(外觀文字)
         detail = (TextView)findViewById(R.id.detail);
@@ -117,15 +125,23 @@ public class MainActivity extends AppCompatActivity {
         invisible_rssi_3 = (TextView)findViewById(R.id.invisible_rssi_3);
 
         //Spinner(sp_esp32_choice)
-        ArrayAdapter<String> adapternumber2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,esp32_num);
+        ArrayAdapter<String> adapternumber2 =
+                new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,esp32_num);
         adapternumber2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_esp32_choice.setAdapter(adapternumber2);    //設定資料來源
         sp_esp32_choice.setOnItemSelectedListener(sp_esp32_choice_Listener);
         //Spinner(environment_choice)
-        ArrayAdapter<String> adapternumber_environment_choice = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,environment_choice);
+        ArrayAdapter<String> adapternumber_environment_choice =
+                new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,environment_choice);
         adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
         beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
+        //Spinner(beacon_id_spinner)
+        ArrayAdapter<String> adapternumber_beacon_id_spinner_choice =
+                new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,beacon_id_spinner_choice);
+        adapternumber_beacon_id_spinner_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        beacon_idnum_spinner.setAdapter(adapternumber_beacon_id_spinner_choice);    //設定資料來源
+        beacon_idnum_spinner.setOnItemSelectedListener(beacon_id_spinner_choice_Listener);
 
         //button
         btStatus = (Button)findViewById(R.id.btStatus);
@@ -671,6 +687,24 @@ public class MainActivity extends AppCompatActivity {
             sw_room.setText(room_place);
             //Toast test = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
             //test.show();
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) { }};
+
+    //選擇哪個beacon：用下拉式選單，替代輸入文字(因應11/10的老師建議)
+    Spinner.OnItemSelectedListener beacon_id_spinner_choice_Listener = new Spinner.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int beacon_num, long id3) {
+
+            /*
+            room_choice = position2 ; //選項1時，使他輸出為0
+            String room_place = parent.getItemAtPosition(position2).toString();;
+            //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
+            int Position_string = 1;
+            room_place = room_place.substring(Position_string+1);
+            sw_room.setText(room_place);
+            //Toast test = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
+            //test.show();
+             */
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
