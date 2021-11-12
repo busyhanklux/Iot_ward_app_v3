@@ -34,16 +34,16 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/BT_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="回上頁"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0" />
 
     <Button
         android:id="@+id/BT_home"
@@ -52,9 +52,9 @@
         android:text="回首頁"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/draw_pic"
-        app:layout_constraintVertical_bias="0.637" />
+        app:layout_constraintVertical_bias="0.625" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

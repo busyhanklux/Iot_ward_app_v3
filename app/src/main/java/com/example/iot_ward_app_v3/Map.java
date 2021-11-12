@@ -22,9 +22,11 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 public class Map extends AppCompatActivity {
 
     //畫板參考https://lowren.pixnet.net/blog/post/92267045
-    Button bt_back;
     int rule,door,select_number;
     String select_room;
+    Long check1,check2,check3;
+
+    Button bt_back;
     private TextView test1,rule_keep,door_keep,remind_text;
     private RadioButton left_door,right_door;
     private RadioGroup  select_door;
@@ -65,9 +67,9 @@ public class Map extends AppCompatActivity {
             int rssi_2 = bundle.getInt("rssi_2");
             int rssi_3 = bundle.getInt("rssi_3");
 
-            Long check1 = bundle.getLong("check_time1");
-            Long check2 = bundle.getLong("check_time2");
-            Long check3 = bundle.getLong("check_time3");
+            check1 = bundle.getLong("check_time1");
+            check2 = bundle.getLong("check_time2");
+            check3 = bundle.getLong("check_time3");
 
             select_number = bundle.getInt("select_number");
             select_room = bundle.getString("select_room");
@@ -269,9 +271,19 @@ public class Map extends AppCompatActivity {
             bundle2.putInt("rssi_2",rssi_2);
             bundle2.putInt("rssi_3",rssi_3);
 
+            //這個是給回上一頁準備資料用的
+            check1 = bundle.getLong("check_time1");
+            check2 = bundle.getLong("check_time2");
+            check3 = bundle.getLong("check_time3");
+            bundle2.putLong("check_time1",check1);
+            bundle2.putLong("check_time2",check2);
+            bundle2.putLong("check_time3",check3);
+
+            //傳給下一頁：門的方向資料
             int door2 = Integer.parseInt((String) door_keep.getText());
             bundle2.putInt("door2",door2);
 
+            //傳給下一頁：點的放置資料
             int rule2 = Integer.parseInt((String) rule_keep.getText());
             bundle2.putInt("rule2",rule2);
 
