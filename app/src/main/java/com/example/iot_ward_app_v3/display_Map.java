@@ -17,6 +17,11 @@ import android.widget.Toast;
 public class display_Map extends AppCompatActivity {
 
     int door,rule,door2;
+    int rssi_1,rssi_2,rssi_3;
+    Long check1,check2,check3;
+    int select_number;
+    String select_room;
+
     TextView door_number;
     Button BT_home,BT_back;
     @Override
@@ -33,17 +38,39 @@ public class display_Map extends AppCompatActivity {
 
         Intent intent2 = this.getIntent();
         Bundle bundle2 = intent2.getExtras();
-        int rssi_1 = bundle2.getInt("rssi_1");
-        int rssi_2 = bundle2.getInt("rssi_2");
-        int rssi_3 = bundle2.getInt("rssi_3");
+
+        rssi_1 = bundle2.getInt("rssi_1");
+        rssi_2 = bundle2.getInt("rssi_2");
+        rssi_3 = bundle2.getInt("rssi_3");
+        check1 = bundle2.getLong("check_time1");
+        check2 = bundle2.getLong("check_time2");
+        check3 = bundle2.getLong("check_time3");
+
+        Bundle bundle = new Bundle();
+
+        bundle.putInt("rssi_1",rssi_1);
+        bundle.putInt("rssi_2",rssi_2);
+        bundle.putInt("rssi_3",rssi_3);
+        bundle.putLong("check_time1",check1);
+        bundle.putLong("check_time2",check2);
+        bundle.putLong("check_time3",check3);
+
+        select_number = bundle2.getInt("select_number");
+        select_room = bundle2.getString("select_room");
+        bundle.putInt("select_number",select_number);
+        bundle.putString("select_room",select_room);
+
+        Toast test = Toast.makeText(display_Map.this,select_number+"嘎啦嘎拉"+select_room+"嘎啦嘎拉"+check3,Toast.LENGTH_SHORT);
+        test.show();
+        //intent2.putExtras(bundle);
 
         door = bundle2.getInt("door2");
         door_number = (TextView)findViewById(R.id.door_number);
         door_number.setText(String.valueOf(door));
 
         rule = bundle2.getInt("rule2");
-        Toast test = Toast.makeText(display_Map.this,door+"_1145_"+rule,Toast.LENGTH_SHORT);
-        test.show();
+        //Toast test = Toast.makeText(display_Map.this,door+"_1145_"+rule,Toast.LENGTH_SHORT);
+        //test.show();
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
@@ -215,10 +242,40 @@ public class display_Map extends AppCompatActivity {
     {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(display_Map.this,Map.class);
-            startActivity(intent);
-            finish();
+            //try {
+                Intent intent2 = new Intent();
+
+                Bundle bundle = new Bundle();
+//                Bundle bundle2 = intent2.getExtras();
+
+
+                bundle.putInt("rssi_1",rssi_1);
+                bundle.putInt("rssi_2",rssi_2);
+                bundle.putInt("rssi_3",rssi_3);
+                bundle.putLong("check_time1",check1);
+                bundle.putLong("check_time2",check2);
+                bundle.putLong("check_time3",check3);
+
+                Toast test = Toast.makeText(display_Map.this,check1+"T"+check2+"T"+check3,Toast.LENGTH_SHORT);
+                //Toast test = Toast.makeText(display_Map.this,rssi_1+"T"+rssi_2+"T"+rssi_3,Toast.LENGTH_SHORT);
+                //Toast test = Toast.makeText(display_Map.this,"沒問題",Toast.LENGTH_SHORT);
+                test.show();
+
+                //int select_number = bundle2.getInt("select_number");
+                //String select_room = bundle2.getString("select_room");
+                bundle.putInt("select_number",select_number);
+                bundle.putString("select_room",select_room);
+
+                intent2.putExtras(bundle);
+                intent2.setClass(display_Map.this,Map.class);
+                startActivity(intent2);
+                finish();
+                /*
+            }catch (Exception error){
+                Toast test = Toast.makeText(display_Map.this,"未知錯誤",Toast.LENGTH_SHORT);
+                test.show();
+            }*/
+
         }
     };
 }

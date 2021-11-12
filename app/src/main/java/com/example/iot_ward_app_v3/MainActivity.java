@@ -234,8 +234,8 @@ public class MainActivity extends AppCompatActivity {
                                     if(room_choice == 2) {
                                         A = 75.00; n = 3.40;
                                     }
-                                    Toast test = Toast.makeText(MainActivity.this,A +""+n,Toast.LENGTH_SHORT);
-                                    test.show();
+                                    //Toast test = Toast.makeText(MainActivity.this,A +""+n,Toast.LENGTH_SHORT);
+                                    //test.show();
 
                                     //這個蠻有趣的，這邊0/0 = 無限大
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
@@ -266,8 +266,16 @@ public class MainActivity extends AppCompatActivity {
                                     //tvrssi_2.setText("RSSI: " + rssi2.toString());
                                     tvrssi_2.setText(rssi2.toString());
 
-                                    double A = 59.00;
-                                    double n = 3.60;
+                                    double A = 0, n = 0;
+                                    if(room_choice == 0) {
+                                        A = 59.00; n = 3.40;
+                                    }
+                                    if(room_choice == 1) {
+                                        A = 65.00; n = 3.40;
+                                    }
+                                    if(room_choice == 2) {
+                                        A = 75.00; n = 3.40;
+                                    }
                                     double M_1 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -294,8 +302,16 @@ public class MainActivity extends AppCompatActivity {
                                     //tvrssi_3.setText("RSSI: " + rssi3.toString());
                                     tvrssi_3.setText(rssi3.toString());
 
-                                    double A = 59.00;
-                                    double n = 3.60;
+                                    double A = 0, n = 0;
+                                    if(room_choice == 0) {
+                                        A = 59.00; n = 3.40;
+                                    }
+                                    if(room_choice == 1) {
+                                        A = 65.00; n = 3.40;
+                                    }
+                                    if(room_choice == 2) {
+                                        A = 75.00; n = 3.40;
+                                    }
                                     double M_1 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();

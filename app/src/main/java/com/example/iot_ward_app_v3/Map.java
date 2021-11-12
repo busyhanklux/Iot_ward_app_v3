@@ -24,7 +24,10 @@ public class Map extends AppCompatActivity {
     //畫板參考https://lowren.pixnet.net/blog/post/92267045
     int rule,door,select_number;
     String select_room;
+
+    //你必須在這裡創立全域變數，這可能是最簡單的bundle方法，不然程式會誤認為 0 或 null
     Long check1,check2,check3;
+    int rssi_1,rssi_2,rssi_3;
 
     Button bt_back;
     private TextView test1,rule_keep,door_keep,remind_text;
@@ -63,16 +66,28 @@ public class Map extends AppCompatActivity {
 
             Intent intent = this.getIntent();
             Bundle bundle = intent.getExtras();
-            int rssi_1 = bundle.getInt("rssi_1");
-            int rssi_2 = bundle.getInt("rssi_2");
-            int rssi_3 = bundle.getInt("rssi_3");
+            rssi_1 = bundle.getInt("rssi_1");
+            rssi_2 = bundle.getInt("rssi_2");
+            rssi_3 = bundle.getInt("rssi_3");
 
             check1 = bundle.getLong("check_time1");
             check2 = bundle.getLong("check_time2");
             check3 = bundle.getLong("check_time3");
 
+            //某某
             select_number = bundle.getInt("select_number");
+            //在某某的情形
             select_room = bundle.getString("select_room");
+
+            Bundle bundle2 = new Bundle();
+            bundle2.putLong("check_time1",check1);
+            bundle2.putLong("check_time2",check2);
+            bundle2.putLong("check_time3",check3);
+            bundle2.putInt("select_number",select_number);
+            bundle2.putString("select_room",select_room);
+            bundle2.putInt("rssi_1",rssi_1);
+            bundle2.putInt("rssi_2",rssi_2);
+            bundle2.putInt("rssi_3",rssi_3);
 
             long time_now=System.currentTimeMillis() / 1000; //獲取app系統時間
 
@@ -212,8 +227,8 @@ public class Map extends AppCompatActivity {
             if (checkedId == R.id.left_door){ //左側門
                 door = 1;
                 door_keep.setText("1");
-                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                //test.show();
+                Toast test = Toast.makeText(Map.this,check1+"",Toast.LENGTH_SHORT);
+                test.show();
                 remind_text.setText("提醒訊息：點擊「展示」按鈕，以觀看\n"+select_number+" 號在 "+select_room+" 的情形");
             }
             if (checkedId == R.id.right_door){ //右側門
@@ -233,13 +248,13 @@ public class Map extends AppCompatActivity {
 
             if(door == 1){//左門
                 pre_place.setImageResource(R.drawable.place1);
-                Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                test.show();
+                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
+                //test.show();
             }
             if(door == 2){//右門
                 pre_place.setImageResource(R.drawable.place2);
-                Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                test.show();
+                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
+                //test.show();
             } }};
 
     //回到首頁重新查詢
@@ -255,29 +270,33 @@ public class Map extends AppCompatActivity {
     };
 
     //切換展示地圖
-    private  View.OnClickListener display_L = new View.OnClickListener()
+    public  View.OnClickListener display_L = new View.OnClickListener()
     {
         @Override
         public void onClick(View v) {
 
-            Intent intent_2 = new Intent();
+            Intent intent = new Intent();
             Bundle bundle = new Bundle();
-            int rssi_1 = bundle.getInt("rssi_1");
-            int rssi_2 = bundle.getInt("rssi_2");
-            int rssi_3 = bundle.getInt("rssi_3");
-
             Bundle bundle2 = new Bundle();
+
+            //防止回上一頁出error
+            //首先從1獲取，再丟入2
+
             bundle2.putInt("rssi_1",rssi_1);
             bundle2.putInt("rssi_2",rssi_2);
             bundle2.putInt("rssi_3",rssi_3);
 
             //這個是給回上一頁準備資料用的
-            check1 = bundle.getLong("check_time1");
-            check2 = bundle.getLong("check_time2");
-            check3 = bundle.getLong("check_time3");
+            //首先從1獲取，再丟入2
+
             bundle2.putLong("check_time1",check1);
             bundle2.putLong("check_time2",check2);
             bundle2.putLong("check_time3",check3);
+
+            bundle2.putInt("select_number",select_number);
+            bundle2.putString("select_room",select_room);
+            Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
+            test2.show();
 
             //傳給下一頁：門的方向資料
             int door2 = Integer.parseInt((String) door_keep.getText());
@@ -287,10 +306,9 @@ public class Map extends AppCompatActivity {
             int rule2 = Integer.parseInt((String) rule_keep.getText());
             bundle2.putInt("rule2",rule2);
 
-            intent_2.putExtras(bundle2);
-
-            intent_2.setClass(Map.this,display_Map.class);
-            startActivity(intent_2);
+            intent.putExtras(bundle2);
+            intent.setClass(Map.this,display_Map.class);
+            startActivity(intent);
             finish();
         }
     };
