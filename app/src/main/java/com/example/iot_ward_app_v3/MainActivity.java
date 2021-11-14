@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 } catch (Exception RSSI_not_found) {
                                     tvrssi_1.setText("資料錯誤");
+                                    distance_1.setText("格式不符");
                                     invisible_rssi_1.setText("-150");
                                 }
                             }
@@ -285,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 } catch (Exception RSSI_not_found) {
                                     tvrssi_2.setText("資料錯誤");
+                                    distance_2.setText("格式不符");
                                     invisible_rssi_2.setText("-150");
                                 }
                             }
@@ -321,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 } catch (Exception RSSI_not_found) {
                                     tvrssi_3.setText("資料錯誤");
+                                    distance_3.setText("格式不符");
                                     invisible_rssi_3.setText("-150");
                                 }
                             }
