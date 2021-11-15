@@ -93,7 +93,7 @@ public class display_Map extends AppCompatActivity {
         public void onDraw(Canvas canvas) {
             super.onDraw(mCanvas);
 
-            Paint p = new Paint();                            // 創建畫筆
+            Paint p = new Paint();    // 創建畫筆
             Paint rect = new Paint(); //畫方形的畫筆
             Paint circle = new Paint();
 
@@ -112,7 +112,17 @@ public class display_Map extends AppCompatActivity {
             Room.close(); // 使這些點構成封閉的多邊形
             canvas.drawPath(Room, rect);
 
+            //規則有：
+            // 0、(-1、-2、-3)、(-230、-232、-233)、(-130、-131、-133)
+            // (-120、-121、-122)、(11、1、21、2、31、3)
+            // (12、22、32)
+            //rule的數字：代碼，如果有負，其一不在，三者不在為0
+            //第一：為第幾個附近
+            //第二：(如果為負)兩位數一起看，第幾和第幾之間
+            //第二：(如果為正)如果相似，個位為1(等近)或2(等遠)，十位為主角
+            //第三：三位數，同二，再加上靠近第幾(中間為0)
             //關於door1、door2，只是因為門的位置，改變了三角形的方向
+
             if (door == 1) {//左門
                 Path path = new Path();
 
@@ -130,38 +140,32 @@ public class display_Map extends AppCompatActivity {
 
                 //根據規則有不同的動作，cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp
-                    circle.setAntiAlias(true);
-                    circle.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door1_triangle_1_x - 100, door1_triangle_1_y - 50, 20, circle); //-100 -50
                     //canvas.drawCircle(200 - 100, 100 - 50, 20, circle); //-100 -50
                 }
                 if (rule == -2) { //只有第二個esp
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_1_y - 100, 20, circle); //+100 -100
                     //canvas.drawCircle(600 + 100, 100 - 100, 20, circle); //+100 -100
                 }
                 if (rule == -3) { //只有第三個esp
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_2_y + 50, 20, circle); //+100 +50
                     //canvas.drawCircle(600 + 100, 500 + 50, 20, circle); //+100 +50
                 }
                 if (rule == 1) { //第一個esp近
-                    circle.setAntiAlias(true);
-                    circle.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 50, 20, circle); //+100 +50
                     //canvas.drawCircle(200 + 100, 100 + 50, 20, circle); //+100 +50
                 }
                 if (rule == 2) { //第二個esp近
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 100, 20, circle); //-100 +100
                     //canvas.drawCircle(600 - 100, 100 + 100, 20, circle); //-100 +100
                 }
                 if (rule == 3) { //第三個esp近
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_2_y - 50, 20, circle); //-100 -50
                     //canvas.drawCircle(600 - 100, 500-50, 20, circle); //-100 -50
                 }
@@ -184,38 +188,32 @@ public class display_Map extends AppCompatActivity {
                 //根據規則有不同的動作
                 //cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp
-                    circle.setAntiAlias(true);
-                    circle.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door2_triangle_1_x +100, door2_triangle_1_y -50, 20, circle); //+100 -50
                     //canvas.drawCircle(600+100, 100-50, 20, circle); //+100 -50
                 }
                 if (rule == -2) { //只有第二個esp
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door2_triangle_2_x -100, door2_triangle_1_y -100, 20, circle); //-100 -100
                     //canvas.drawCircle(200-100, 100-100, 20, circle); //-100 -100
                 }
                 if (rule == -3) { //只有第三個esp
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door2_triangle_2_x -100, door2_triangle_2_y +50, 20, circle); //-100 +50
                     //canvas.drawCircle(200-100, 500+50, 20, circle); //-100 +50
                 }
                 if (rule == 1) {
-                    circle.setAntiAlias(true);
-                    circle.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door2_triangle_1_x -100, door2_triangle_1_y +50, 20, circle); //-100 +50
                     //canvas.drawCircle(600-100, 100+50, 20, circle); //-100 +50
                 }
                 if (rule == 2) {
-                    circle.setAntiAlias(true);
-                    circle.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door2_triangle_2_x +100, door2_triangle_1_y +100, 20, circle); //+100 +100
                     //canvas.drawCircle(200+100, 100+100, 20, circle); //+100 +100
                 }
                 if (rule == 3) {
-                    circle.setAntiAlias(true);
-                    circle.setColor(Color.RED);
+                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
                     canvas.drawCircle(door2_triangle_2_x +100, door2_triangle_2_y -50, 20, circle); //+100 -50
                     //canvas.drawCircle(200+100, 500-50, 20, circle); //+100 -50
                 }
