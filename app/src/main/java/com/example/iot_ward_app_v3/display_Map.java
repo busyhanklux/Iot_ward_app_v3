@@ -69,6 +69,7 @@ public class display_Map extends AppCompatActivity {
         door_number.setText(String.valueOf(door));
 
         rule = bundle2.getInt("rule2");
+        rule = 12;
         //Toast test = Toast.makeText(display_Map.this,door+"_1145_"+rule,Toast.LENGTH_SHORT);
         //test.show();
 
@@ -96,26 +97,32 @@ public class display_Map extends AppCompatActivity {
             Paint p = new Paint();    // 創建畫筆
             Paint rect = new Paint(); //畫方形的畫筆
             Paint circle = new Paint();
+            Paint rect_door = new Paint(); //畫門的
 
             //canvas.drawText("String.valueOf(door)", 50, 100, p);        // 寫文字
 
             // 三角形繪圖
-            p.setColor(Color.parseColor("#FF8C00"));
+            p.setColor(Color.parseColor("#FBD9D9"));
             p.setTextSize(100);
             rect.setColor(Color.parseColor("#33FFA6"));
             rect.setTextSize(100);
+            rect_door.setColor(Color.parseColor("#00C1FF"));
+            rect_door.setTextSize(100);
+
             //canvas.drawText("三角形：",350,100,p);
 
             Path Room = new Path(); //畫長方
-            Room.moveTo(190, 190); /*左上*/ Room.lineTo(610, 190); //右上
-            Room.lineTo(610, 610);/*右下*/ Room.lineTo(190, 610);//左下
+            Room.moveTo(240, 190); /*左上*/ Room.lineTo(760, 190); //右上
+            Room.lineTo(760, 710);/*右下*/ Room.lineTo(240, 710);//左下
             Room.close(); // 使這些點構成封閉的多邊形
             canvas.drawPath(Room, rect);
 
+
+
             //規則有：
             // 0、(-1、-2、-3)、(-230、-232、-233)、(-130、-131、-133)
-            // (-120、-121、-122)、(11、1、21、2、31、3)
-            // (12、22、32)
+            // (-120、-121、-122)、(11、1、21、2、31、3、12、22、32)、66
+
             //rule的數字：代碼，如果有負，其一不在，三者不在為0
             //第一：為第幾個附近
             //第二：(如果為負)兩位數一起看，第幾和第幾之間
@@ -124,13 +131,19 @@ public class display_Map extends AppCompatActivity {
             //關於door1、door2，只是因為門的位置，改變了三角形的方向
 
             if (door == 1) {//左門
+                Path Door = new Path(); //畫長方門
+                Door.moveTo(250, 700); /*左上*/ Door.lineTo(400, 700); //右上
+                Door.lineTo(400, 730);/*右下*/  Door.lineTo(250, 730);//左下
+                Door.close(); // 使這些點構成封閉的多邊形
+                canvas.drawPath(Door, rect_door);
+
                 Path path = new Path();
 
                 //(0,0)左上、等腰直角三角 或 直角三角
                 //door1_triangle_1_x => 左 x(200) , door1_triangle_2_x => 右 x(600)
-                int door1_triangle_1_x = 200,door1_triangle_2_x = 600;
+                int door1_triangle_1_x = 250,door1_triangle_2_x = 750;
                 //door1_triangle_1_y => 上 y(100) , door1_triangle_2_y => 下 y(500)
-                int door1_triangle_1_y = 200,door1_triangle_2_y = 600;
+                int door1_triangle_1_y = 200,door1_triangle_2_y = 700;
                 // moveTo：此點為多邊形的起點
                 path.moveTo(door1_triangle_1_x, door1_triangle_1_y); //1號
                 path.lineTo(door1_triangle_2_x, door1_triangle_1_y); //2號
@@ -138,47 +151,99 @@ public class display_Map extends AppCompatActivity {
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
 
+                circle.setAntiAlias(true);  circle.setColor(Color.RED);
                 //根據規則有不同的動作，cx,cy為圓的圓心位置
-                if (rule == -1) { //只有第一個esp
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door1_triangle_1_x - 100, door1_triangle_1_y - 50, 20, circle); //-100 -50
-                    //canvas.drawCircle(200 - 100, 100 - 50, 20, circle); //-100 -50
+                if (rule == -1) { //只有第一個esp被偵測
+                    canvas.drawCircle(door1_triangle_1_x - 100, door1_triangle_1_y - 50, 20, circle); //(150,150)
                 }
-                if (rule == -2) { //只有第二個esp
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_1_y - 100, 20, circle); //+100 -100
-                    //canvas.drawCircle(600 + 100, 100 - 100, 20, circle); //+100 -100
+                if (rule == -2) { //只有第二個esp被偵測
+                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_1_y - 50, 20, circle); //(850,150)
                 }
-                if (rule == -3) { //只有第三個esp
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_2_y + 50, 20, circle); //+100 +50
-                    //canvas.drawCircle(600 + 100, 500 + 50, 20, circle); //+100 +50
+                if (rule == -3) { //只有第三個esp被偵測
+                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_2_y + 50, 20, circle); //(850,750)
                 }
                 if (rule == 1) { //第一個esp近
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 50, 20, circle); //+100 +50
-                    //canvas.drawCircle(200 + 100, 100 + 50, 20, circle); //+100 +50
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 100, 20, circle); //(350,300)
                 }
                 if (rule == 2) { //第二個esp近
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 100, 20, circle); //-100 +100
-                    //canvas.drawCircle(600 - 100, 100 + 100, 20, circle); //-100 +100
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 100, 20, circle); //(650,300)
                 }
                 if (rule == 3) { //第三個esp近
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_2_y - 50, 20, circle); //-100 -50
-                    //canvas.drawCircle(600 - 100, 500-50, 20, circle); //-100 -50
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_2_y - 100, 20, circle); //(650,600)
                 }
+                if (rule == 11) { //靠近第一個esp，23等距
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 250, 20, circle); //(300,450)
+                }
+                if (rule == 12) { //遠離第一個esp，23等距
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 250, 20, circle); //(300,450)
+                }
+                if (rule == 21) { //靠近第二個esp，13等距
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 150, 20, circle); //(650,350)
+                }
+                if (rule == 22) { //遠離第二個esp，13等距
+                    canvas.drawCircle(door1_triangle_1_x + 150, door1_triangle_2_y - 150, 20, circle); //(400,550)
+                }
+                if (rule == 31) { //靠近第三個esp，12等距
+                    canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_2_y - 150, 20, circle); //(500,550)
+                }
+                if (rule == 32) { //遠離第三個esp，12等距
+                    canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 150, 20, circle); //(500,350)
+                }
+                if (rule == -120) { //沒有3，12等遠
+                    canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y - 100, 20, circle); //(500,100)
+                    canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 100, 20, circle); //(500,300)
+                }
+                if (rule == -121) { //沒有3，1近
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y - 100, 20, circle); //(350,100)
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 100, 20, circle); //(350,300)
+                }
+                if (rule == -122) { //沒有3，2近
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y - 100, 20, circle); //(650,100)
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 100, 20, circle); //(650,300)
+                }
+                if (rule == -130) { //沒有2，13等遠
+                    canvas.drawCircle(door1_triangle_1_x + 125, door1_triangle_2_y - 125, 20, circle); //(375,575)
+                    canvas.drawCircle(door1_triangle_1_x - 125, door1_triangle_2_y + 125, 20, circle); //(125,825)
+                }
+                if (rule == -131) { //沒有2，1近
+                    canvas.drawCircle(door1_triangle_1_x + 125, door1_triangle_2_y - 325, 20, circle); //(375,375)
+                    canvas.drawCircle(door1_triangle_1_x - 125, door1_triangle_2_y - 175, 20, circle);  //(125,525)
+                }
+                if (rule == -133) { //沒有2，3近
+                    canvas.drawCircle(door1_triangle_1_x + 325, door1_triangle_2_y - 125, 20, circle); //(575,575)
+                    canvas.drawCircle(door1_triangle_1_x + 175, door1_triangle_2_y + 125, 20, circle);  //(425,825)
+                }
+                if (rule == -230) { //沒有1，23等
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 250, 20, circle); //(650,450)
+                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_1_y + 250, 20, circle); //(850,450)
+                }
+                if (rule == -232) { //沒有1，2近
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 100, 20, circle); //(650,300)
+                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_1_y + 100, 20, circle); //(850,300)
+                }
+                if (rule == -233) { //沒有1，3近
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_2_y - 100, 20, circle); //(650,600)
+                    canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_2_y - 100, 20, circle); //(850,600)
+                }
+                if (rule == 66) { //中心
+                    canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 250, 20, circle); //(500,450)
+                }
+
             }
 
             if (door == 2) {//右門
+                Path Door = new Path(); //畫長方門
+                Door.moveTo(750, 700); /*左上*/ Door.lineTo(600, 700); //右上
+                Door.lineTo(600, 730);/*右下*/  Door.lineTo(750, 730);//左下
+                Door.close(); // 使這些點構成封閉的多邊形
+                canvas.drawPath(Door, rect_door);
 
                 Path path = new Path();
                 //(0,0)左上、等腰直角三角 或 直角三角
                 //door2_triangle_1_x => 右 x(600) , door2_triangle_2_x => 左 x(200)
-                int door2_triangle_1_x = 600,door2_triangle_2_x = 200;
+                int door2_triangle_1_x = 750,door2_triangle_2_x = 250;
                 //door2_triangle_1_y => 上 y(100) , door2_triangle_2_y => 下 y(500)
-                int door2_triangle_1_y = 200,door2_triangle_2_y = 600;
+                int door2_triangle_1_y = 200,door2_triangle_2_y = 700;
                 path.moveTo(door2_triangle_1_x, door2_triangle_1_y);// 此點為多邊形的起點
                 path.lineTo(door2_triangle_2_x, door2_triangle_1_y);
                 path.lineTo(door2_triangle_2_x, door2_triangle_2_y);
@@ -186,66 +251,92 @@ public class display_Map extends AppCompatActivity {
                 canvas.drawPath(path, p);
 
                 //根據規則有不同的動作
+                circle.setAntiAlias(true);  circle.setColor(Color.RED);
                 //cx,cy為圓的圓心位置
-                if (rule == -1) { //只有第一個esp
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door2_triangle_1_x +100, door2_triangle_1_y -50, 20, circle); //+100 -50
-                    //canvas.drawCircle(600+100, 100-50, 20, circle); //+100 -50
+                if (rule == -1) { //只有第一個esp被偵測
+                    canvas.drawCircle(door2_triangle_1_x + 100, door2_triangle_1_y - 50, 20, circle); }
+                if (rule == -2) { //只有第二個esp被偵測
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_1_y - 50, 20, circle); }
+                if (rule == -3) { //只有第三個esp被偵測
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_2_y + 50, 20, circle); }
+                if (rule == 1) { //第一個esp近
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 100, 20, circle); }
+                if (rule == 2) { //第二個esp近
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 100, 20, circle); }
+                if (rule == 3) { //第三個esp近
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 100, 20, circle); }
+                if (rule == 11) { //靠近第一個esp，23等距
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 250, 20, circle); }
+                if (rule == 12) { //遠離第一個esp，23等距
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 250, 20, circle); }
+                if (rule == 21) { //靠近第二個esp，13等距
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 150, 20, circle); }
+                if (rule == 22) { //遠離第二個esp，13等距
+                    canvas.drawCircle(door2_triangle_1_x - 150, door2_triangle_2_y - 150, 20, circle); }
+                if (rule == 31) { //靠近第三個esp，12等距
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_2_y - 150, 20, circle); }
+                if (rule == 32) { //遠離第三個esp，12等距
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 150, 20, circle); }
+                if (rule == -120) { //沒有3，12等遠
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y - 100, 20, circle);
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 100, 20, circle);
                 }
-                if (rule == -2) { //只有第二個esp
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door2_triangle_2_x -100, door2_triangle_1_y -100, 20, circle); //-100 -100
-                    //canvas.drawCircle(200-100, 100-100, 20, circle); //-100 -100
+                if (rule == -121) { //沒有3，1近
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y - 100, 20, circle);
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 100, 20, circle);
                 }
-                if (rule == -3) { //只有第三個esp
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door2_triangle_2_x -100, door2_triangle_2_y +50, 20, circle); //-100 +50
-                    //canvas.drawCircle(200-100, 500+50, 20, circle); //-100 +50
+                if (rule == -122) { //沒有3，2近
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y - 100, 20, circle);
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 100, 20, circle);
                 }
-                if (rule == 1) {
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door2_triangle_1_x -100, door2_triangle_1_y +50, 20, circle); //-100 +50
-                    //canvas.drawCircle(600-100, 100+50, 20, circle); //-100 +50
+                if (rule == -130) { //沒有2，13等遠
+                    canvas.drawCircle(door2_triangle_1_x - 125, door2_triangle_2_y - 125, 20, circle);
+                    canvas.drawCircle(door2_triangle_1_x + 125, door2_triangle_2_y + 125, 20, circle);
                 }
-                if (rule == 2) {
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door2_triangle_2_x +100, door2_triangle_1_y +100, 20, circle); //+100 +100
-                    //canvas.drawCircle(200+100, 100+100, 20, circle); //+100 +100
+                if (rule == -131) { //沒有2，1近
+                    canvas.drawCircle(door2_triangle_1_x - 125, door2_triangle_2_y - 325, 20, circle);
+                    canvas.drawCircle(door2_triangle_1_x + 125, door2_triangle_2_y - 175, 20, circle);
                 }
-                if (rule == 3) {
-                    circle.setAntiAlias(true);  circle.setColor(Color.RED);
-                    canvas.drawCircle(door2_triangle_2_x +100, door2_triangle_2_y -50, 20, circle); //+100 -50
-                    //canvas.drawCircle(200+100, 500-50, 20, circle); //+100 -50
+                if (rule == -133) { //沒有2，3近
+                    canvas.drawCircle(door2_triangle_1_x - 325, door2_triangle_2_y - 125, 20, circle);
+                    canvas.drawCircle(door2_triangle_1_x - 175, door2_triangle_2_y + 125, 20, circle);
                 }
+                if (rule == -230) { //沒有1，23等
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_1_y + 250, 20, circle);
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 250, 20, circle);
+                }
+                if (rule == -232) { //沒有1，2近
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_1_y + 100, 20, circle);
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 100, 20, circle);
+                }
+                if (rule == -233) { //沒有1，3近
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_2_y - 100, 20, circle);
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 100, 20, circle);
+                }
+                if (rule == 66) { //中心
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 250, 20, circle); }
             }
-
-
-        }
-    }
+        }}
 
     //回到首頁重新查詢
-    private  View.OnClickListener BT_home_L = new View.OnClickListener()
-    {
+    private  View.OnClickListener BT_home_L = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
             intent.setClass(display_Map.this,MainActivity.class);
             startActivity(intent);
             finish();
-        }
-    };
+        }};
 
     //回到上頁重新選擇
-    private  View.OnClickListener BT_back_L = new View.OnClickListener()
-    {
+    private  View.OnClickListener BT_back_L = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //try {
+            try {
                 Intent intent2 = new Intent();
 
                 Bundle bundle = new Bundle();
-//                Bundle bundle2 = intent2.getExtras();
-
+//              Bundle bundle2 = intent2.getExtras();
 
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
@@ -268,12 +359,11 @@ public class display_Map extends AppCompatActivity {
                 intent2.setClass(display_Map.this,Map.class);
                 startActivity(intent2);
                 finish();
-                /*
+
             }catch (Exception error){
                 Toast test = Toast.makeText(display_Map.this,"未知錯誤",Toast.LENGTH_SHORT);
                 test.show();
-            }*/
-
+            }
         }
     };
 }

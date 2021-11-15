@@ -164,7 +164,11 @@ public class Map extends AppCompatActivity {
                     rule = -122;     rule_keep.setText("-122");
                 }
             }else {
-                if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
+                if ((gap2_3 < 4) & (gap2_3 > -4) & (gap1_3 < 4) & (gap1_3 > -4) & (gap1_2 < 4) & (gap1_2 > -4)
+                        & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
+                    //conclude.setText("你要找的beacon可能位於三個esp的中心");
+                    rule = 66;       rule_keep.setText("66");
+                }else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
                     if((gap2_3 < 4) & (gap2_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
                         //conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相似");
                         rule = 11;      rule_keep.setText("11");
