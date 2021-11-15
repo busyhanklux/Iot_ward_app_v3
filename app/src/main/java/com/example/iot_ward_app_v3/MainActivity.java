@@ -565,7 +565,6 @@ public class MainActivity extends AppCompatActivity {
         private  View.OnClickListener btStatusListener = new View.OnClickListener()
         {
             public void onClick(View v){
-                //RSSI判定(版本2，規則一和二)
                 //條件一：三個同時7分內，或其中兩個5分內
                 //過：
                 //規則一：純粹的比rssi哪個為最小，它就是最靠近的
@@ -598,7 +597,6 @@ public class MainActivity extends AppCompatActivity {
                         conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
                     }else if (time_now - check1 > 300)  { //只有1超過五分鐘
                         //conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個或第三個esp32附近");
-
                         if((rssi_2 > -140) & (rssi_3 > -140) & (gap2_3 < 4) & (gap2_3 > -4)){ //判定：2 == 3，相似
                             conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個或第三個esp中間，且可能外於兩者之間的牆外");
                         }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 > rssi_3)){ //判定：2 > 3
