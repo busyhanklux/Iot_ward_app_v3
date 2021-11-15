@@ -107,8 +107,8 @@ public class display_Map extends AppCompatActivity {
             //canvas.drawText("三角形：",350,100,p);
 
             Path Room = new Path(); //畫長方
-            Room.moveTo(190, 90); /*左上*/ Room.lineTo(610, 90); //右上
-            Room.lineTo(610, 510);/*右下*/ Room.lineTo(190, 510);//左下
+            Room.moveTo(190, 190); /*左上*/ Room.lineTo(610, 190); //右上
+            Room.lineTo(610, 610);/*右下*/ Room.lineTo(190, 610);//左下
             Room.close(); // 使這些點構成封閉的多邊形
             canvas.drawPath(Room, rect);
 
@@ -120,7 +120,7 @@ public class display_Map extends AppCompatActivity {
                 //door1_triangle_1_x => 左 x(200) , door1_triangle_2_x => 右 x(600)
                 int door1_triangle_1_x = 200,door1_triangle_2_x = 600;
                 //door1_triangle_1_y => 上 y(100) , door1_triangle_2_y => 下 y(500)
-                int door1_triangle_1_y = 100,door1_triangle_2_y = 500;
+                int door1_triangle_1_y = 200,door1_triangle_2_y = 600;
                 // moveTo：此點為多邊形的起點
                 path.moveTo(door1_triangle_1_x, door1_triangle_1_y); //1號
                 path.lineTo(door1_triangle_2_x, door1_triangle_1_y); //2號
@@ -174,7 +174,7 @@ public class display_Map extends AppCompatActivity {
                 //door2_triangle_1_x => 右 x(600) , door2_triangle_2_x => 左 x(200)
                 int door2_triangle_1_x = 600,door2_triangle_2_x = 200;
                 //door2_triangle_1_y => 上 y(100) , door2_triangle_2_y => 下 y(500)
-                int door2_triangle_1_y = 100,door2_triangle_2_y = 500;
+                int door2_triangle_1_y = 200,door2_triangle_2_y = 600;
                 path.moveTo(door2_triangle_1_x, door2_triangle_1_y);// 此點為多邊形的起點
                 path.lineTo(door2_triangle_2_x, door2_triangle_1_y);
                 path.lineTo(door2_triangle_2_x, door2_triangle_2_y);

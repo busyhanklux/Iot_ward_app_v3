@@ -227,15 +227,16 @@ public class Map extends AppCompatActivity {
             if (checkedId == R.id.left_door){ //左側門
                 door = 1;
                 door_keep.setText("1");
-                Toast test = Toast.makeText(Map.this,check1+"",Toast.LENGTH_SHORT);
-                test.show();
+                //Toast test = Toast.makeText(Map.this,check1+"",Toast.LENGTH_SHORT);
+                //test.show();
                 remind_text.setText("提醒訊息：點擊「展示」按鈕，以觀看\n"+select_number+" 號在 "+select_room+" 的情形");
             }
             if (checkedId == R.id.right_door){ //右側門
                 door = 2;
                 door_keep.setText("2");
-                Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                test.show();
+                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
+                //test.show();
+                remind_text.setText("提醒訊息：點擊「展示」按鈕，以觀看\n"+select_number+" 號在 "+select_room+" 的情形");
             }}};
 
 
@@ -275,41 +276,50 @@ public class Map extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            Bundle bundle2 = new Bundle();
+            //必須選擇其一才能觀看地圖，否則執行toast
+            if ((door == 1) || (door == 2)){
 
-            //防止回上一頁出error
-            //首先從1獲取，再丟入2
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                Bundle bundle2 = new Bundle();
 
-            bundle2.putInt("rssi_1",rssi_1);
-            bundle2.putInt("rssi_2",rssi_2);
-            bundle2.putInt("rssi_3",rssi_3);
+                //防止回上一頁出error
+                //首先從1獲取，再丟入2
 
-            //這個是給回上一頁準備資料用的
-            //首先從1獲取，再丟入2
+                bundle2.putInt("rssi_1",rssi_1);
+                bundle2.putInt("rssi_2",rssi_2);
+                bundle2.putInt("rssi_3",rssi_3);
 
-            bundle2.putLong("check_time1",check1);
-            bundle2.putLong("check_time2",check2);
-            bundle2.putLong("check_time3",check3);
+                //這個是給回上一頁準備資料用的
+                //首先從1獲取，再丟入2
 
-            bundle2.putInt("select_number",select_number);
-            bundle2.putString("select_room",select_room);
-            Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
-            test2.show();
+                bundle2.putLong("check_time1",check1);
+                bundle2.putLong("check_time2",check2);
+                bundle2.putLong("check_time3",check3);
 
-            //傳給下一頁：門的方向資料
-            int door2 = Integer.parseInt((String) door_keep.getText());
-            bundle2.putInt("door2",door2);
+                bundle2.putInt("select_number",select_number);
+                bundle2.putString("select_room",select_room);
+                //Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
+                //test2.show();
 
-            //傳給下一頁：點的放置資料
-            int rule2 = Integer.parseInt((String) rule_keep.getText());
-            bundle2.putInt("rule2",rule2);
+                //傳給下一頁：門的方向資料
+                int door2 = Integer.parseInt((String) door_keep.getText());
+                bundle2.putInt("door2",door2);
 
-            intent.putExtras(bundle2);
-            intent.setClass(Map.this,display_Map.class);
-            startActivity(intent);
-            finish();
+                //傳給下一頁：點的放置資料
+                int rule2 = Integer.parseInt((String) rule_keep.getText());
+                bundle2.putInt("rule2",rule2);
+
+                intent.putExtras(bundle2);
+                intent.setClass(Map.this,display_Map.class);
+                startActivity(intent);
+                finish();
+            }else{
+                Toast warning = Toast.makeText(Map.this,"請選擇門的位置，選擇完再按「展示」",Toast.LENGTH_SHORT);
+                warning.show();
         }
+
+    }
+
     };
 }

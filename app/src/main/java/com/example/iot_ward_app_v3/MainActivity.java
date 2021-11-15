@@ -566,10 +566,13 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View v){
                 //RSSI判定(版本2，規則一和二)
+                //條件一：三個同時7分內，或其中兩個5分內
+                //過：
                 //規則一：純粹的比rssi哪個為最小，它就是最靠近的
                 //規則二：延伸規則1，但出現兩者rssi相同之情形(兩者相同距為遠方)
                 //規則三：出現兩者rssi相同之情形(兩者相同距為近方)，如果不符合一二，執行之
-                //條件一：三個同時7分內，或其中兩個5分內
+                //未過：
+                //兩者比大小，或以唯一為主
                 try{
                     int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
                     int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
@@ -590,11 +593,32 @@ public class MainActivity extends AppCompatActivity {
                     }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時超過五分鐘
                         conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
                     }else if (time_now - check1 > 300)  { //只有1超過五分鐘
-                            conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個和第三個esp32附近");
+                        //conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個或第三個esp32附近");
+                        if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 == rssi_3)){ //判定：2 == 3
+                            conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個或第三個esp中間，且可能外於兩者之間的牆外");
+                        }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 > rssi_3)){ //判定：2 > 3
+                            conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個esp附近，且可能外於第二個或第三個esp之間的牆外");
+                        }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 < rssi_3)){ //判定：2 < 3
+                            conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第二個或第三個esp之間的牆外");
+                        }
                     }else if (time_now - check2 > 300)  { //只有2超過五分鐘
-                        conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個和第三個esp32附近");
+                        //conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個或第三個esp32附近");
+                        if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 == rssi_3)){ //判定：1 == 3
+                            conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第三個esp中間，且可能外於兩者之間的牆外");
+                        }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 > rssi_3)){ //判定：1 > 3
+                            conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個esp附近，且可能外於第一個或第三個esp之間的牆外");
+                        }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 < rssi_3)){ //判定：1 < 3
+                            conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第一個或第三個esp之間的牆外");
+                        }
                     }else if (time_now - check3 > 300)  { //只有1超過五分鐘
-                        conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個和第二個esp32附近");
+                        //conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個或第二個esp32附近");
+                        if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 == rssi_3)){ //判定：2 == 3
+                            conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個或第三個esp中間，且可能外於兩者之間的牆外");
+                        }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 > rssi_3)){ //判定：2 > 3
+                            conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個esp附近，且可能外於第二個或第三個esp之間的牆外");
+                        }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 < rssi_3)){ //判定：2 < 3
+                            conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第二個或第三個esp之間的牆外");
+                        }
                     }else {
                         if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
                             if((rssi_2 == rssi_3)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
