@@ -263,7 +263,7 @@ public class Map extends AppCompatActivity {
                 door_keep.setText("1");
                 //Toast test = Toast.makeText(Map.this,check1+"",Toast.LENGTH_SHORT);
                 //test.show();
-                remind_text.setText("提醒訊息：點擊「展示」按鈕，以觀看\n"+select_number+" 號在 "+select_room+" 的情形");
+                remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+" 號(嬰兒處理台(YD-IC-SCC))\n在 "+select_room+" 的情形");
             }
             if (checkedId == R.id.right_door){ //右側門
                 door = 2;
