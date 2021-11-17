@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
     };
-
+        //按下「文字說明」
         private  View.OnClickListener btStatusListener = new View.OnClickListener()
         {
             @SuppressLint("SetTextI18n")
