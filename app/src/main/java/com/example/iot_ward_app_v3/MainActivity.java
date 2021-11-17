@@ -566,7 +566,7 @@ public class MainActivity extends AppCompatActivity {
         private  View.OnClickListener btStatusListener = new View.OnClickListener()
         {
             public void onClick(View v){
-                //條件一：三個同時7分內，或其中兩個5分內
+                //條件一：三個同時10分內，或其中兩個10分內
                 //過：
                 //規則一：純粹的比rssi哪個為最小，它就是最靠近的
                 //規則二：延伸規則1，但出現兩者rssi相同之情形(兩者相同距為遠方)
