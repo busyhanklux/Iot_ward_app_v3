@@ -47,13 +47,14 @@ public class MainActivity extends AppCompatActivity {
     };
 
     String[] environment_choice = new String[]{
-      "1.大型空間","2.喜樂兒產房","3.ICU"
+      "1.大型空間","2.樂得兒產房","3.ICU"
     };
 
     String[] beacon_id_spinner_choice = new String[]{
-            "1.暫無使用之設備","2.","3.","4.嬰兒推車","5.",
-            "6.暫無使用之設備","7.暫無使用之設備","8." ,"9.暫無使用之設備","10.暫無使用之設備",
-            "11.","12.","13.","14.","15.",
+            "1.暫無使用之設備",
+            "2.高層次胎兒監視器(FM20)","3.雙胞胎胎兒監視器(FC1400)", "4.嬰兒推車","5.嬰兒處理台(YD-IC-SCC)",
+            "6.暫無使用之設備","7.暫無使用之設備","8.點滴架(有幫浦點滴輸液)" ,"9.暫無使用之設備","10.暫無使用之設備",
+            "11.E化行動護理工作車","12.E化行動護理工作車(有條碼印表機)","13.急救車","14.生理監視器(PHILIPS)","15.生理監視器(M9000A)",
             "16.點滴架","17.調試用編號，僅供測試使用"
     };
 
@@ -587,15 +588,15 @@ public class MainActivity extends AppCompatActivity {
                     int gap2_3 = abs(rssi_2) - abs(rssi_3); //23之距離
 
                     //三個同時超過7分鐘
-                    if((time_now - check1 > 420) & (time_now - check2 > 420) & (time_now - check3 > 420)){
+                    if((time_now - check1 > 600) & (time_now - check2 > 600) & (time_now - check3 > 600)){
                         conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp32同時一段時間未啟動");
-                    }else if ((time_now - check1 > 300) & (time_now - check2 > 300)) { //1.2同時超過五分鐘
+                    }else if ((time_now - check1 > 600) & (time_now - check2 > 600)) { //1.2同時超過五分鐘
                         conclude.setText("esp裝置一和二未啟動或未偵測到一段時間，因此可能位於第三個esp32附近");
-                    }else if ((time_now - check2 > 300) & (time_now - check3 > 300)) { //2.3同時超過五分鐘
+                    }else if ((time_now - check2 > 600) & (time_now - check3 > 600)) { //2.3同時超過五分鐘
                         conclude.setText("esp裝置二和三未啟動或未偵測到一段時間，因此可能位於第一個esp32附近");
-                    }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時超過五分鐘
+                    }else if ((time_now - check1 > 600) & (time_now - check3 > 600)) { //1.3同時超過五分鐘
                         conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
-                    }else if (time_now - check1 > 300)  { //只有1超過五分鐘
+                    }else if (time_now - check1 > 600)  { //只有1超過五分鐘
                         //conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個或第三個esp32附近");
                         if((rssi_2 > -140) & (rssi_3 > -140) & (gap2_3 < 4) & (gap2_3 > -4)){ //判定：2 == 3，相似
                             conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個或第三個esp中間，且可能外於兩者之間的牆外");
@@ -604,7 +605,7 @@ public class MainActivity extends AppCompatActivity {
                         }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 < rssi_3)){ //判定：2 < 3
                             conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第二個或第三個esp之間的牆外");
                         }
-                    }else if (time_now - check2 > 300)  { //只有2超過五分鐘
+                    }else if (time_now - check2 > 600)  { //只有2超過五分鐘
                         //conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個或第三個esp32附近");
                         if((rssi_1 > -140) & (rssi_3 > -140) & (gap1_3 < 4) & (gap1_3 > -4)){ //判定：1 == 3，相似
                             conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第三個esp中間，且可能外於兩者之間的牆外");
@@ -613,7 +614,7 @@ public class MainActivity extends AppCompatActivity {
                         }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 < rssi_3)){ //判定：1 < 3
                             conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第一個或第三個esp之間的牆外");
                         }
-                    }else if (time_now - check3 > 300)  { //只有3超過五分鐘
+                    }else if (time_now - check3 > 600)  { //只有3超過五分鐘
                         //conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個或第二個esp32附近");
                         if((rssi_1 > -140) & (rssi_2 > -140) & (gap1_2 < 4) & (gap1_2 > -4)){ //判定：1 == 2，相似
                             conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第二個esp中間，且可能外於兩者之間的牆外");

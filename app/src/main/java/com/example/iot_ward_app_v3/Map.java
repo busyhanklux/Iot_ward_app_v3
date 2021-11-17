@@ -115,19 +115,19 @@ public class Map extends AppCompatActivity {
             //第三：三位數，同二，再加上靠近第幾(中間為0)
 
             //三個同時超過7分鐘
-            if((time_now - check1 > 420) & (time_now - check2 > 420) & (time_now - check3 > 420)){
+            if((time_now - check1 > 600) & (time_now - check2 > 600) & (time_now - check3 > 600)){
                 //conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp32同時一段時間未啟動");
                 rule = 0;   rule_keep.setText("0");
-            }else if ((time_now - check1 > 300) & (time_now - check2 > 300)) { //1.2同時超過五分鐘
+            }else if ((time_now - check1 > 600) & (time_now - check2 > 600)) { //1.2同時超過五分鐘
                 //conclude.setText("esp裝置一和二未啟動或未偵測到一段時間，因此可能位於第三個esp32附近");
                 rule = -3;  rule_keep.setText("-3");
-            }else if ((time_now - check2 > 300) & (time_now - check3 > 300)) { //2.3同時超過五分鐘
+            }else if ((time_now - check2 > 600) & (time_now - check3 > 600)) { //2.3同時超過五分鐘
                 //conclude.setText("esp裝置二和三未啟動或未偵測到一段時間，因此可能位於第一個esp32附近");
                 rule = -1;  rule_keep.setText("-1");
-            }else if ((time_now - check1 > 300) & (time_now - check3 > 300)) { //1.3同時超過五分鐘
+            }else if ((time_now - check1 > 600) & (time_now - check3 > 600)) { //1.3同時超過五分鐘
                 //conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
                 rule = -2;  rule_keep.setText("-2");
-            }else if (time_now - check1 > 300)  { //只有1超過五分鐘
+            }else if (time_now - check1 > 600)  { //只有1超過五分鐘
                 //conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個和第三個esp32附近");
                 if((rssi_2 > -140) & (rssi_3 > -140) & (gap2_3 < 4) & (gap2_3 > -4)){ //判定：2 == 3，相似
                     //conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個或第三個esp中間，且可能外於兩者之間的牆外");
@@ -139,7 +139,7 @@ public class Map extends AppCompatActivity {
                     //conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第二個或第三個esp之間的牆外");
                     rule = -233;    rule_keep.setText("-233");
                 }
-            }else if (time_now - check2 > 300)  { //只有2超過五分鐘
+            }else if (time_now - check2 > 600)  { //只有2超過五分鐘
                 //conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個和第三個esp32附近");
                 if((rssi_1 > -140) & (rssi_3 > -140) & (gap1_3 < 4) & (gap1_3 > -4)){ //判定：1 == 3，相似
                     //conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第三個esp中間，且可能外於兩者之間的牆外");
@@ -151,7 +151,7 @@ public class Map extends AppCompatActivity {
                     //conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第一個或第三個esp之間的牆外");
                     rule = -133;    rule_keep.setText("-133");
                 }
-            }else if (time_now - check3 > 300)  { //只有3超過五分鐘
+            }else if (time_now - check3 > 600)  { //只有3超過五分鐘
                 //conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個和第二個esp32附近");
                 if((rssi_1 > -140) & (rssi_2 > -140) & (gap1_2 < 4) & (gap1_2 > -4)){ //判定：1 == 2，相似
                     //conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第二個esp中間，且可能外於兩者之間的牆外");
@@ -278,8 +278,8 @@ public class Map extends AppCompatActivity {
     public View.OnClickListener pre_display_L = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast test3 = Toast.makeText(Map.this,String.valueOf(door),Toast.LENGTH_SHORT);
-            test3.show();
+            //Toast test3 = Toast.makeText(Map.this,String.valueOf(door),Toast.LENGTH_SHORT);
+            //test3.show();
 
             if(door == 1){//左門
                 pre_place.setImageResource(R.drawable.place1);

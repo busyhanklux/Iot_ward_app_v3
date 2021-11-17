@@ -60,8 +60,8 @@ public class display_Map extends AppCompatActivity {
         bundle.putInt("select_number",select_number);
         bundle.putString("select_room",select_room);
 
-        Toast test = Toast.makeText(display_Map.this,select_number+"嘎啦嘎拉"+select_room+"嘎啦嘎拉"+check3,Toast.LENGTH_SHORT);
-        test.show();
+        //Toast test = Toast.makeText(display_Map.this,select_number+"嘎啦嘎拉"+select_room+"嘎啦嘎拉"+check3,Toast.LENGTH_SHORT);
+        //test.show();
         //intent2.putExtras(bundle);
 
         door = bundle2.getInt("door2");
@@ -69,7 +69,7 @@ public class display_Map extends AppCompatActivity {
         door_number.setText(String.valueOf(door));
 
         rule = bundle2.getInt("rule2");
-        rule = 12;
+        //rule = 12;
         //Toast test = Toast.makeText(display_Map.this,door+"_1145_"+rule,Toast.LENGTH_SHORT);
         //test.show();
 
