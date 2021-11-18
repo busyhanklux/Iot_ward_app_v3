@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         find_major.setOnClickListener(find_major_L);
         }
 
+        //按下「查找按鈕」
         private  View.OnClickListener find_major_L = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
