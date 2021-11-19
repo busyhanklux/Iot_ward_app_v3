@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btMap,btStatus,esp32_switch,find_major;
     private TextView time_check1,time_check2,time_check3;
     int room_choice,beacon_number_choice;
+    String beacon_name,esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
     //下拉式選單
     String[] esp32_num = new String[]{
@@ -560,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
                     tv_ei.setText("格式錯誤");
                 }
 
-
+                esp32_switch_unlock = "Yes";
             }
 
     };
@@ -718,18 +719,6 @@ public class MainActivity extends AppCompatActivity {
                 Long check2 = Long.parseLong(String.valueOf(time_check2.getText()));
                 Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
 
-                /*
-                //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
-                if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                    conclude.setText("你要找的beacon靠近第一個esp32");
-                }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                    conclude.setText("你要找的beacon靠近第二個esp32");
-                }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                    conclude.setText("你要找的beacon靠近第三個esp32");
-                }else{
-                    conclude.setText("資料有誤，或是未建構這項規則");
-                }*/
-
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
@@ -747,6 +736,8 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putLong("check_time2",check2);
                 bundle.putLong("check_time3",check3);
 
+                bundle.putString("beacon_name",beacon_name);
+
                 intent.putExtras(bundle);
                 intent.setClass(MainActivity.this,Map.class);
                 startActivity(intent);
@@ -762,10 +753,17 @@ public class MainActivity extends AppCompatActivity {
     //選擇第幾個esp32的資料
     Spinner.OnItemSelectedListener sp_esp32_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            if(esp32_switch_unlock == "Yes")
+            {
+
+                //String pos_B = parent.getItemAtPosition(position).toString();
+                //String Input = (Input_major.getText()).toString();
+
+                //Toast test = Toast.makeText(MainActivity.this,pos_A_2+"",Toast.LENGTH_SHORT);
+                //test.show();
+            }
             String pos_A_2 = String.valueOf(position);
             sw_number.setText(pos_A_2);
-            //String pos_B = parent.getItemAtPosition(position).toString();
-            //String Input = (Input_major.getText()).toString();
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
@@ -774,7 +772,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner.OnItemSelectedListener environment_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position2, long id2) {
             room_choice = position2 ; //選項1時，使他輸出為0
-            String room_place = parent.getItemAtPosition(position2).toString();
+            String room_place = parent.getItemAtPosition(position2).toString(); //取得文字
             //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
             int Position_string = 1;
             room_place = room_place.substring(Position_string+1);
@@ -793,11 +791,19 @@ public class MainActivity extends AppCompatActivity {
             //Toast beacon_number_Toast = Toast.makeText(MainActivity.this,beacon_number_choice+"",Toast.LENGTH_SHORT);
             //beacon_number_Toast.show();
             Input_major.setText(String.valueOf(beacon_number_choice)); //由此控制原本的輸入文字
+
+            int Position_string = 1; //文字字元數，如果為10號以後就處理3個字元
+            if(beacon_number_choice >= 10){
+                Position_string = 2;
+            }
+            beacon_name = parent.getItemAtPosition(beacon_num).toString(); //擷取選項的文字
+            beacon_name = beacon_name.substring(Position_string+1); //處理文字
+
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
 
-
+    //按下切換「esp32」
     private View.OnClickListener esp32_switchListener = new View.OnClickListener() {
         public void onClick(View v) {
             FirebaseDatabase database2 = FirebaseDatabase.getInstance();

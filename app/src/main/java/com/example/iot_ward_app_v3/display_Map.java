@@ -20,7 +20,7 @@ public class display_Map extends AppCompatActivity {
     int rssi_1,rssi_2,rssi_3;
     Long check1,check2,check3;
     int select_number;
-    String select_room;
+    String select_room,beacon_name;
 
     TextView door_number;
     Button BT_home,BT_back;
@@ -57,6 +57,7 @@ public class display_Map extends AppCompatActivity {
 
         select_number = bundle2.getInt("select_number");
         select_room = bundle2.getString("select_room");
+        beacon_name = bundle2.getString("beacon_name");
         bundle.putInt("select_number",select_number);
         bundle.putString("select_room",select_room);
 
@@ -354,6 +355,7 @@ public class display_Map extends AppCompatActivity {
                 //String select_room = bundle2.getString("select_room");
                 bundle.putInt("select_number",select_number);
                 bundle.putString("select_room",select_room);
+                bundle.putString("beacon_name",beacon_name);
 
                 intent2.putExtras(bundle);
                 intent2.setClass(display_Map.this,Map.class);

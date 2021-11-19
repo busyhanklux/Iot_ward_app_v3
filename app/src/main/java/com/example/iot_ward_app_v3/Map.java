@@ -25,7 +25,7 @@ public class Map extends AppCompatActivity {
 
     //畫板參考https://lowren.pixnet.net/blog/post/92267045
     int rule,door,select_number;
-    String select_room;
+    String select_room,beacon_name;
 
     //你必須在這裡創立全域變數，這可能是最簡單的bundle方法，不然程式會誤認為 0 或 null
     Long check1,check2,check3;
@@ -76,9 +76,11 @@ public class Map extends AppCompatActivity {
             check2 = bundle.getLong("check_time2");
             check3 = bundle.getLong("check_time3");
 
-            //某某
+            //某某號，設備名字嘎啦嘎拉
             select_number = bundle.getInt("select_number");
-            //在某某的情形
+            beacon_name = bundle.getString("beacon_name");
+
+            //在某某房間的情形
             select_room = bundle.getString("select_room");
 
             Bundle bundle2 = new Bundle();
@@ -263,14 +265,14 @@ public class Map extends AppCompatActivity {
                 door_keep.setText("1");
                 //Toast test = Toast.makeText(Map.this,check1+"",Toast.LENGTH_SHORT);
                 //test.show();
-                remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+" 號(嬰兒處理台(YD-IC-SCC))\n在 "+select_room+" 的情形");
+                remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+"號 " + beacon_name + "\n在 "+select_room+" 的情形");
             }
             if (checkedId == R.id.right_door){ //右側門
                 door = 2;
                 door_keep.setText("2");
                 //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
                 //test.show();
-                remind_text.setText("提醒訊息：點擊「展示」按鈕，以觀看\n"+select_number+" 號在 "+select_room+" 的情形");
+                remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+"號 " + beacon_name + "\n在 "+select_room+" 的情形");
             }}};
 
 
@@ -333,6 +335,7 @@ public class Map extends AppCompatActivity {
 
                 bundle2.putInt("select_number",select_number);
                 bundle2.putString("select_room",select_room);
+                bundle2.putString("beacon_name",beacon_name);
                 //Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
                 //test2.show();
 
