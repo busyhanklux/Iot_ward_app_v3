@@ -152,6 +152,9 @@ public class display_Map extends AppCompatActivity {
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
 
+                p.setColor(Color.WHITE);							// 設置白色
+                canvas.drawText("門",270,780,p);			// 寫一段文字
+
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
                 //根據規則有不同的動作，cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp被偵測
@@ -250,6 +253,9 @@ public class display_Map extends AppCompatActivity {
                 path.lineTo(door2_triangle_2_x, door2_triangle_2_y);
                 path.close(); // 使這些點構成封閉的多邊形
                 canvas.drawPath(path, p);
+
+                p.setColor(Color.WHITE);							// 設置白色
+                canvas.drawText("門",630,780,p);			// 門
 
                 //根據規則有不同的動作
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);

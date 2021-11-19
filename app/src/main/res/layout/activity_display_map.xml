@@ -5,6 +5,8 @@
     android:id="@+id/back_to_first"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:textColor ="@color/white"
     tools:context=".display_Map">
 
     <TextView

@@ -10,10 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo4"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Iot_ward_app_v3">
+        android:theme= "@style/AppTheme.NoActionBar">
         <activity
             android:name=".display_Map"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"/> //保持直的
         <activity
             android:name=".Map"

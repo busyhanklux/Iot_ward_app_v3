@@ -753,6 +753,7 @@ public class MainActivity extends AppCompatActivity {
     //選擇第幾個esp32的資料
     Spinner.OnItemSelectedListener sp_esp32_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            //修bug
             if(esp32_switch_unlock == "Yes")
             {
 

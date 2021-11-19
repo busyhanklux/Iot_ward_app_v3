@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <!--
+    <style name="darktheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#B8DE14 </item>
+        <item name="android:colorPrimaryDark">#DE1414 </item>
+        <item name="android:textColor">#656A69 </item> 文字顏色(下拉式選單)
+        <item name="android:background">#212121 </item> 文字的眶顏色(下拉式選單)+醒目文字
+        <item name="android:tint">#14DEB6 </item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style> -->
+    <style name="AppTheme.NoActionBar" parent="Theme.Iot_ward_app_v3">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+</resources>
     <!-- https://www.youtube.com/watch?v=-qsHE3TpJqw ，介面顏色設定-->
+    <!--http://dog0416.blogspot.com/2018/04/android-hide-action-bar-and-status-bar.html-->

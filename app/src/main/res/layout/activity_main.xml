@@ -5,20 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     tools:context=".MainActivity">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"></LinearLayout>
 
     <ImageView
         android:id="@+id/imgTitle"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         app:srcCompat="@drawable/logo2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"></LinearLayout>
 
     <TextView
         android:id="@+id/tvID"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="查詢選擇(上為設備編號，下為環境選擇)"
+        android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
     <Spinner
@@ -54,6 +66,9 @@
                 android:layout_width="300dp"
                 android:layout_height="48dp"
                 android:layout_weight="0.25"
+                android:backgroundTint="#FFFFFF"
+                android:foregroundTint="#FFFFFF"
+                android:textColor="#FFFFFF"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <Spinner
@@ -90,6 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="設備編號資訊"
+        android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
 
@@ -175,7 +191,7 @@
             android:id="@+id/sw_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:textColor="@color/white"
             android:visibility="gone"
             tools:visibility="gone" />
 
@@ -226,6 +242,7 @@
             android:scrollbars="none"
             android:text="請先輸入要查詢的beacon編號"
             android:textAlignment="center"
+            android:textColor="#FFFFFF"
             android:textDirection="ltr"
             android:textSize="20sp" />
 
@@ -341,7 +358,8 @@
         <TextView
             android:id="@+id/conclude"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <LinearLayout
@@ -361,7 +379,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="文字說明" />
+            android:text="文字說明"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/textView"
@@ -374,7 +393,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="開啟地圖" />
+            android:text="開啟地圖"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/textView3"
