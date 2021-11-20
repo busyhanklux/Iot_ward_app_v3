@@ -76,7 +76,7 @@ public class display_Map extends AppCompatActivity {
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
-        view.setMinimumHeight(500);
+        view.setMinimumHeight(600);
         view.setMinimumWidth(300);
         view.invalidate();
         layout.addView(view);
@@ -153,7 +153,13 @@ public class display_Map extends AppCompatActivity {
                 canvas.drawPath(path, p);
 
                 p.setColor(Color.WHITE);							// 設置白色
-                canvas.drawText("門",270,780,p);			// 寫一段文字
+                //建議：圖例
+                p.setTextSize(40);
+                canvas.drawText("門前牆角" ,150,100,p);
+                canvas.drawText("門斜牆角" ,675,100,p);
+                canvas.drawText("門平行牆角",650,800,p);
+
+                //圖例：用ppt丟imageView
 
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
                 //根據規則有不同的動作，cx,cy為圓的圓心位置

@@ -758,7 +758,6 @@ public class MainActivity extends AppCompatActivity {
             //修bug
             if(esp32_switch_unlock == "Yes")
             {
-
                 //String pos_B = parent.getItemAtPosition(position).toString();
                 //String Input = (Input_major.getText()).toString();
 
