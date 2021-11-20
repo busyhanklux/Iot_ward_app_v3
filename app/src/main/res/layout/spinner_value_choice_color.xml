@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:textSize="15dp"
+    android:textColor="#FFFFFF"
+    android:background="@color/colorBackground">
+    </TextView>
+    <!--spinner的顏色，大小，字體，都要從這改-->
+    <!--//設定字體大小-->
+    <!--//設定文字顏色-->
+    <!--//設定背景顏色-->
+    <!--//設定字體樣式-->
+    <!--android:textStyle="bold"-->
+    <!--android:padding="13dp"-->
+    <!--android:textSize="24dp"-->

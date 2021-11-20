@@ -50,6 +50,7 @@
             android:gravity="center"
             android:text="選擇門的方位，以便進行地圖顯示"
             android:textAlignment="center"
+            android:textColor="#FFFFFF"
             android:textDirection="ltr"
             android:textSize="24sp" />
 
@@ -65,14 +66,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="門：左" />
+                android:text="門：左"
+                android:textColor="#FFFFFF" />
 
             <RadioButton
                 android:id="@+id/right_door"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="門：右" />
+                android:text="門：右"
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/check_door"
@@ -89,6 +92,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:textColor="#FFFFFF"
             android:textSize="20sp" />
 
         <TextView

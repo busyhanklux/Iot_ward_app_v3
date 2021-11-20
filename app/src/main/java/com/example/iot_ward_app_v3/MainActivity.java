@@ -127,21 +127,22 @@ public class MainActivity extends AppCompatActivity {
         invisible_rssi_2 = (TextView)findViewById(R.id.invisible_rssi_2);
         invisible_rssi_3 = (TextView)findViewById(R.id.invisible_rssi_3);
 
+        //spinner相關，你需要一個xml來調整大小(把android拿掉
         //Spinner(sp_esp32_choice)
         ArrayAdapter<String> adapternumber2 =
-                new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,esp32_num);
+                new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,esp32_num);
         adapternumber2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_esp32_choice.setAdapter(adapternumber2);    //設定資料來源
         sp_esp32_choice.setOnItemSelectedListener(sp_esp32_choice_Listener);
         //Spinner(environment_choice)
         ArrayAdapter<String> adapternumber_environment_choice =
-                new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,environment_choice);
+                new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,environment_choice);
         adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
         beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
         //Spinner(beacon_id_spinner)
         ArrayAdapter<String> adapternumber_beacon_id_spinner_choice =
-                new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,beacon_id_spinner_choice);
+                new ArrayAdapter<String>(this ,R.layout.spinner_value_choice_color,beacon_id_spinner_choice);
         adapternumber_beacon_id_spinner_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         beacon_idnum_spinner.setAdapter(adapternumber_beacon_id_spinner_choice);    //設定資料來源
         beacon_idnum_spinner.setOnItemSelectedListener(beacon_id_spinner_choice_Listener);
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         private  View.OnClickListener find_major_L = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                conclude.setText(""); //清除文字說明的文字
                 FirebaseDatabase database_get = FirebaseDatabase.getInstance();
                 try {
                     int select_major = Integer.parseInt(String.valueOf(Input_major.getText()));
