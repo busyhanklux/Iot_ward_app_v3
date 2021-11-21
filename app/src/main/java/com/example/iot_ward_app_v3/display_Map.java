@@ -1,7 +1,10 @@
 package com.example.iot_ward_app_v3;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,11 +13,13 @@ import android.graphics.Path;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class display_Map extends AppCompatActivity {
+    Context context = display_Map.this;
 
     int door,rule,door2;
     int rssi_1,rssi_2,rssi_3;
@@ -23,7 +28,7 @@ public class display_Map extends AppCompatActivity {
     String select_room,beacon_name;
 
     TextView door_number;
-    Button BT_home,BT_back;
+    Button BT_home,BT_back,BT_icon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,9 @@ public class display_Map extends AppCompatActivity {
         //回上一頁的按鈕
         BT_back = findViewById(R.id.BT_back);
         BT_back.setOnClickListener(BT_back_L);
+        //圖例
+        BT_icon = findViewById(R.id.BT_icon);
+        BT_icon.setOnClickListener(BT_icon_L);
 
         Intent intent2 = this.getIntent();
         Bundle bundle2 = intent2.getExtras();
@@ -105,7 +113,7 @@ public class display_Map extends AppCompatActivity {
             // 三角形繪圖
             p.setColor(Color.parseColor("#FBD9D9"));
             p.setTextSize(100);
-            rect.setColor(Color.parseColor("#33FFA6"));
+            rect.setColor(Color.parseColor("#33FFA6")); //綠色
             rect.setTextSize(100);
             rect_door.setColor(Color.parseColor("#00C1FF"));
             rect_door.setTextSize(100);
@@ -261,7 +269,11 @@ public class display_Map extends AppCompatActivity {
                 canvas.drawPath(path, p);
 
                 p.setColor(Color.WHITE);							// 設置白色
-                canvas.drawText("門",630,780,p);			// 門
+                //建議：圖例
+                p.setTextSize(40);
+                canvas.drawText("門前牆角" ,675,100,p);
+                canvas.drawText("門斜牆角" ,150,100,p);
+                canvas.drawText("門平行牆角",125,800,p);
 
                 //根據規則有不同的動作
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
@@ -376,6 +388,46 @@ public class display_Map extends AppCompatActivity {
 
             }catch (Exception error){
                 Toast test = Toast.makeText(display_Map.this,"未知錯誤",Toast.LENGTH_SHORT);
+                test.show();
+            }
+        }
+    };
+
+    private  View.OnClickListener BT_icon_L = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                if (door == 1){
+                    ImageView iv = new ImageView(context);
+                    iv.setImageResource(R.drawable.icon_left);
+                    AlertDialog.Builder icon_check = new AlertDialog.Builder(display_Map.this);
+                    icon_check.setTitle("顏色、圖例顯示");
+                    icon_check.setIcon(R.drawable.logo4);
+                    icon_check.setView(iv);
+                    icon_check.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+                }
+                if (door == 2){
+                    ImageView iv = new ImageView(context);
+                    iv.setImageResource(R.drawable.icon_right);
+                    AlertDialog.Builder icon_check = new AlertDialog.Builder(display_Map.this);
+                    icon_check.setTitle("顏色、圖例顯示");
+                    icon_check.setIcon(R.drawable.logo4);
+                    icon_check.setView(iv);
+                    icon_check.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+                }
+
+            }catch (Exception error){
+                Toast test = Toast.makeText(display_Map.this,"123",Toast.LENGTH_SHORT);
                 test.show();
             }
         }
