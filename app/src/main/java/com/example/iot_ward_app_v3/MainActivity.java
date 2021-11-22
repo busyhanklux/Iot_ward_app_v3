@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
                     //esp32：1、門口前方牆角(第一個esp) 2、門口斜對牆角(第二個esp) 3、門口平行牆角(第三個esp)
                     //三個同時超過10分鐘，就是沒有
                     if((time_now - check1 > 600) & (time_now - check2 > 600) & (time_now - check3 > 600)){
-                        conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp同時一段時間未啟動");
+                        conclude.setText("你要找的設備，可能不在此範圍一段時間，或著三個esp同時一段時間未啟動");
 
                     }else if ((time_now - check1 > 600) & (time_now - check2 > 600)) { //1.2同時超過10分鐘
                         conclude.setText("esp裝置一(門口前方牆角) 和 esp裝置二(門口斜對牆角) 未啟動或未偵測到一段時間" +
@@ -661,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         if ((gap2_3 < 4) & (gap2_3 > -4) & (gap1_3 < 4) & (gap1_3 > -4) & (gap1_2 < 4) & (gap1_2 > -4)
                                 & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                            conclude.setText("你要找的beacon可能位於該空間的中心"); }
+                            conclude.setText("你要找的設備可能位於該空間的中心"); }
 
                         else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1最近
                             if((gap2_3 < 4) & (gap2_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2,3 相似

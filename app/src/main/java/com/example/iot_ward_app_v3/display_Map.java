@@ -25,9 +25,9 @@ public class display_Map extends AppCompatActivity {
     int rssi_1,rssi_2,rssi_3;
     Long check1,check2,check3;
     int select_number;
-    String select_room,beacon_name;
+    String select_room,beacon_name,description;
 
-    TextView door_number;
+    TextView door_number,text_third;
     Button BT_home,BT_back,BT_icon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,16 @@ public class display_Map extends AppCompatActivity {
         select_number = bundle2.getInt("select_number");
         select_room = bundle2.getString("select_room");
         beacon_name = bundle2.getString("beacon_name");
+
+        description = bundle2.getString("description");
+        text_third = (TextView)findViewById(R.id.text_third);
+        text_third.setText(String.valueOf(description));
+
         bundle.putInt("select_number",select_number);
         bundle.putString("select_room",select_room);
+        bundle.putString("description",description);
 
-        //Toast test = Toast.makeText(display_Map.this,select_number+"嘎啦嘎拉"+select_room+"嘎啦嘎拉"+check3,Toast.LENGTH_SHORT);
+        //Toast test = Toast.makeText(display_Map.this,description+"嘎啦嘎拉"+check3,Toast.LENGTH_SHORT);
         //test.show();
         //intent2.putExtras(bundle);
 
@@ -370,10 +376,10 @@ public class display_Map extends AppCompatActivity {
                 bundle.putLong("check_time2",check2);
                 bundle.putLong("check_time3",check3);
 
-                Toast test = Toast.makeText(display_Map.this,check1+"T"+check2+"T"+check3,Toast.LENGTH_SHORT);
+                //Toast test = Toast.makeText(display_Map.this,check1+"T"+check2+"T"+check3,Toast.LENGTH_SHORT);
                 //Toast test = Toast.makeText(display_Map.this,rssi_1+"T"+rssi_2+"T"+rssi_3,Toast.LENGTH_SHORT);
                 //Toast test = Toast.makeText(display_Map.this,"沒問題",Toast.LENGTH_SHORT);
-                test.show();
+                //test.show();
 
                 //int select_number = bundle2.getInt("select_number");
                 //String select_room = bundle2.getString("select_room");

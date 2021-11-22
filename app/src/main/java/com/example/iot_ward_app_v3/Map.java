@@ -30,6 +30,7 @@ public class Map extends AppCompatActivity {
     //你必須在這裡創立全域變數，這可能是最簡單的bundle方法，不然程式會誤認為 0 或 null
     Long check1,check2,check3;
     int rssi_1,rssi_2,rssi_3;
+    String description;
 
     Button bt_back;
     private TextView test1,rule_keep,door_keep,remind_text;
@@ -116,99 +117,154 @@ public class Map extends AppCompatActivity {
             //第二：(如果為正)如果相似，個位為1(等近)或2(等遠)，十位為主角
             //第三：三位數，同二，再加上靠近第幾(中間為0)
 
-            //三個同時超過7分鐘
+            //esp32：1、門口前方牆角(第一個esp) 2、門口斜對牆角(第二個esp) 3、門口平行牆角(第三個esp)
+            //三個同時超過10分鐘，就是沒有
             if((time_now - check1 > 600) & (time_now - check2 > 600) & (time_now - check3 > 600)){
-                //conclude.setText("你要找的beacon，可能不在此範圍一段時間，或著三個esp32同時一段時間未啟動");
+                description = "你要找的設備，可能不在此範圍一段時間，或著三個esp同時一段時間未啟動";
                 rule = 0;   rule_keep.setText("0");
-            }else if ((time_now - check1 > 600) & (time_now - check2 > 600)) { //1.2同時超過五分鐘
-                //conclude.setText("esp裝置一和二未啟動或未偵測到一段時間，因此可能位於第三個esp32附近");
+
+            }else if ((time_now - check1 > 600) & (time_now - check2 > 600)) { //1.2同時超過10分鐘
+                description = "esp裝置一(門口前方牆角) 和 esp裝置二(門口斜對牆角) 未啟動或未偵測到一段時間" +
+                                "\n因此可能位於 \"門口平行牆角(第三個esp)\" 附近";
                 rule = -3;  rule_keep.setText("-3");
-            }else if ((time_now - check2 > 600) & (time_now - check3 > 600)) { //2.3同時超過五分鐘
-                //conclude.setText("esp裝置二和三未啟動或未偵測到一段時間，因此可能位於第一個esp32附近");
+
+            }else if ((time_now - check2 > 600) & (time_now - check3 > 600)) { //2.3同時超過10分鐘
+                description = "esp裝置二(門口斜對牆角) 和 esp裝置三(門口平行牆角) 未啟動或未偵測到一段時間" +
+                                "\n因此可能位於 \"門口前方牆角(第一個esp)\" 附近";
                 rule = -1;  rule_keep.setText("-1");
-            }else if ((time_now - check1 > 600) & (time_now - check3 > 600)) { //1.3同時超過五分鐘
-                //conclude.setText("esp裝置一和三未啟動或未偵測到一段時間，因此可能位於第二個esp32附近");
+
+            }else if ((time_now - check1 > 600) & (time_now - check3 > 600)) { //1.3同時超過10分鐘
+                description = "esp裝置一(門口前方牆角) 和 esp裝置三(門口平行牆角) 未啟動或未偵測到一段時間" +
+                                "\n因此可能位於 \"門口斜對牆角(第二個esp)\" 附近";
                 rule = -2;  rule_keep.setText("-2");
-            }else if (time_now - check1 > 600)  { //只有1超過五分鐘
+
+            }else if (time_now - check1 > 600)  { //只有1超過10分鐘
                 //conclude.setText("esp裝置一未啟動或未偵測到一段時間，因此可能位於第二個和第三個esp32附近");
-                if((rssi_2 > -140) & (rssi_3 > -140) & (gap2_3 < 4) & (gap2_3 > -4)){ //判定：2 == 3，相似
-                    //conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個或第三個esp中間，且可能外於兩者之間的牆外");
+
+                if((rssi_2 > -140) & (rssi_3 > -140) & (gap2_3 < 4) & (gap2_3 > -4)){ //判定：2和3 RSSI接近，相似距離
+                    description = "esp裝置一(門口前方牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間" +
+                            "\n或可能位於兩者之間的牆外";
                     rule = -230;    rule_keep.setText("-230");
-                }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 > rssi_3)){ //判定：2 > 3
-                    //conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個esp附近，且可能外於第二個或第三個esp之間的牆外");
+
+                }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 > rssi_3)){ //判定：2 > 3 ，2比較近
+                    description = "esp裝置一(門口前方牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口斜對牆角(第二個esp)\" 附近" +
+                            "\n或可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間的牆外";
                     rule = -232;    rule_keep.setText("-232");
-                }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 < rssi_3)){ //判定：2 < 3
-                    //conclude.setText("esp裝置一未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第二個或第三個esp之間的牆外");
+
+                }else if((rssi_2 > -140) & (rssi_3 > -140) & (rssi_2 < rssi_3)){ //判定：2 < 3 ，3比較近
+                    description = "esp裝置一(門口前方牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口平行牆角(第三個esp)\" 附近" +
+                            "\n或可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間的牆外";
                     rule = -233;    rule_keep.setText("-233");
                 }
-            }else if (time_now - check2 > 600)  { //只有2超過五分鐘
+            }else if (time_now - check2 > 600)  { //只有2超過10分鐘
                 //conclude.setText("esp裝置二未啟動或未偵測到一段時間，因此可能位於第一個和第三個esp32附近");
-                if((rssi_1 > -140) & (rssi_3 > -140) & (gap1_3 < 4) & (gap1_3 > -4)){ //判定：1 == 3，相似
-                    //conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第三個esp中間，且可能外於兩者之間的牆外");
+
+                if((rssi_1 > -140) & (rssi_3 > -140) & (gap1_3 < 4) & (gap1_3 > -4)){ //判定：1和3 RSSI接近，相似距離
+                    description = "esp裝置二(門口斜對牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口前方牆角(第一個esp) 和 門口平行牆角(第三個esp)\" 之間" +
+                            "\n或可能位於兩者之間的牆外";
                     rule = -130;    rule_keep.setText("-130");
-                }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 > rssi_3)){ //判定：1 > 3
-                    //conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個esp附近，且可能外於第一個或第三個esp之間的牆外");
+
+                }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 > rssi_3)){ //判定：1 > 3，1比較近
+                    description = "esp裝置二(門口斜對牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口前方牆角(第一個esp)\" 附近" +
+                            "\n或可能位於 \"門口前方牆角(第一個esp) 和 門口平行牆角(第三個esp)\" 之間的牆外";
                     rule = -131;    rule_keep.setText("-131");
-                }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 < rssi_3)){ //判定：1 < 3
-                    //conclude.setText("esp裝置二未啟動或未偵測到一段時間，根據現有的資料，可能位於第三個esp附近，且可能外於第一個或第三個esp之間的牆外");
+
+                }else if((rssi_1 > -140) & (rssi_3 > -140) & (rssi_1 < rssi_3)){ //判定：1 < 3，3比較近
+                    description = "esp裝置二(門口斜對牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口斜對牆角(第二個esp)\" 附近" +
+                            "\n或可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間的牆外";
                     rule = -133;    rule_keep.setText("-133");
                 }
-            }else if (time_now - check3 > 600)  { //只有3超過五分鐘
+            }else if (time_now - check3 > 600)  { //只有3超過10分鐘
                 //conclude.setText("esp裝置三未啟動或未偵測到一段時間，因此可能位於第一個和第二個esp32附近");
-                if((rssi_1 > -140) & (rssi_2 > -140) & (gap1_2 < 4) & (gap1_2 > -4)){ //判定：1 == 2，相似
-                    //conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個或第二個esp中間，且可能外於兩者之間的牆外");
+
+                if((rssi_1 > -140) & (rssi_2 > -140) & (gap1_2 < 4) & (gap1_2 > -4)){ //判定：1和2 RSSI接近，相似距離
+                    description = "esp裝置三(門口平行牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口前方牆角(第一個esp) 或 門口斜對牆角(第二個esp)\" 之間" +
+                            "\n或可能位於兩者之間的牆外";
                     rule = -120;     rule_keep.setText("-120");
-                }else if((rssi_1 > -140) & (rssi_2 > -140) & (rssi_1 > rssi_2)){ //判定：1 > 2
-                    //conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第一個esp附近，且可能外於第一個或第二個esp之間的牆外");
+
+                }else if((rssi_1 > -140) & (rssi_2 > -140) & (rssi_1 > rssi_2)){ //判定：1 > 2，1比較近
+                    description = "esp裝置三(門口平行牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口前方牆角(第一個esp)\" 附近" +
+                            "\n或可能位於 \"門口前方牆角(第一個esp) 或 門口斜對牆角(第二個esp)\" 之間的牆外";
                     rule = -121;     rule_keep.setText("-121");
-                }else if((rssi_1 > -140) & (rssi_2 > -140) & (rssi_1 < rssi_2)){ //判定：1 < 2
-                    //conclude.setText("esp裝置三未啟動或未偵測到一段時間，根據現有的資料，可能位於第二個esp附近，且可能外於第一個或第二個esp之間的牆外");
+
+                }else if((rssi_1 > -140) & (rssi_2 > -140) & (rssi_1 < rssi_2)){ //判定：1 < 2，2比較近
+                    description = "esp裝置三(門口平行牆角)未啟動或未偵測到一段時間 " +
+                            "\n可能位於 \"門口斜對牆角(第二個esp)\" 附近" +
+                            "\n或可能位於 \"門口前方牆角(第一個esp) 或 門口斜對牆角(第二個esp)\" 之間的牆外";
                     rule = -122;     rule_keep.setText("-122");
                 }
             }else {
                 if ((gap2_3 < 4) & (gap2_3 > -4) & (gap1_3 < 4) & (gap1_3 > -4) & (gap1_2 < 4) & (gap1_2 > -4)
                         & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                    //conclude.setText("你要找的beacon可能位於三個esp的中心");
+                    description = "你要找的設備可能位於該空間的中心";
                     rule = 66;       rule_keep.setText("66");
-                }else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(1最近)
-                    if((gap2_3 < 4) & (gap2_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
+
+                }else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1最近
+                    if((gap2_3 < 4) & (gap2_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2,3 相似
                         //conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相似");
+                        description = "該設備靠近 \"門口前方牆角(第一個esp)\" " +
+                                "\n但離 \"門口斜對牆角(第二個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
                         rule = 11;      rule_keep.setText("11");
                     }else{
                         //conclude.setText("你要找的beacon靠近第一個esp32");
+                        description = "該設備靠近 \"門口前方牆角(第一個esp)\" ";
                         rule = 1;       rule_keep.setText("1");
                     }
-                }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //1(2最近)
-                    if((gap1_3 < 4) & (gap1_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ //2
+                }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2最近
+                    if((gap1_3 < 4) & (gap1_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1,3 相似
                         //conclude.setText("你要找的beacon靠近第二個esp32，但離第一與第三的距離相似");
+                        description = "該設備靠近 \"門口斜對牆角(第二個esp)\" " +
+                                "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
                         rule = 21;      rule_keep.setText("21");
                     }else {
                         //conclude.setText("你要找的beacon靠近第二個esp32");
+                        description = "該設備靠近 \"門口斜對牆角(第二個esp)\" ";
                         rule = 2;       rule_keep.setText("2");
                     }
-                }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { //1(3最近)
-                    if ((gap1_2 < 4) & (gap1_2 > -4) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { //2
+                }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { // 3最近
+                    if ((gap1_2 < 4) & (gap1_2 > -4) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { // 1,2 相似
                         //conclude.setText("你要找的beacon靠近第三個esp32，但離第一與第二的距離相似");
+                        description = "該設備靠近 \"門口平行牆角(第三個esp)\" " +
+                                "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似";
                         rule = 31;      rule_keep.setText("31");
                     } else {
                         //conclude.setText("你要找的beacon靠近第三個esp32");
+                        description = "該設備靠近 \"門口平行牆角(第三個esp)\" ";
                         rule = 3;       rule_keep.setText("3");
                     }
                     //此時1,2檢查完畢
                 }else if((rssi_1 < rssi_2) & (rssi_1 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
-                        & (gap2_3 < 4) & (gap2_3 > -4)){ //3(1最遠)
+                        & (gap2_3 < 4) & (gap2_3 > -4)){ //2,3 相似，1最遠
                     //conclude.setText("你要找的beacon遠離第一個esp32，離第二與第三的距離相似");
+                    description = "該設備遠離 \"門口前方牆角(第一個esp)\" " +
+                            "\n但離 \"門口斜對牆角(第二個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
                     rule = 12;      rule_keep.setText("12");
+
                 }else if((rssi_2 < rssi_1) & (rssi_2 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
-                        & (gap1_3 < 4) & (gap1_3 > -4)){ //3(2最遠)
+                        & (gap1_3 < 4) & (gap1_3 > -4)){ //1,3 相似，2最遠
                     //conclude.setText("你要找的beacon遠離第二個esp32，離第一與第三的距離相似");
+                    description = "該設備遠離 \"門口斜對牆角(第二個esp)\" " +
+                            "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
                     rule = 22;      rule_keep.setText("22");
+
                 }else if((rssi_3 < rssi_2) & (rssi_3 < rssi_1) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
-                        & (gap1_2 < 4) & (gap1_2 > -4)){ //3(3最遠)
+                        & (gap1_2 < 4) & (gap1_2 > -4)){ //1,2 相似，3最遠
                     //conclude.setText("你要找的beacon遠離第三個esp32，離第一與第二的距離相似");
+                    description = "該設備遠離 \"門口平行牆角(第三個esp)\" " +
+                            "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似";
                     rule = 32;      rule_keep.setText("32");
+
                 }else{
                     //conclude.setText("資料有誤，或是未建構這項規則");
+                    description = "資料有誤，或是未建構這項規則";
                     rule = 0;       rule_keep.setText("0");
                 }
             }
@@ -346,6 +402,8 @@ public class Map extends AppCompatActivity {
                 //傳給下一頁：點的放置資料
                 int rule2 = Integer.parseInt((String) rule_keep.getText());
                 bundle2.putInt("rule2",rule2);
+
+                bundle2.putString("description",description);
 
                 intent.putExtras(bundle2);
                 intent.setClass(Map.this,display_Map.class);
