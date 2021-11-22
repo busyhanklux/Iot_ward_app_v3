@@ -162,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         private  View.OnClickListener find_major_L = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                conclude.setText(""); //清除文字說明的文字
                 FirebaseDatabase database_get = FirebaseDatabase.getInstance();
                 try {
                     int select_major = Integer.parseInt(String.valueOf(Input_major.getText()));
@@ -562,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
                 }catch(Exception E){
                     tv_ei.setText("格式錯誤");
                 }
-
+                conclude.setText(""); //清除文字說明的文字
                 esp32_switch_unlock = "Yes";
             }
 
@@ -818,28 +817,37 @@ public class MainActivity extends AppCompatActivity {
                 switch (condition){
                     case "0":
                         String S_tvrssi_1 = (String) tvrssi_1.getText(); //rssi
-                        String S_distance_1 = (String) distance_1.getText(); //距離
+                        String S_distance_1 =  distance_1.getText()+"m"; //距離
+                        if(distance_1.getText() == "格式不符"){
+                            S_distance_1 =  (String) distance_1.getText();
+                        }
                         String S_time_1 = (String)  tv_time_1.getText(); //時間
 
-                        detail.setText("RSSI："+S_tvrssi_1 + "，距離："+ S_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + S_time_1  );
+                        detail.setText("RSSI："+S_tvrssi_1 + "，儀器測距："+ S_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + S_time_1  );
                         tv_ei.setText("以下是您的結果");
                         break;
 
                     case "1":
                         String S_tvrssi_2 = (String) tvrssi_2.getText(); //rssi
-                        String S_distance_2 = (String) distance_2.getText(); //距離
+                        String S_distance_2 =  distance_2.getText()+"m"; //距離
+                        if(distance_2.getText() == "格式不符"){
+                            S_distance_2 =  (String) distance_2.getText();
+                        }
                         String S_time_2 = (String)  tv_time_2.getText(); //時間
 
-                        detail.setText("RSSI："+S_tvrssi_2 + "，距離："+ S_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + S_time_2  );
+                        detail.setText("RSSI："+S_tvrssi_2 + "，儀器測距："+ S_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + S_time_2  );
                         tv_ei.setText("以下是您的結果");
                         break;
 
                     case "2":
                         String S_tvrssi_3 = (String) tvrssi_3.getText(); //rssi
-                        String S_distance_3 = (String) distance_3.getText(); //距離
+                        String S_distance_3 = (String) distance_3.getText()+"m"; //距離
+                        if(distance_3.getText() == "格式不符"){
+                            S_distance_3 =  (String) distance_3.getText();
+                        }
                         String S_time_3 = (String)  tv_time_3.getText(); //時間
 
-                        detail.setText("RSSI："+S_tvrssi_3 + "，距離："+ S_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + S_time_3  );
+                        detail.setText("RSSI："+S_tvrssi_3 + "，儀器測距："+ S_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + S_time_3  );
                         tv_ei.setText("以下是您的結果");
                         break;
                 }
