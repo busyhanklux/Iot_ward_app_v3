@@ -238,7 +238,7 @@
             android:layout_height="90dp"
             android:layout_gravity="center"
             android:scrollbars="none"
-            android:text="請先輸入要查詢的beacon編號"
+            android:text="請先選擇要查詢的設備(beacon)編號"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textDirection="ltr"

@@ -196,20 +196,23 @@ public class MainActivity extends AppCompatActivity {
                                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                                     Integer major = dataSnapshot.getValue(Integer.class);
                                                                     if(major == null){
-                                                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"這三個esp32都沒有"+ select_major +"號，請換編號查詢");
-                                                                        detail.setText("請重新輸入要查詢的beacon編號");}
+                                                                        //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
+                                                                        tv_ei.setText("三個esp32都沒有上傳過 "+ select_major +"號 "+ beacon_name + " 的資料，請換編號查詢");
+                                                                        detail.setText("請重新選擇要查詢的設備(beacon)編號");}
                                                                     else{
-                                                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                                                        //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
+                                                                        tv_ei.setText("至少有一個esp32有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                                                         detail.setText("查找完畢");}
                                                             }
                                                                 public void onCancelled(DatabaseError error) { }});}
                                                         }else{
-                                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                                        //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
+                                                        tv_ei.setText("至少有一個esp32有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                                         detail.setText("查找完畢");
                                                     }}
                                                 public void onCancelled(DatabaseError error) { }});
                                                 }}else{
-                                        tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有"+select_major+"號的資料，請接續後續步驟");
+                                        tv_ei.setText("至少有一個esp32有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                         detail.setText("查找完畢");
                                     }}
                                 public void onCancelled(DatabaseError error) { }});
@@ -359,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
                                             String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                                            tv_time_1.setText("\n組1偵測時間: " + format);
+                                            tv_time_1.setText("\nesp32之1偵測時間: " + format);
                                             //tv_time_1.setText("\n組1偵測時間: " + fix_add);
                                             long check = fix + time;
                                             time_check1.setText(Long.toString(check));
@@ -369,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_1.setText("\n組1時間找不到，請再試一次");
+                                    tv_time_1.setText("\nesp32之1時間找不到，請再試一次");
                                     time_check1.setText(Long.toString(0));
                                 }}
 
@@ -394,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
                                             String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                                            tv_time_2.setText("\n組1偵測時間: " + format);
+                                            tv_time_2.setText("\nesp32之2偵測時間: " + format);
                                             //tv_time_2.setText("\n組1偵測時間: " + fix_add);
                                             long check = fix + time;
                                             time_check2.setText(Long.toString(check));
@@ -404,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_2.setText("\n組2時間找不到，請再試一次");
+                                    tv_time_2.setText("\nesp32之2時間找不到，請再試一次");
                                     time_check2.setText(Long.toString(0));
                                 }
                             }
@@ -430,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
                                             String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                                            tv_time_3.setText("\n組3偵測時間: " + format);
+                                            tv_time_3.setText("\nesp32之3偵測時間: " + format);
                                             //tv_time_3.setText("\n組3偵測時間: " + fix_add);
                                             long check = fix + time;
                                             time_check3.setText(Long.toString(check));
@@ -440,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_3.setText("\n組3時間找不到，請再試一次");
+                                    tv_time_3.setText("\nesp32之3時間找不到，請再試一次");
                                     time_check3.setText(Long.toString(0));
                                 }
                             }
@@ -704,7 +707,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
                 }catch(Exception RSSI_not_found){
-                    conclude.setText("請先查找beacon");
+                    conclude.setText("請先查找設備(beacon)");
 
                 }}};
 
@@ -745,7 +748,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
 
             }catch(Exception RSSI_not_found){
-                Toast error = Toast.makeText(MainActivity.this,"請先在上方輸入編號",Toast.LENGTH_SHORT);
+                Toast error = Toast.makeText(MainActivity.this,"請先在上方選擇編號",Toast.LENGTH_SHORT);
                 error.show();
             }
         }
