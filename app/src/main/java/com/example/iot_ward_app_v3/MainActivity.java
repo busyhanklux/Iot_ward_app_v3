@@ -1,7 +1,5 @@
 package com.example.iot_ward_app_v3;
 
-import static android.content.ContentValues.TAG;
-
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
@@ -10,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,27 +29,29 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvID,tvResult,tv_ei,tvrssi_1,tvrssi_2,tvrssi_3,distance_1,distance_2,distance_3;
+    private TextView tvID,tvResult,tv_ei,distance_1,distance_2,distance_3;
     private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3;
-    private TextView tv_time_1,tv_time_2,tv_time_3,invisible_rssi_1,invisible_rssi_2,invisible_rssi_3,conclude;
-    private TextView detail,sw_number,sw_distance,sw_time,sw_room,Input_major,number_decided;
+    private TextView tv_time_1,tv_time_2,tv_time_3,conclude;
+    private TextView detail,sw_number,sw_distance,sw_time,sw_room;//Input_major,number_decided
     private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
     private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
     private TextView time_check1,time_check2,time_check3;
+
     int room_choice,beacon_number_choice;
-    String beacon_name,esp32_switch_unlock = "No"; //beacon選擇的spinner使用
+    int number_decided; //1.用來丟入下一頁使用 2.防呆
+    int rssi_1,rssi_2,rssi_3; //存放rssi
+    String String_rssi_1,String_rssi_2,String_rssi_3; //存放rssi，用於顯示在esp32切換
+
+    String beacon_name; //設備名稱
+    String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
     //下拉式選單
-    String[] esp32_num = new String[]{
-            "1","2","3"
-    };
+    String[] esp32_num = new String[]{ "1","2","3" }; //
 
-    String[] environment_choice = new String[]{
-      "1.大型空間","2.樂得兒產房","3.ICU"
-    };
+    String[] environment_choice = new String[]{ "1.大型空間","2.樂得兒產房","3.ICU" }; //環境選擇
 
-    String[] beacon_id_spinner_choice = new String[]{
+    String[] beacon_id_spinner_choice = new String[]{ //設備編號
             "1.暫無使用之設備",
             "2.高層次胎兒監視器(FM20)","3.雙胞胎胎兒監視器(FC1400)", "4.嬰兒推車","5.嬰兒處理台(YD-IC-SCC)",
             "6.暫無使用之設備","7.暫無使用之設備","8.點滴架(有幫浦點滴輸液)" ,"9.暫無使用之設備","10.暫無使用之設備",
@@ -64,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //輸入major編號(輸入文字)
-        Input_major = (TextView) findViewById(R.id.Input_major);
 
         //圖片(外觀圖示)
         imgTitle = (ImageView)findViewById(R.id.imgTitle);
@@ -82,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         sw_room = (TextView)findViewById(R.id.sw_room);     //放下拉sp_room_choice的選擇
         sw_distance = (TextView)findViewById(R.id.sw_distance);
         sw_time = (TextView)findViewById(R.id.sw_time);
-        number_decided = (TextView)findViewById(R.id.number_decided); //1.用來丟入下一頁使用 2.防呆
 
         //設備編號(外觀文字)
         tvID = (TextView)findViewById(R.id.tvID);
@@ -92,11 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
         //顯示要尋找的beacon的uuid值
         tv_ei = (TextView)findViewById(R.id.equipment_information_tv);
-
-        //顯示三個esp32的RSSI值
-        tvrssi_1 = (TextView)findViewById(R.id.tvrssi_1);
-        tvrssi_2 = (TextView)findViewById(R.id.tvrssi_2);
-        tvrssi_3 = (TextView)findViewById(R.id.tvrssi_3);
 
         //顯示三個esp32的距離值
         distance_1 = (TextView)findViewById(R.id.distance_1);
@@ -122,11 +112,6 @@ public class MainActivity extends AppCompatActivity {
         //文字的位置判定
         conclude = (TextView)findViewById(R.id.conclude);
 
-        //純粹放數字用的，別理他
-        invisible_rssi_1 = (TextView)findViewById(R.id.invisible_rssi_1);
-        invisible_rssi_2 = (TextView)findViewById(R.id.invisible_rssi_2);
-        invisible_rssi_3 = (TextView)findViewById(R.id.invisible_rssi_3);
-
         //spinner相關，你需要一個xml來調整大小(把android拿掉
         //Spinner(sp_esp32_choice)
         ArrayAdapter<String> adapternumber2 =
@@ -134,12 +119,14 @@ public class MainActivity extends AppCompatActivity {
         adapternumber2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_esp32_choice.setAdapter(adapternumber2);    //設定資料來源
         sp_esp32_choice.setOnItemSelectedListener(sp_esp32_choice_Listener);
+
         //Spinner(environment_choice)
         ArrayAdapter<String> adapternumber_environment_choice =
                 new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,environment_choice);
         adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
         beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
+
         //Spinner(beacon_id_spinner)
         ArrayAdapter<String> adapternumber_beacon_id_spinner_choice =
                 new ArrayAdapter<String>(this ,R.layout.spinner_value_choice_color,beacon_id_spinner_choice);
@@ -164,14 +151,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseDatabase database_get = FirebaseDatabase.getInstance();
                 try {
-                    int select_major = Integer.parseInt(String.valueOf(Input_major.getText()));
-                    number_decided.setText(Input_major.getText());
+                    int select_major = beacon_number_choice;
+                    number_decided = beacon_number_choice;
+
                     //當我選擇環境時，他們的room_choice會被選項跟著改動
                     int firebase_number_1 = room_choice*3 + 1;
                     int firebase_number_2 = room_choice*3 + 2;
                     int firebase_number_3 = room_choice*3 + 3;
 
-                    if((select_major > 0)&(select_major < 20)){
+                    if( (select_major > 0) & (select_major < 20) ){
                         //搜尋有沒有該major，沒有就換找下一個
                             DatabaseReference major1 = database_get.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("Major");
                             major1.addValueEventListener(new ValueEventListener() {
@@ -218,32 +206,28 @@ public class MainActivity extends AppCompatActivity {
                                 public void onCancelled(DatabaseError error) { }});
 
                         FirebaseDatabase database_sw = FirebaseDatabase.getInstance();
-                        DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_" + firebase_number_1).child((Input_major.getText()).toString()).child("RSSI");
-                        DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_" + firebase_number_2).child((Input_major.getText()).toString()).child("RSSI");
-                        DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_" + firebase_number_3).child((Input_major.getText()).toString()).child("RSSI");
+                        DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("RSSI");
+                        DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("RSSI");
+                        DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("RSSI");
 
                         esp32_no1_RSSI.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer rssi1 = dataSnapshot.getValue(Integer.class);
-                                    invisible_rssi_1.setText(rssi1.toString());
 
-                                    //tvrssi_1.setText("RSSI: " + rssi1.toString());
-                                    tvrssi_1.setText(rssi1.toString());
+                                    rssi_1 = rssi1; //把這個區域(無_) 丟給 全域(有_)
+                                    String_rssi_1 = rssi1.toString();
 
                                     double A = 0, n = 0;
                                     if(room_choice == 0) {
-                                        A = 59.00; n = 3.40;
-                                    }
+                                        A = 59.00; n = 3.40; }
+
                                     if(room_choice == 1) {
-                                        A = 65.00; n = 3.40;
-                                    }
+                                        A = 65.00; n = 3.40; }
+
                                     if(room_choice == 2) {
-                                        A = 75.00; n = 3.40;
-                                    }
-                                    //Toast test = Toast.makeText(MainActivity.this,A +""+n,Toast.LENGTH_SHORT);
-                                    //test.show();
+                                        A = 75.00; n = 3.40; }
 
                                     //這個蠻有趣的，這邊0/0 = 無限大
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
@@ -251,100 +235,94 @@ public class MainActivity extends AppCompatActivity {
                                     NumberFormat nf = NumberFormat.getInstance();
                                     nf.setMaximumFractionDigits(2);						// 若小數點超過四位，則第五位~四捨五入
                                     nf.setMinimumFractionDigits(1);
-                                    distance_1.setText(String.valueOf(nf.format((M_1))));
-
+                                    distance_1.setText(nf.format((M_1)));
 
                                 } catch (Exception RSSI_not_found) {
-                                    tvrssi_1.setText("資料錯誤");
+                                    String_rssi_1 = "資料錯誤";
                                     distance_1.setText("格式不符");
-                                    invisible_rssi_1.setText("-150");
+                                    rssi_1 = -150;
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no2_RSSI.addValueEventListener(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer rssi2 = dataSnapshot.getValue(Integer.class);
 
-                                    invisible_rssi_2.setText(rssi2.toString());
-                                    //tvrssi_2.setText("RSSI: " + rssi2.toString());
-                                    tvrssi_2.setText(rssi2.toString());
+                                    rssi_2 = rssi2; //把這個區域(無_) 丟給 全域(有_)
+                                    String_rssi_2 = rssi2.toString();
 
                                     double A = 0, n = 0;
                                     if(room_choice == 0) {
-                                        A = 59.00; n = 3.40;
-                                    }
+                                        A = 59.00; n = 3.40; }
+
                                     if(room_choice == 1) {
-                                        A = 65.00; n = 3.40;
-                                    }
+                                        A = 65.00; n = 3.40; }
+
                                     if(room_choice == 2) {
-                                        A = 75.00; n = 3.40;
-                                    }
+                                        A = 75.00; n = 3.40; }
+
                                     double M_1 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
                                     nf.setMaximumFractionDigits(2);						// 若小數點超過四位，則第五位~四捨五入
                                     nf.setMinimumFractionDigits(1);
-                                    distance_2.setText(String.valueOf(nf.format((M_1))));
+                                    distance_2.setText(nf.format((M_1)));
 
                                 } catch (Exception RSSI_not_found) {
-                                    tvrssi_2.setText("資料錯誤");
+                                    String_rssi_2 = "資料錯誤";
                                     distance_2.setText("格式不符");
-                                    invisible_rssi_2.setText("-150");
+                                    rssi_2 = -150;
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) { Log.w(TAG, "Failed to read value.", error.toException()); }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no3_RSSI.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer rssi3 = dataSnapshot.getValue(Integer.class);
 
-                                    invisible_rssi_3.setText(rssi3.toString());
-                                    //tvrssi_3.setText("RSSI: " + rssi3.toString());
-                                    tvrssi_3.setText(rssi3.toString());
+                                    rssi_3 = rssi3; //把這個區域(無_) 丟給 全域(有_)
+                                    String_rssi_3 = rssi3.toString();
 
                                     double A = 0, n = 0;
                                     if(room_choice == 0) {
-                                        A = 59.00; n = 3.40;
-                                    }
+                                        A = 59.00; n = 3.40; }
+
                                     if(room_choice == 1) {
-                                        A = 65.00; n = 3.40;
-                                    }
+                                        A = 65.00; n = 3.40; }
+
                                     if(room_choice == 2) {
-                                        A = 75.00; n = 3.40;
-                                    }
+                                        A = 75.00; n = 3.40; }
+
                                     double M_1 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
                                     nf.setMaximumFractionDigits(2);						// 若小數點超過四位，則第五位~四捨五入
                                     nf.setMinimumFractionDigits(1);
-                                    distance_3.setText(String.valueOf(nf.format((M_1))));
+                                    distance_3.setText(nf.format((M_1)));
 
                                 } catch (Exception RSSI_not_found) {
-                                    tvrssi_3.setText("資料錯誤");
+                                    String_rssi_3 = "資料錯誤";
                                     distance_3.setText("格式不符");
-                                    invisible_rssi_3.setText("-150");
+                                    rssi_3 = -150;
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) { Log.w(TAG, "Failed to read value.", error.toException()); }});
+                            public void onCancelled(DatabaseError error) { }});
 
-                        DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no3_unix = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("epochTime_temp");
-                        DatabaseReference esp32_no1_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("time");
-                        DatabaseReference esp32_no2_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("time");
-                        DatabaseReference esp32_no3_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("time");
+                        DatabaseReference esp32_no1_unix = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("epochTime_temp");
+                        DatabaseReference esp32_no2_unix = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("epochTime_temp");
+                        DatabaseReference esp32_no3_unix = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("epochTime_temp");
+                        DatabaseReference esp32_no1_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("time");
+                        DatabaseReference esp32_no2_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("time");
+                        DatabaseReference esp32_no3_unix_fix = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("time");
 
                         esp32_no1_unix.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -361,9 +339,8 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_switch = Long.valueOf(fix) * 1000;
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
-                                            String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                                            tv_time_1.setText("\nesp32之1偵測時間: " + format);
-                                            //tv_time_1.setText("\n組1偵測時間: " + fix_add);
+                                            String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
+                                            tv_time_1.setText("\nesp之1偵測時間: " + format);
                                             long check = fix + time;
                                             time_check1.setText(Long.toString(check));
                                         }
@@ -372,15 +349,13 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_1.setText("\nesp32之1時間找不到，請再試一次");
+                                    tv_time_1.setText("\nesp之1時間找不到，請再試一次");
                                     time_check1.setText(Long.toString(0));
                                 }}
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no2_unix.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -396,9 +371,8 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_switch = Long.valueOf(fix) * 1000;
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
-                                            String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                                            tv_time_2.setText("\nesp32之2偵測時間: " + format);
-                                            //tv_time_2.setText("\n組1偵測時間: " + fix_add);
+                                            String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
+                                            tv_time_2.setText("\nesp之2偵測時間: " + format);
                                             long check = fix + time;
                                             time_check2.setText(Long.toString(check));
                                         }
@@ -407,16 +381,14 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_2.setText("\nesp32之2時間找不到，請再試一次");
+                                    tv_time_2.setText("\nesp之2時間找不到，請再試一次");
                                     time_check2.setText(Long.toString(0));
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no3_unix.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -432,9 +404,8 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_switch = Long.valueOf(fix) * 1000;
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
-                                            String format = new SimpleDateFormat("MM月dd日, yyyy年 hh:mma").format(day_month_year);
-                                            tv_time_3.setText("\nesp32之3偵測時間: " + format);
-                                            //tv_time_3.setText("\n組3偵測時間: " + fix_add);
+                                            String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
+                                            tv_time_3.setText("\nesp之3偵測時間: " + format);
                                             long check = fix + time;
                                             time_check3.setText(Long.toString(check));
                                         }
@@ -443,23 +414,20 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_3.setText("\nesp32之3時間找不到，請再試一次");
+                                    tv_time_3.setText("\nesp之3時間找不到，請再試一次");
                                     time_check3.setText(Long.toString(0));
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
 
-                        DatabaseReference esp32_no1_minor = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no2_minor = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no3_minor = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("Minor");
-                        DatabaseReference esp32_no1_major = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(Input_major.getText())).child("Major");
-                        DatabaseReference esp32_no2_major = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(Input_major.getText())).child("Major");
-                        DatabaseReference esp32_no3_major = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(Input_major.getText())).child("Major");
+                        DatabaseReference esp32_no1_minor = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("Minor");
+                        DatabaseReference esp32_no2_minor = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("Minor");
+                        DatabaseReference esp32_no3_minor = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("Minor");
+                        DatabaseReference esp32_no1_major = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("Major");
+                        DatabaseReference esp32_no2_major = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("Major");
+                        DatabaseReference esp32_no3_major = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("Major");
 
                         //major
                         esp32_no1_major.addValueEventListener(new ValueEventListener() {
@@ -472,12 +440,10 @@ public class MainActivity extends AppCompatActivity {
                                     tvmajor1.setText("Major找不到");
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no2_major.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -488,12 +454,10 @@ public class MainActivity extends AppCompatActivity {
                                     tvmajor2.setText("Major找不到");
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no3_major.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -504,11 +468,8 @@ public class MainActivity extends AppCompatActivity {
                                     tvmajor3.setText("Major找不到");
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
 
                         //minor
@@ -522,12 +483,10 @@ public class MainActivity extends AppCompatActivity {
                                     tvminor1.setText("Minor找不到");
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no2_minor.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -538,12 +497,10 @@ public class MainActivity extends AppCompatActivity {
                                     tvminor2.setText("Minor找不到");
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
+
                         esp32_no3_minor.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -554,21 +511,18 @@ public class MainActivity extends AppCompatActivity {
                                     tvminor3.setText("Minor找不到");
                                 }
                             }
-
                             @Override
-                            public void onCancelled(DatabaseError error) {
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
+                            public void onCancelled(DatabaseError error) { }
                         });
-                    } else{ tv_ei.setText("範圍不對"); }
-                }catch(Exception E){
-                    tv_ei.setText("格式錯誤");
-                }
+
+                    }else{ tv_ei.setText("範圍不對"); }
+                }catch(Exception E){ tv_ei.setText("格式錯誤"); }
+
                 conclude.setText(""); //清除文字說明的文字
                 esp32_switch_unlock = "Yes";
             }
-
     };
+
         //按下「文字說明」
         private  View.OnClickListener btStatusListener = new View.OnClickListener()
         {
@@ -582,14 +536,11 @@ public class MainActivity extends AppCompatActivity {
                 //未過：
                 //兩者比大小，或以唯一為主
                 try{
-                    int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
-                    int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
-                    int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
                     Long check1 = Long.parseLong(String.valueOf(time_check1.getText()));
                     Long check2 = Long.parseLong(String.valueOf(time_check2.getText()));
                     Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
 
-                    long time_now=System.currentTimeMillis() / 1000; //獲取app系統時間
+                    long time_now = System.currentTimeMillis() / 1000; //獲取app系統時間
 
                     int gap1_2 = abs(rssi_1) - abs(rssi_2); //12之距離
                     int gap1_3 = abs(rssi_1) - abs(rssi_3); //13之距離
@@ -666,21 +617,21 @@ public class MainActivity extends AppCompatActivity {
                             conclude.setText("你要找的設備可能位於該空間的中心"); }
 
                         else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1最近
-                            if((gap2_3 < 4) & (gap2_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2,3 相似
+                            if((gap2_3 < 4) & (gap2_3 > -4)){ // 2,3 相似
                                 conclude.setText("該設備靠近 \"門口前方牆角(第一個esp)\" " +
                                         "\n但離 \"門口斜對牆角(第二個esp) 與 門口平行牆角(第三個esp)\" 的距離相似"); }
                             else{
                                 conclude.setText("該設備靠近 \"門口前方牆角(第一個esp)\" "); }
                         }
                         else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2最近
-                            if((gap1_3 < 4) & (gap1_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1,3 相似
+                            if((gap1_3 < 4) & (gap1_3 > -4)){ // 1,3 相似
                                 conclude.setText("該設備靠近 \"門口斜對牆角(第二個esp)\" " +
                                         "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似");
                             }else{
                                 conclude.setText("該設備靠近 \"門口斜對牆角(第二個esp)\" "); }
                         }
                         else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { // 3最近
-                            if ((gap1_2 < 4) & (gap1_2 > -4) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { // 1,2 相似
+                            if ((gap1_2 < 4) & (gap1_2 > -4)) { // 1,2 相似
                                 conclude.setText("該設備靠近 \"門口平行牆角(第三個esp)\" " +
                                         "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似");
                             }else{
@@ -705,7 +656,6 @@ public class MainActivity extends AppCompatActivity {
                             conclude.setText("資料有誤，或是未建構這項規則");
                         }
                     }
-                    //conclude.setText("這是一條測試用訊息"+ rssi_1 + "\n" + rssi_2 + "\n" + rssi_3);
                 }catch(Exception RSSI_not_found){
                     conclude.setText("請先查找設備(beacon)");
 
@@ -715,10 +665,6 @@ public class MainActivity extends AppCompatActivity {
     private  View.OnClickListener btMapListener = new View.OnClickListener() {
         public void onClick(View v){
             try{
-                int rssi_1 = Integer.parseInt(String.valueOf(invisible_rssi_1.getText()));
-                int rssi_2 = Integer.parseInt(String.valueOf(invisible_rssi_2.getText()));
-                int rssi_3 = Integer.parseInt(String.valueOf(invisible_rssi_3.getText()));
-
                 Long check1 = Long.parseLong(String.valueOf(time_check1.getText()));
                 Long check2 = Long.parseLong(String.valueOf(time_check2.getText()));
                 Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
@@ -726,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
-                int select_number = Integer.parseInt(String.valueOf(number_decided.getText()));
+                int select_number = number_decided;
                 bundle.putInt("select_number",select_number);
 
                 String select_room = String.valueOf(sw_room.getText());
@@ -758,10 +704,9 @@ public class MainActivity extends AppCompatActivity {
     Spinner.OnItemSelectedListener sp_esp32_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //修bug
-            if(esp32_switch_unlock == "Yes")
+            if(esp32_switch_unlock.equals("Yes"))
             {
                 //String pos_B = parent.getItemAtPosition(position).toString();
-                //String Input = (Input_major.getText()).toString();
 
                 //Toast test = Toast.makeText(MainActivity.this,pos_A_2+"",Toast.LENGTH_SHORT);
                 //test.show();
@@ -781,8 +726,6 @@ public class MainActivity extends AppCompatActivity {
             int Position_string = 1;
             room_place = room_place.substring(Position_string+1);
             sw_room.setText(room_place);
-            //Toast test = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
-            //test.show();
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
@@ -792,9 +735,6 @@ public class MainActivity extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> parent, View view, int beacon_num, long id3) {
 
             beacon_number_choice = beacon_num + 1; //當我選16號時，beacon_num = 15，+1是為了textview方便設定
-            //Toast beacon_number_Toast = Toast.makeText(MainActivity.this,beacon_number_choice+"",Toast.LENGTH_SHORT);
-            //beacon_number_Toast.show();
-            Input_major.setText(String.valueOf(beacon_number_choice)); //由此控制原本的輸入文字
 
             int Position_string = 1; //文字字元數，如果為10號以後就處理3個字元
             if(beacon_number_choice >= 10){
@@ -802,56 +742,57 @@ public class MainActivity extends AppCompatActivity {
             }
             beacon_name = parent.getItemAtPosition(beacon_num).toString(); //擷取選項的文字
             beacon_name = beacon_name.substring(Position_string+1); //處理文字
-
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
 
     //按下切換「esp32」
     private View.OnClickListener esp32_switchListener = new View.OnClickListener() {
+        @SuppressLint("SetTextI18n")
         public void onClick(View v) {
-            FirebaseDatabase database2 = FirebaseDatabase.getInstance();
-
-            String pos_A = (String) sw_number.getText();
-            String pos_B = (String) tv_ei.getText();
-
             try {
                 String condition = (String) sw_number.getText();
                 switch (condition){
                     case "0":
-                        String S_tvrssi_1 = (String) tvrssi_1.getText(); //rssi
+                        //rssi
                         String S_distance_1 =  distance_1.getText()+"m"; //距離
                         if(distance_1.getText() == "格式不符"){
                             S_distance_1 =  (String) distance_1.getText();
                         }
                         String S_time_1 = (String)  tv_time_1.getText(); //時間
 
-                        detail.setText("RSSI："+S_tvrssi_1 + "，儀器測距："+ S_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + S_time_1  );
+                        detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ S_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + S_time_1  );
                         tv_ei.setText("以下是您的結果");
+                        //Toast test1 = Toast.makeText(MainActivity.this,String_rssi_1+"",Toast.LENGTH_SHORT);
+                        //test1.show();
                         break;
 
                     case "1":
-                        String S_tvrssi_2 = (String) tvrssi_2.getText(); //rssi
+                        //rssi
                         String S_distance_2 =  distance_2.getText()+"m"; //距離
                         if(distance_2.getText() == "格式不符"){
                             S_distance_2 =  (String) distance_2.getText();
                         }
                         String S_time_2 = (String)  tv_time_2.getText(); //時間
 
-                        detail.setText("RSSI："+S_tvrssi_2 + "，儀器測距："+ S_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + S_time_2  );
+                        detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ S_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + S_time_2  );
                         tv_ei.setText("以下是您的結果");
+                        //Toast test2 = Toast.makeText(MainActivity.this,String_rssi_2+"",Toast.LENGTH_SHORT);
+                        //test2.show();
                         break;
 
                     case "2":
-                        String S_tvrssi_3 = (String) tvrssi_3.getText(); //rssi
-                        String S_distance_3 = (String) distance_3.getText()+"m"; //距離
+                        //rssi
+                        String S_distance_3 = distance_3.getText()+"m"; //距離
                         if(distance_3.getText() == "格式不符"){
                             S_distance_3 =  (String) distance_3.getText();
                         }
                         String S_time_3 = (String)  tv_time_3.getText(); //時間
 
-                        detail.setText("RSSI："+S_tvrssi_3 + "，儀器測距："+ S_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + S_time_3  );
+                        detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ S_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + S_time_3  );
                         tv_ei.setText("以下是您的結果");
+                        //Toast test3 = Toast.makeText(MainActivity.this,String_rssi_3+"",Toast.LENGTH_SHORT);
+                        //test3.show();
                         break;
                 }
             } catch (Exception RSSI_not_found) {
@@ -860,5 +801,4 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-
-//firebase讀取來源https://mnya.tw/cc/word/1495.html
+//firebase讀取參考來源https://mnya.tw/cc/word/1495.html
