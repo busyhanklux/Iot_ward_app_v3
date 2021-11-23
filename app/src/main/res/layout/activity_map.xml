@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/place_ask" />
+        app:srcCompat="@drawable/place_ask"
+        tools:ignore="ImageContrastCheck" />
 
     <Button
         android:id="@+id/back"

@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class display_Map extends AppCompatActivity {
     Context context = display_Map.this;
 
-    int door,rule,door2;
+    int door,rule;
     int rssi_1,rssi_2,rssi_3;
     Long check1,check2,check3;
     int select_number;
@@ -75,18 +75,11 @@ public class display_Map extends AppCompatActivity {
         bundle.putString("select_room",select_room);
         bundle.putString("description",description);
 
-        //Toast test = Toast.makeText(display_Map.this,description+"嘎啦嘎拉"+check3,Toast.LENGTH_SHORT);
-        //test.show();
-        //intent2.putExtras(bundle);
-
         door = bundle2.getInt("door2");
         door_number = (TextView)findViewById(R.id.door_number);
         door_number.setText(String.valueOf(door));
 
         rule = bundle2.getInt("rule2");
-        //rule = 12;
-        //Toast test = Toast.makeText(display_Map.this,door+"_1145_"+rule,Toast.LENGTH_SHORT);
-        //test.show();
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
@@ -114,8 +107,6 @@ public class display_Map extends AppCompatActivity {
             Paint circle = new Paint();
             Paint rect_door = new Paint(); //畫門的
 
-            //canvas.drawText("String.valueOf(door)", 50, 100, p);        // 寫文字
-
             // 三角形繪圖
             p.setColor(Color.parseColor("#FBD9D9"));
             p.setTextSize(100);
@@ -124,15 +115,11 @@ public class display_Map extends AppCompatActivity {
             rect_door.setColor(Color.parseColor("#00C1FF"));
             rect_door.setTextSize(100);
 
-            //canvas.drawText("三角形：",350,100,p);
-
             Path Room = new Path(); //畫長方
             Room.moveTo(240, 190); /*左上*/ Room.lineTo(760, 190); //右上
             Room.lineTo(760, 710);/*右下*/ Room.lineTo(240, 710);//左下
             Room.close(); // 使這些點構成封閉的多邊形
             canvas.drawPath(Room, rect);
-
-
 
             //規則有：
             // 0、(-1、-2、-3)、(-230、-232、-233)、(-130、-131、-133)
@@ -143,7 +130,7 @@ public class display_Map extends AppCompatActivity {
             //第二：(如果為負)兩位數一起看，第幾和第幾之間
             //第二：(如果為正)如果相似，個位為1(等近)或2(等遠)，十位為主角
             //第三：三位數，同二，再加上靠近第幾(中間為0)
-            //關於door1、door2，只是因為門的位置，改變了三角形的方向
+            //關於door，只是因為門的位置，改變了三角形的方向
 
             if (door == 1) {//左門
                 Path Door = new Path(); //畫長方門
@@ -157,8 +144,10 @@ public class display_Map extends AppCompatActivity {
                 //(0,0)左上、等腰直角三角 或 直角三角
                 //door1_triangle_1_x => 左 x(200) , door1_triangle_2_x => 右 x(600)
                 int door1_triangle_1_x = 250,door1_triangle_2_x = 750;
+
                 //door1_triangle_1_y => 上 y(100) , door1_triangle_2_y => 下 y(500)
                 int door1_triangle_1_y = 200,door1_triangle_2_y = 700;
+
                 // moveTo：此點為多邊形的起點
                 path.moveTo(door1_triangle_1_x, door1_triangle_1_y); //1號
                 path.lineTo(door1_triangle_2_x, door1_triangle_1_y); //2號
@@ -269,8 +258,10 @@ public class display_Map extends AppCompatActivity {
                 //(0,0)左上、等腰直角三角 或 直角三角
                 //door2_triangle_1_x => 右 x(600) , door2_triangle_2_x => 左 x(200)
                 int door2_triangle_1_x = 750,door2_triangle_2_x = 250;
+
                 //door2_triangle_1_y => 上 y(100) , door2_triangle_2_y => 下 y(500)
                 int door2_triangle_1_y = 200,door2_triangle_2_y = 700;
+
                 path.moveTo(door2_triangle_1_x, door2_triangle_1_y);// 此點為多邊形的起點
                 path.lineTo(door2_triangle_2_x, door2_triangle_1_y);
                 path.lineTo(door2_triangle_2_x, door2_triangle_2_y);
@@ -289,31 +280,43 @@ public class display_Map extends AppCompatActivity {
                 //cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp被偵測
                     canvas.drawCircle(door2_triangle_1_x + 100, door2_triangle_1_y - 50, 20, circle);
-                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 50, 20, circle);}
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 50, 20, circle);
+                }
                 if (rule == -2) { //只有第二個esp被偵測
                     canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_1_y - 50, 20, circle);
-                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 50, 20, circle);}
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 50, 20, circle);
+                }
                 if (rule == -3) { //只有第三個esp被偵測
                     canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_2_y + 50, 20, circle);
-                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 50, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 50, 20, circle);
+                }
                 if (rule == 1) { //第一個esp近
-                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 100, 20, circle); }
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 100, 20, circle);
+                }
                 if (rule == 2) { //第二個esp近
-                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 100, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 100, 20, circle);
+                }
                 if (rule == 3) { //第三個esp近
-                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 100, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 100, 20, circle);
+                }
                 if (rule == 11) { //靠近第一個esp，23等距
-                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 250, 20, circle); }
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 250, 20, circle);
+                }
                 if (rule == 12) { //遠離第一個esp，23等距
-                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 250, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 250, 20, circle);
+                }
                 if (rule == 21) { //靠近第二個esp，13等距
-                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 150, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 150, 20, circle);
+                }
                 if (rule == 22) { //遠離第二個esp，13等距
-                    canvas.drawCircle(door2_triangle_1_x - 150, door2_triangle_2_y - 150, 20, circle); }
+                    canvas.drawCircle(door2_triangle_1_x - 150, door2_triangle_2_y - 150, 20, circle);
+                }
                 if (rule == 31) { //靠近第三個esp，12等距
-                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_2_y - 150, 20, circle); }
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_2_y - 150, 20, circle);
+                }
                 if (rule == 32) { //遠離第三個esp，12等距
-                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 150, 20, circle); }
+                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 150, 20, circle);
+                }
                 if (rule == -120) { //沒有3，12等遠
                     canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y - 100, 20, circle);
                     canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 100, 20, circle);
@@ -373,7 +376,6 @@ public class display_Map extends AppCompatActivity {
                 Intent intent2 = new Intent();
 
                 Bundle bundle = new Bundle();
-//              Bundle bundle2 = intent2.getExtras();
 
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
@@ -382,13 +384,6 @@ public class display_Map extends AppCompatActivity {
                 bundle.putLong("check_time2",check2);
                 bundle.putLong("check_time3",check3);
 
-                //Toast test = Toast.makeText(display_Map.this,check1+"T"+check2+"T"+check3,Toast.LENGTH_SHORT);
-                //Toast test = Toast.makeText(display_Map.this,rssi_1+"T"+rssi_2+"T"+rssi_3,Toast.LENGTH_SHORT);
-                //Toast test = Toast.makeText(display_Map.this,"沒問題",Toast.LENGTH_SHORT);
-                //test.show();
-
-                //int select_number = bundle2.getInt("select_number");
-                //String select_room = bundle2.getString("select_room");
                 bundle.putInt("select_number",select_number);
                 bundle.putString("select_room",select_room);
                 bundle.putString("beacon_name",beacon_name);

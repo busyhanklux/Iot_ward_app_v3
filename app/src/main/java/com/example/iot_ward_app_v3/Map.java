@@ -33,7 +33,7 @@ public class Map extends AppCompatActivity {
     String description;
 
     Button bt_back;
-    private TextView test1,rule_keep,door_keep,remind_text;
+    private TextView rule_keep,door_keep,remind_text;
     private RadioButton left_door,right_door;
     private RadioGroup  select_door;
     private Button pre_display,display;
@@ -44,7 +44,6 @@ public class Map extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        test1 = (TextView) findViewById(R.id.choice_place);
         rule_keep = (TextView) findViewById(R.id.rule_keep);
         door_keep = (TextView) findViewById(R.id.door_keep);
         remind_text = (TextView) findViewById(R.id.remind_text); //提醒訊息
@@ -76,8 +75,6 @@ public class Map extends AppCompatActivity {
             check1 = bundle.getLong("check_time1");
             check2 = bundle.getLong("check_time2");
             check3 = bundle.getLong("check_time3");
-            Toast test1 = Toast.makeText(Map.this,check1+" ",Toast.LENGTH_SHORT);
-            test1.show();
 
             //某某號，設備名字嘎啦嘎拉
             select_number = bundle.getInt("select_number");
@@ -270,37 +267,6 @@ public class Map extends AppCompatActivity {
                     rule = 0;       rule_keep.setText("0");
                 }
             }
-            //利用判斷規則決定原點的位置
-            //版本1：套用規則一
-            //規則一：純粹的比rssi哪個為最小，它就是最靠近的
-            //規則二：延伸規則一，套用但出現兩者rssi相同之情形
-            /*
-            if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                Toast test = Toast.makeText(Map.this,"第一個esp32",Toast.LENGTH_SHORT);
-                test.show();
-                rule_keep.setText("1");
-                rule = 1;
-            }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                Toast test = Toast.makeText(Map.this,"第二個esp32",Toast.LENGTH_SHORT);
-                test.show();
-                rule_keep.setText("2");
-                rule = 2;
-            }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                Toast test = Toast.makeText(Map.this,"第三個esp32",Toast.LENGTH_SHORT);
-                test.show();
-                rule_keep.setText("3");
-                rule = 3;
-            }else{
-                //test1.setText("沒有這東西");
-                rule_keep.setText("0");
-                rule = 0;
-            }
-
-             */
-
-
-            //Toast test2 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
-            //test2.show();
 
         }catch (Exception intent_error){
             Intent intent = new Intent();
@@ -320,16 +286,10 @@ public class Map extends AppCompatActivity {
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == R.id.left_door){ //左側門
                 door = 1;
-                door_keep.setText("1");
-                //Toast test = Toast.makeText(Map.this,check1+"",Toast.LENGTH_SHORT);
-                //test.show();
                 remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+"號 " + beacon_name + "\n在 "+select_room+" 的情形");
             }
             if (checkedId == R.id.right_door){ //右側門
                 door = 2;
-                door_keep.setText("2");
-                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                //test.show();
                 remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+"號 " + beacon_name + "\n在 "+select_room+" 的情形");
             }}};
 
@@ -338,19 +298,13 @@ public class Map extends AppCompatActivity {
     public View.OnClickListener pre_display_L = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //Toast test3 = Toast.makeText(Map.this,String.valueOf(door),Toast.LENGTH_SHORT);
-            //test3.show();
-
             if(door == 1){//左門
                 pre_place.setImageResource(R.drawable.place1);
-                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                //test.show();
             }
             if(door == 2){//右門
                 pre_place.setImageResource(R.drawable.place2);
-                //Toast test = Toast.makeText(Map.this,door_keep.getText(),Toast.LENGTH_SHORT);
-                //test.show();
-            } }};
+            }
+        }};
 
     //回到首頁重新查詢
     private  View.OnClickListener bt_backListener = new View.OnClickListener()
@@ -374,7 +328,6 @@ public class Map extends AppCompatActivity {
             if ((door == 1) || (door == 2)){
 
                 Intent intent = new Intent();
-                Bundle bundle = new Bundle();
                 Bundle bundle2 = new Bundle();
 
                 //防止回上一頁出error
@@ -398,8 +351,7 @@ public class Map extends AppCompatActivity {
                 //test2.show();
 
                 //傳給下一頁：門的方向資料
-                int door2 = Integer.parseInt((String) door_keep.getText());
-                bundle2.putInt("door2",door2);
+                bundle2.putInt("door2",door);
 
                 //傳給下一頁：點的放置資料
                 int rule2 = Integer.parseInt((String) rule_keep.getText());
