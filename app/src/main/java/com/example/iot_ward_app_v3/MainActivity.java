@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
+    String version = "1.00"; //純粹辨認版本用的
+
     //下拉式選單
     String[] esp32_num = new String[]{ "1","2","3" }; //esp32切換
 
