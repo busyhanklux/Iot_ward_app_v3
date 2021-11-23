@@ -33,9 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3,conclude;
     private TextView detail,sw_number,sw_distance,sw_time,sw_room;//Input_major,number_decided
     private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
-    private ImageView imgTitle;
     private Button btMap,btStatus,esp32_switch,find_major;
-    private TextView time_check1,time_check2,time_check3;
 
     int room_choice,beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
@@ -43,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
     String String_rssi_1,String_rssi_2,String_rssi_3; //存放rssi，用於顯示在esp32切換
     String String_distance_1,String_distance_2,String_distance_3; //存放距離，用於顯示儀器測距
     String String_displaytime_1 , String_displaytime_2 , String_displaytime_3; //存放時間，用來顯示時間
-
-    Long unixtime_check1,unixtime_check2,unixtime_check3;
+    Long unixtime_check1,unixtime_check2,unixtime_check3; //存放unix時間，用來判定時間
+    String Major_1,Major_2,Major_3; //存放Major，用來顯示Major
+    String Minor_1,Minor_2,Minor_3; //存放Minor，用來顯示Minor
 
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
@@ -67,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //圖片(外觀圖示)
-        imgTitle = (ImageView)findViewById(R.id.imgTitle);
-
         //下拉式選單
         sp_esp32_choice = (Spinner)findViewById(R.id.sp_esp32_choice); //選擇該esp32的哪一個
         beacon_spinner  = (Spinner)findViewById(R.id.environment_choice); //選擇環境
@@ -79,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         detail = (TextView)findViewById(R.id.detail);
         sw_number = (TextView)findViewById(R.id.sw_number); //放下拉sp_esp32_choice的選擇
         sw_room = (TextView)findViewById(R.id.sw_room);     //放下拉sp_room_choice的選擇
-        sw_distance = (TextView)findViewById(R.id.sw_distance);
-        sw_time = (TextView)findViewById(R.id.sw_time);
 
         //設備編號(外觀文字)
         tvID = (TextView)findViewById(R.id.tvID);
@@ -90,19 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         //顯示要尋找的beacon的uuid值
         tv_ei = (TextView)findViewById(R.id.equipment_information_tv);
-
-        //顯示該uuid的major、minor
-        tvmajor1 = (TextView)findViewById(R.id.tvmajor1);
-        tvmajor2 = (TextView)findViewById(R.id.tvmajor2);
-        tvmajor3 = (TextView)findViewById(R.id.tvmajor3);
-        tvminor1 = (TextView)findViewById(R.id.tvminor1);
-        tvminor2 = (TextView)findViewById(R.id.tvminor2);
-        tvminor3 = (TextView)findViewById(R.id.tvminor3);
-
-        //顯示time
-        time_check1 = (TextView)findViewById(R.id.time_check_1);
-        time_check2 = (TextView)findViewById(R.id.time_check_2);
-        time_check3 = (TextView)findViewById(R.id.time_check_3);
 
         //文字的位置判定
         conclude = (TextView)findViewById(R.id.conclude);
@@ -433,9 +414,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer major = dataSnapshot.getValue(Integer.class);
-                                    tvmajor1.setText("Major : " + major.toString());
+                                    Major_1 = "Major : " + major.toString();
                                 } catch (Exception RSSI_not_found) {
-                                    tvmajor1.setText("Major找不到");
+                                    Major_1 = "Major找不到";
                                 }
                             }
                             @Override
@@ -447,9 +428,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer major = dataSnapshot.getValue(Integer.class);
-                                    tvmajor2.setText("Major : " + major.toString());
+                                    Major_2 = "Major : " + major.toString();
                                 } catch (Exception RSSI_not_found) {
-                                    tvmajor2.setText("Major找不到");
+                                    Major_2 = "Major找不到";
                                 }
                             }
                             @Override
@@ -461,9 +442,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer major = dataSnapshot.getValue(Integer.class);
-                                    tvmajor3.setText("Major : " + major.toString());
+                                    Major_3 = "Major : " + major.toString();
                                 } catch (Exception RSSI_not_found) {
-                                    tvmajor3.setText("Major找不到");
+                                    Major_3 = "Major找不到";
                                 }
                             }
                             @Override
@@ -476,9 +457,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer minor = dataSnapshot.getValue(Integer.class);
-                                    tvminor1.setText("Minor : " + minor.toString());
+                                    Minor_1 = "Minor : " + minor.toString();
                                 } catch (Exception RSSI_not_found) {
-                                    tvminor1.setText("Minor找不到");
+                                    Minor_1 = "Minor找不到";
                                 }
                             }
                             @Override
@@ -490,9 +471,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer minor = dataSnapshot.getValue(Integer.class);
-                                    tvminor2.setText("Minor : " + minor.toString());
+                                    Minor_2 = "Minor : " + minor.toString();
                                 } catch (Exception RSSI_not_found) {
-                                    tvminor2.setText("Minor找不到");
+                                    Minor_2 = "Minor找不到";
                                 }
                             }
                             @Override
@@ -504,9 +485,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
                                     Integer minor = dataSnapshot.getValue(Integer.class);
-                                    tvminor3.setText("Minor : " + minor.toString());
+                                    Minor_3 = "Minor : " + minor.toString();
                                 } catch (Exception RSSI_not_found) {
-                                    tvminor3.setText("Minor找不到");
+                                    Minor_3 = "Minor找不到";
                                 }
                             }
                             @Override
@@ -751,7 +732,7 @@ public class MainActivity extends AppCompatActivity {
                             display_distance_1 = String_distance_1;
                         }
 
-                        detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ display_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + String_displaytime_1 );
+                        detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ display_distance_1 + " " + "\n" + Major_1 + "，" + Minor_1  + String_displaytime_1 );
                         tv_ei.setText("以下是您的結果");
                         Toast test1 = Toast.makeText(MainActivity.this,unixtime_check1+"",Toast.LENGTH_SHORT);
                         test1.show();
@@ -766,7 +747,7 @@ public class MainActivity extends AppCompatActivity {
                             display_distance_2 = String_distance_2;
                         }
 
-                        detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ display_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + String_displaytime_2  );
+                        detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ display_distance_2 + " " + "\n" + Major_2 + "，" + Minor_2  + String_displaytime_2  );
                         tv_ei.setText("以下是您的結果");
                         Toast test2 = Toast.makeText(MainActivity.this,unixtime_check2+"",Toast.LENGTH_SHORT);
                         test2.show();
@@ -781,7 +762,7 @@ public class MainActivity extends AppCompatActivity {
                             display_distance_3 = String_distance_3;
                         }
 
-                        detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ display_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + String_displaytime_3 );
+                        detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ display_distance_3 + " " + "\n" + Major_3 + "，" + Minor_3  + String_displaytime_3 );
                         tv_ei.setText("以下是您的結果");
                         Toast test3 = Toast.makeText(MainActivity.this,unixtime_check3+"",Toast.LENGTH_SHORT);
                         test3.show();

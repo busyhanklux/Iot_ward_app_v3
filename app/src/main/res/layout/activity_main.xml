@@ -33,13 +33,6 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
-    <Spinner
-        android:id="@+id/spID"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:visibility="gone"
-        tools:ignore="SpeakableTextPresentCheck" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,17 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/Input_major"
-                android:layout_width="30dp"
-                android:layout_height="48dp"
-                android:ems="10"
-                android:hint="1~17"
-                android:inputType="number"
-                android:textDirection="ltr"
-                android:visibility="gone"
-                tools:visibility="gone" />
 
             <Spinner
                 android:id="@+id/beacon_id_spinner"
@@ -157,53 +139,6 @@
             android:visibility="gone"
             tools:visibility="gone" />
 
-        <TextView
-            android:id="@+id/sw_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/sw_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        tools:visibility="gone">
-
-        <TextView
-            android:id="@+id/distance_1"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_weight="0.25"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/distance_2"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_weight="0.25"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/distance_3"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_weight="0.25"
-            android:visibility="gone"
-            tools:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -222,108 +157,6 @@
             android:textColor="#FFFFFF"
             android:textDirection="ltr"
             android:textSize="20sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.15"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="gone">
-
-            <TextView
-                android:id="@+id/tvmajor1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvmajor2"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvmajor3"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvminor1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvminor2"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvminor3"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:orientation="vertical"
-            android:visibility="invisible"
-            tools:visibility="gone">
-
-            <TextView
-                android:id="@+id/time_check_1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:visibility="gone"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/time_check_2"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:visibility="gone"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/time_check_3"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:visibility="gone"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/time_1"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:visibility="gone"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/time_2"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:visibility="gone"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/time_3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:visibility="gone"
-                tools:visibility="gone" />
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -360,7 +193,6 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -378,30 +210,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
-    </LinearLayout>
+    </LinearLayout><![CDATA[
 
-    <TextView
-        android:id="@+id/invisible_rssi_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:visibility="invisible"
-        tools:visibility="gone" />
-
-    <TextView
-        android:id="@+id/invisible_rssi_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        tools:visibility="gone" />
-
-    <TextView
-        android:id="@+id/invisible_rssi_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:visibility="invisible"
-        tools:visibility="gone" />
     >
 
+]]>
 </LinearLayout>
