@@ -179,12 +179,15 @@ public class display_Map extends AppCompatActivity {
                 //根據規則有不同的動作，cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp被偵測
                     canvas.drawCircle(door1_triangle_1_x - 100, door1_triangle_1_y - 50, 20, circle); //(150,150)
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 50, 20, circle); //(350,250)
                 }
                 if (rule == -2) { //只有第二個esp被偵測
                     canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_1_y - 50, 20, circle); //(850,150)
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 50, 20, circle); //(650,250)
                 }
                 if (rule == -3) { //只有第三個esp被偵測
                     canvas.drawCircle(door1_triangle_2_x + 100, door1_triangle_2_y + 50, 20, circle); //(850,750)
+                    canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_2_y - 50, 20, circle); //(650,650)
                 }
                 if (rule == 1) { //第一個esp近
                     canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 100, 20, circle); //(350,300)
@@ -235,7 +238,7 @@ public class display_Map extends AppCompatActivity {
                 }
                 if (rule == -133) { //沒有2，3近
                     canvas.drawCircle(door1_triangle_1_x + 325, door1_triangle_2_y - 125, 20, circle); //(575,575)
-                    canvas.drawCircle(door1_triangle_1_x + 175, door1_triangle_2_y + 125, 20, circle);  //(425,825)
+                    canvas.drawCircle(door1_triangle_1_x + 175, door1_triangle_2_y + 125, 20, circle); //(425,825)
                 }
                 if (rule == -230) { //沒有1，23等
                     canvas.drawCircle(door1_triangle_2_x - 100, door1_triangle_1_y + 250, 20, circle); //(650,450)
@@ -285,11 +288,14 @@ public class display_Map extends AppCompatActivity {
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
                 //cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp被偵測
-                    canvas.drawCircle(door2_triangle_1_x + 100, door2_triangle_1_y - 50, 20, circle); }
+                    canvas.drawCircle(door2_triangle_1_x + 100, door2_triangle_1_y - 50, 20, circle);
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 50, 20, circle);}
                 if (rule == -2) { //只有第二個esp被偵測
-                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_1_y - 50, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_1_y - 50, 20, circle);
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_1_y + 50, 20, circle);}
                 if (rule == -3) { //只有第三個esp被偵測
-                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_2_y + 50, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x - 100, door2_triangle_2_y + 50, 20, circle);
+                    canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 50, 20, circle); }
                 if (rule == 1) { //第一個esp近
                     canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 100, 20, circle); }
                 if (rule == 2) { //第二個esp近
