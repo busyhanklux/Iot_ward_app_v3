@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,27 +28,27 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvID,tvResult,tv_ei;
-    private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3,conclude;
-    private TextView detail,sw_number,sw_distance,sw_time,sw_room;//Input_major,number_decided
+    private TextView tv_ei,conclude,detail;
     private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
     private Button btMap,btStatus,esp32_switch,find_major;
 
     int room_choice,beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
     int rssi_1,rssi_2,rssi_3; //存放rssi
+    String sw_number; //放esp32切換
     String String_rssi_1,String_rssi_2,String_rssi_3; //存放rssi，用於顯示在esp32切換
     String String_distance_1,String_distance_2,String_distance_3; //存放距離，用於顯示儀器測距
     String String_displaytime_1 , String_displaytime_2 , String_displaytime_3; //存放時間，用來顯示時間
     Long unixtime_check1,unixtime_check2,unixtime_check3; //存放unix時間，用來判定時間
     String Major_1,Major_2,Major_3; //存放Major，用來顯示Major
     String Minor_1,Minor_2,Minor_3; //存放Minor，用來顯示Minor
+    String room_place,select_room; //存放房間的選擇，前：隨選單控制，後：隨按鈕控制
 
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
     //下拉式選單
-    String[] esp32_num = new String[]{ "1","2","3" }; //
+    String[] esp32_num = new String[]{ "1","2","3" }; //esp32切換
 
     String[] environment_choice = new String[]{ "1.大型空間","2.樂得兒產房","3.ICU" }; //環境選擇
 
@@ -73,14 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         //細節(外觀文字)
         detail = (TextView)findViewById(R.id.detail);
-        sw_number = (TextView)findViewById(R.id.sw_number); //放下拉sp_esp32_choice的選擇
-        sw_room = (TextView)findViewById(R.id.sw_room);     //放下拉sp_room_choice的選擇
-
-        //設備編號(外觀文字)
-        tvID = (TextView)findViewById(R.id.tvID);
-
-        //設備資訊(外觀文字)
-        tvResult = (TextView)findViewById(R.id.tvResult);
 
         //顯示要尋找的beacon的uuid值
         tv_ei = (TextView)findViewById(R.id.equipment_information_tv);
@@ -129,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     int select_major = beacon_number_choice;
                     number_decided = beacon_number_choice;
+                    select_room = room_place;
 
                     //當我選擇環境時，他們的room_choice會被選項跟著改動
                     int firebase_number_1 = room_choice*3 + 1;
@@ -643,10 +635,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
-                int select_number = number_decided;
-                bundle.putInt("select_number",select_number);
-
-                String select_room = String.valueOf(sw_room.getText());
+                bundle.putInt("select_number", number_decided);
                 bundle.putString("select_room", select_room);
 
                 bundle.putInt("rssi_1",rssi_1);
@@ -674,16 +663,7 @@ public class MainActivity extends AppCompatActivity {
     //選擇第幾個esp32的資料
     Spinner.OnItemSelectedListener sp_esp32_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            //修bug
-            if(esp32_switch_unlock.equals("Yes"))
-            {
-                //String pos_B = parent.getItemAtPosition(position).toString();
-
-                //Toast test = Toast.makeText(MainActivity.this,pos_A_2+"",Toast.LENGTH_SHORT);
-                //test.show();
-            }
-            String pos_A_2 = String.valueOf(position);
-            sw_number.setText(pos_A_2);
+            sw_number = String.valueOf(position);
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
@@ -692,11 +672,10 @@ public class MainActivity extends AppCompatActivity {
     Spinner.OnItemSelectedListener environment_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position2, long id2) {
             room_choice = position2 ; //選項1時，使他輸出為0
-            String room_place = parent.getItemAtPosition(position2).toString(); //取得文字
+            room_place = parent.getItemAtPosition(position2).toString(); //取得文字
             //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
             int Position_string = 1;
             room_place = room_place.substring(Position_string+1);
-            sw_room.setText(room_place);
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
@@ -722,8 +701,7 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("SetTextI18n")
         public void onClick(View v) {
             try {
-                String condition = (String) sw_number.getText();
-                switch (condition){
+                switch (sw_number){
                     case "0":   //rssi、距離、時間
                         String display_distance_1;
                         if(String_distance_1 != "格式不符"){
@@ -731,41 +709,30 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             display_distance_1 = String_distance_1;
                         }
-
                         detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ display_distance_1 + " " + "\n" + Major_1 + "，" + Minor_1  + String_displaytime_1 );
                         tv_ei.setText("以下是您的結果");
-                        Toast test1 = Toast.makeText(MainActivity.this,unixtime_check1+"",Toast.LENGTH_SHORT);
-                        test1.show();
                         break;
 
                     case "1":   //rssi、距離、時間
-
                         String display_distance_2;
                         if(String_distance_2 != "格式不符"){
                             display_distance_2 = String_distance_2+"m";
                         }else{
                             display_distance_2 = String_distance_2;
                         }
-
                         detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ display_distance_2 + " " + "\n" + Major_2 + "，" + Minor_2  + String_displaytime_2  );
                         tv_ei.setText("以下是您的結果");
-                        Toast test2 = Toast.makeText(MainActivity.this,unixtime_check2+"",Toast.LENGTH_SHORT);
-                        test2.show();
                         break;
 
                     case "2":   //rssi、距離、時間
-
                         String display_distance_3;
                         if(String_distance_3 != "格式不符"){
                             display_distance_3 = String_distance_3+"m";
                         }else{
                             display_distance_3 = String_distance_3;
                         }
-
                         detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ display_distance_3 + " " + "\n" + Major_3 + "，" + Minor_3  + String_displaytime_3 );
                         tv_ei.setText("以下是您的結果");
-                        Toast test3 = Toast.makeText(MainActivity.this,unixtime_check3+"",Toast.LENGTH_SHORT);
-                        test3.show();
                         break;
                 }
             } catch (Exception RSSI_not_found) {

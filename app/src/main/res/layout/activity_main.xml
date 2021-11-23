@@ -118,27 +118,6 @@
             android:text="切換esp32"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <TextView
-            android:id="@+id/sw_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/number_decided"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/sw_room"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
     </LinearLayout>
 
     <LinearLayout
