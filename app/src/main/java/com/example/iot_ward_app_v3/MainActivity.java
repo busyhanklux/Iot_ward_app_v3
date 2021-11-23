@@ -29,9 +29,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvID,tvResult,tv_ei,distance_1,distance_2,distance_3;
-    private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3;
-    private TextView tv_time_1,tv_time_2,tv_time_3,conclude;
+    private TextView tvID,tvResult,tv_ei;
+    private TextView tvmajor1,tvmajor2,tvmajor3,tvminor1,tvminor2,tvminor3,conclude;
     private TextView detail,sw_number,sw_distance,sw_time,sw_room;//Input_major,number_decided
     private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
     private ImageView imgTitle;
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     int number_decided; //1.用來丟入下一頁使用 2.防呆
     int rssi_1,rssi_2,rssi_3; //存放rssi
     String String_rssi_1,String_rssi_2,String_rssi_3; //存放rssi，用於顯示在esp32切換
+    String String_distance_1,String_distance_2,String_distance_3; //存放距離，用於顯示儀器測距
+    String String_displaytime_1 , String_displaytime_2 , String_displaytime_3; //存放時間，用來顯示時間
 
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
@@ -88,11 +89,6 @@ public class MainActivity extends AppCompatActivity {
         //顯示要尋找的beacon的uuid值
         tv_ei = (TextView)findViewById(R.id.equipment_information_tv);
 
-        //顯示三個esp32的距離值
-        distance_1 = (TextView)findViewById(R.id.distance_1);
-        distance_2 = (TextView)findViewById(R.id.distance_2);
-        distance_3 = (TextView)findViewById(R.id.distance_3);
-
         //顯示該uuid的major、minor
         tvmajor1 = (TextView)findViewById(R.id.tvmajor1);
         tvmajor2 = (TextView)findViewById(R.id.tvmajor2);
@@ -102,9 +98,6 @@ public class MainActivity extends AppCompatActivity {
         tvminor3 = (TextView)findViewById(R.id.tvminor3);
 
         //顯示time
-        tv_time_1 = (TextView)findViewById(R.id.time_1);
-        tv_time_2 = (TextView)findViewById(R.id.time_2);
-        tv_time_3 = (TextView)findViewById(R.id.time_3);
         time_check1 = (TextView)findViewById(R.id.time_check_1);
         time_check2 = (TextView)findViewById(R.id.time_check_2);
         time_check3 = (TextView)findViewById(R.id.time_check_3);
@@ -235,11 +228,11 @@ public class MainActivity extends AppCompatActivity {
                                     NumberFormat nf = NumberFormat.getInstance();
                                     nf.setMaximumFractionDigits(2);						// 若小數點超過四位，則第五位~四捨五入
                                     nf.setMinimumFractionDigits(1);
-                                    distance_1.setText(nf.format((M_1)));
+                                    String_distance_1 = nf.format(M_1);
 
                                 } catch (Exception RSSI_not_found) {
                                     String_rssi_1 = "資料錯誤";
-                                    distance_1.setText("格式不符");
+                                    String_distance_1 = "格式不符";
                                     rssi_1 = -150;
                                 }
                             }
@@ -265,16 +258,16 @@ public class MainActivity extends AppCompatActivity {
                                     if(room_choice == 2) {
                                         A = 75.00; n = 3.40; }
 
-                                    double M_1 = pow(10, ((abs(rssi2) - A) / (10 * n)));
+                                    double M_2 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
                                     nf.setMaximumFractionDigits(2);						// 若小數點超過四位，則第五位~四捨五入
                                     nf.setMinimumFractionDigits(1);
-                                    distance_2.setText(nf.format((M_1)));
+                                    String_distance_2 = nf.format(M_2);
 
                                 } catch (Exception RSSI_not_found) {
                                     String_rssi_2 = "資料錯誤";
-                                    distance_2.setText("格式不符");
+                                    String_distance_2 = "格式不符";
                                     rssi_2 = -150;
                                 }
                             }
@@ -301,16 +294,16 @@ public class MainActivity extends AppCompatActivity {
                                     if(room_choice == 2) {
                                         A = 75.00; n = 3.40; }
 
-                                    double M_1 = pow(10, ((abs(rssi3) - A) / (10 * n)));
+                                    double M_3 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
                                     nf.setMaximumFractionDigits(2);						// 若小數點超過四位，則第五位~四捨五入
                                     nf.setMinimumFractionDigits(1);
-                                    distance_3.setText(nf.format((M_1)));
+                                    String_distance_3 = nf.format(M_3);
 
                                 } catch (Exception RSSI_not_found) {
                                     String_rssi_3 = "資料錯誤";
-                                    distance_3.setText("格式不符");
+                                    String_distance_3 = "格式不符";
                                     rssi_3 = -150;
                                 }
                             }
@@ -340,7 +333,8 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
                                             String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
-                                            tv_time_1.setText("\nesp之1偵測時間: " + format);
+
+                                            String_displaytime_1 = "\nesp之1偵測時間: " + format;
                                             long check = fix + time;
                                             time_check1.setText(Long.toString(check));
                                         }
@@ -349,7 +343,8 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_1.setText("\nesp之1時間找不到，請再試一次");
+
+                                    String_displaytime_1 = "\nesp之1時間找不到，請再試一次";
                                     time_check1.setText(Long.toString(0));
                                 }}
                             @Override
@@ -372,7 +367,8 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
                                             String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
-                                            tv_time_2.setText("\nesp之2偵測時間: " + format);
+
+                                            String_displaytime_2 = "\nesp之2偵測時間: " + format;
                                             long check = fix + time;
                                             time_check2.setText(Long.toString(check));
                                         }
@@ -381,7 +377,8 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_2.setText("\nesp之2時間找不到，請再試一次");
+
+                                    String_displaytime_2 = "\nesp之2時間找不到，請再試一次";
                                     time_check2.setText(Long.toString(0));
                                 }
                             }
@@ -405,7 +402,8 @@ public class MainActivity extends AppCompatActivity {
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
                                             String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
-                                            tv_time_3.setText("\nesp之3偵測時間: " + format);
+
+                                            String_displaytime_3 = "\nesp之3偵測時間: " + format;
                                             long check = fix + time;
                                             time_check3.setText(Long.toString(check));
                                         }
@@ -414,7 +412,8 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                                 } catch (Exception time_not_found) {
-                                    tv_time_3.setText("\nesp之3時間找不到，請再試一次");
+
+                                    String_displaytime_3 = "\nesp之3時間找不到，請再試一次";
                                     time_check3.setText(Long.toString(0));
                                 }
                             }
@@ -753,43 +752,45 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String condition = (String) sw_number.getText();
                 switch (condition){
-                    case "0":
-                        //rssi
-                        String S_distance_1 =  distance_1.getText()+"m"; //距離
-                        if(distance_1.getText() == "格式不符"){
-                            S_distance_1 =  (String) distance_1.getText();
+                    case "0":   //rssi、距離、時間
+                        String display_distance_1;
+                        if(String_distance_1 != "格式不符"){
+                            display_distance_1 = String_distance_1+"m";
+                        }else{
+                            display_distance_1 = String_distance_1;
                         }
-                        String S_time_1 = (String)  tv_time_1.getText(); //時間
 
-                        detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ S_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + S_time_1  );
+                        detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ display_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + String_displaytime_1 );
                         tv_ei.setText("以下是您的結果");
                         //Toast test1 = Toast.makeText(MainActivity.this,String_rssi_1+"",Toast.LENGTH_SHORT);
                         //test1.show();
                         break;
 
-                    case "1":
-                        //rssi
-                        String S_distance_2 =  distance_2.getText()+"m"; //距離
-                        if(distance_2.getText() == "格式不符"){
-                            S_distance_2 =  (String) distance_2.getText();
-                        }
-                        String S_time_2 = (String)  tv_time_2.getText(); //時間
+                    case "1":   //rssi、距離、時間
 
-                        detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ S_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + S_time_2  );
+                        String display_distance_2;
+                        if(String_distance_2 != "格式不符"){
+                            display_distance_2 = String_distance_2+"m";
+                        }else{
+                            display_distance_2 = String_distance_2;
+                        }
+
+                        detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ display_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + String_displaytime_2  );
                         tv_ei.setText("以下是您的結果");
                         //Toast test2 = Toast.makeText(MainActivity.this,String_rssi_2+"",Toast.LENGTH_SHORT);
                         //test2.show();
                         break;
 
-                    case "2":
-                        //rssi
-                        String S_distance_3 = distance_3.getText()+"m"; //距離
-                        if(distance_3.getText() == "格式不符"){
-                            S_distance_3 =  (String) distance_3.getText();
-                        }
-                        String S_time_3 = (String)  tv_time_3.getText(); //時間
+                    case "2":   //rssi、距離、時間
 
-                        detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ S_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + S_time_3  );
+                        String display_distance_3;
+                        if(String_distance_3 != "格式不符"){
+                            display_distance_3 = String_distance_3+"m";
+                        }else{
+                            display_distance_3 = String_distance_3;
+                        }
+
+                        detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ display_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + String_displaytime_3 );
                         tv_ei.setText("以下是您的結果");
                         //Toast test3 = Toast.makeText(MainActivity.this,String_rssi_3+"",Toast.LENGTH_SHORT);
                         //test3.show();
@@ -798,7 +799,5 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception RSSI_not_found) {
                 detail.setText("資料有誤");
             }}};
-
 }
-
 //firebase讀取參考來源https://mnya.tw/cc/word/1495.html
