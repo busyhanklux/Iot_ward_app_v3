@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     String String_distance_1,String_distance_2,String_distance_3; //存放距離，用於顯示儀器測距
     String String_displaytime_1 , String_displaytime_2 , String_displaytime_3; //存放時間，用來顯示時間
 
+    Long unixtime_check1,unixtime_check2,unixtime_check3;
+
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
@@ -335,8 +337,7 @@ public class MainActivity extends AppCompatActivity {
                                             String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
 
                                             String_displaytime_1 = "\nesp之1偵測時間: " + format;
-                                            long check = fix + time;
-                                            time_check1.setText(Long.toString(check));
+                                            unixtime_check1 = fix + time;
                                         }
                                         @Override
                                         public void onCancelled(DatabaseError error) {}
@@ -345,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (Exception time_not_found) {
 
                                     String_displaytime_1 = "\nesp之1時間找不到，請再試一次";
-                                    time_check1.setText(Long.toString(0));
+                                    unixtime_check1 = Long.valueOf(0);
                                 }}
                             @Override
                             public void onCancelled(DatabaseError error) { }
@@ -369,8 +370,7 @@ public class MainActivity extends AppCompatActivity {
                                             String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
 
                                             String_displaytime_2 = "\nesp之2偵測時間: " + format;
-                                            long check = fix + time;
-                                            time_check2.setText(Long.toString(check));
+                                            unixtime_check2 = fix + time;
                                         }
                                         @Override
                                         public void onCancelled(DatabaseError error) {}
@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (Exception time_not_found) {
 
                                     String_displaytime_2 = "\nesp之2時間找不到，請再試一次";
-                                    time_check2.setText(Long.toString(0));
+                                    unixtime_check2 =  Long.valueOf(0);
                                 }
                             }
                             @Override
@@ -404,8 +404,7 @@ public class MainActivity extends AppCompatActivity {
                                             String format = new SimpleDateFormat("yyyy/MM/dd ahh:mm").format(day_month_year);
 
                                             String_displaytime_3 = "\nesp之3偵測時間: " + format;
-                                            long check = fix + time;
-                                            time_check3.setText(Long.toString(check));
+                                            unixtime_check3 = fix + time;
                                         }
                                         @Override
                                         public void onCancelled(DatabaseError error) {}
@@ -414,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (Exception time_not_found) {
 
                                     String_displaytime_3 = "\nesp之3時間找不到，請再試一次";
-                                    time_check3.setText(Long.toString(0));
+                                    unixtime_check3 =  Long.valueOf(0);
                                 }
                             }
                             @Override
@@ -535,10 +534,6 @@ public class MainActivity extends AppCompatActivity {
                 //未過：
                 //兩者比大小，或以唯一為主
                 try{
-                    Long check1 = Long.parseLong(String.valueOf(time_check1.getText()));
-                    Long check2 = Long.parseLong(String.valueOf(time_check2.getText()));
-                    Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
-
                     long time_now = System.currentTimeMillis() / 1000; //獲取app系統時間
 
                     int gap1_2 = abs(rssi_1) - abs(rssi_2); //12之距離
@@ -547,22 +542,22 @@ public class MainActivity extends AppCompatActivity {
 
                     //esp32：1、門口前方牆角(第一個esp) 2、門口斜對牆角(第二個esp) 3、門口平行牆角(第三個esp)
                     //三個同時超過10分鐘，就是沒有
-                    if((time_now - check1 > 600) & (time_now - check2 > 600) & (time_now - check3 > 600)){
+                    if((time_now - unixtime_check1 > 600) & (time_now - unixtime_check2 > 600) & (time_now - unixtime_check3 > 600)){
                         conclude.setText("你要找的設備，可能不在此範圍一段時間，或著三個esp同時一段時間未啟動");
 
-                    }else if ((time_now - check1 > 600) & (time_now - check2 > 600)) { //1.2同時超過10分鐘
+                    }else if ((time_now - unixtime_check1 > 600) & (time_now - unixtime_check2 > 600)) { //1.2同時超過10分鐘
                         conclude.setText("esp裝置一(門口前方牆角) 和 esp裝置二(門口斜對牆角) 未啟動或未偵測到一段時間" +
                                 "\n因此可能位於 \"門口平行牆角(第三個esp)\" 附近");
 
-                    }else if ((time_now - check2 > 600) & (time_now - check3 > 600)) { //2.3同時超過10分鐘
+                    }else if ((time_now - unixtime_check2 > 600) & (time_now - unixtime_check3 > 600)) { //2.3同時超過10分鐘
                         conclude.setText("esp裝置二(門口斜對牆角) 和 esp裝置三(門口平行牆角) 未啟動或未偵測到一段時間" +
                                 "\n因此可能位於 \"門口前方牆角(第一個esp)\" 附近");
 
-                    }else if ((time_now - check1 > 600) & (time_now - check3 > 600)) { //1.3同時超過10分鐘
+                    }else if ((time_now - unixtime_check1 > 600) & (time_now - unixtime_check3 > 600)) { //1.3同時超過10分鐘
                         conclude.setText("esp裝置一(門口前方牆角) 和 esp裝置三(門口平行牆角) 未啟動或未偵測到一段時間" +
                                 "\n因此可能位於 \"門口斜對牆角(第二個esp)\" 附近");
 
-                    }else if (time_now - check1 > 600)  { //只有1未偵測超過10分鐘
+                    }else if (time_now - unixtime_check1 > 600)  { //只有1未偵測超過10分鐘
                         if((rssi_2 > -140) & (rssi_3 > -140) & (gap2_3 < 4) & (gap2_3 > -4)){ //判定：2和3 RSSI接近，相似距離
                             conclude.setText("esp裝置一(門口前方牆角)未啟動或未偵測到一段時間 " +
                                     "\n可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間" +
@@ -578,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
                                     "\n可能位於 \"門口平行牆角(第三個esp)\" 附近" +
                                     "\n或可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間的牆外"); }
 
-                    }else if (time_now - check2 > 600)  { //只有2未偵測超過10分鐘
+                    }else if (time_now - unixtime_check2 > 600)  { //只有2未偵測超過10分鐘
                         if((rssi_1 > -140) & (rssi_3 > -140) & (gap1_3 < 4) & (gap1_3 > -4)){ //判定：1和3 RSSI接近，相似距離
                             conclude.setText("esp裝置二(門口斜對牆角)未啟動或未偵測到一段時間 " +
                                     "\n可能位於 \"門口前方牆角(第一個esp) 和 門口平行牆角(第三個esp)\" 之間" +
@@ -594,7 +589,7 @@ public class MainActivity extends AppCompatActivity {
                                     "\n可能位於 \"門口斜對牆角(第二個esp)\" 附近" +
                                     "\n或可能位於 \"門口斜對牆角(第二個esp) 和 門口平行牆角(第三個esp)\" 之間的牆外"); }
 
-                    }else if (time_now - check3 > 600)  { //只有3未偵測超過10分鐘
+                    }else if (time_now - unixtime_check3 > 600)  { //只有3未偵測超過10分鐘
                         if((rssi_1 > -140) & (rssi_2 > -140) & (gap1_2 < 4) & (gap1_2 > -4)){ //判定：1和2 RSSI接近，相似距離
                             conclude.setText("esp裝置三(門口平行牆角)未啟動或未偵測到一段時間 " +
                                     "\n可能位於 \"門口前方牆角(第一個esp) 或 門口斜對牆角(第二個esp)\" 之間，" +
@@ -664,10 +659,6 @@ public class MainActivity extends AppCompatActivity {
     private  View.OnClickListener btMapListener = new View.OnClickListener() {
         public void onClick(View v){
             try{
-                Long check1 = Long.parseLong(String.valueOf(time_check1.getText()));
-                Long check2 = Long.parseLong(String.valueOf(time_check2.getText()));
-                Long check3 = Long.parseLong(String.valueOf(time_check3.getText()));
-
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
@@ -681,9 +672,9 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putInt("rssi_2",rssi_2);
                 bundle.putInt("rssi_3",rssi_3);
 
-                bundle.putLong("check_time1",check1);
-                bundle.putLong("check_time2",check2);
-                bundle.putLong("check_time3",check3);
+                bundle.putLong("check_time1",unixtime_check1);
+                bundle.putLong("check_time2",unixtime_check2);
+                bundle.putLong("check_time3",unixtime_check3);
 
                 bundle.putString("beacon_name",beacon_name);
 
@@ -762,8 +753,8 @@ public class MainActivity extends AppCompatActivity {
 
                         detail.setText("RSSI："+String_rssi_1 + "，儀器測距："+ display_distance_1 + " " + "\n" + tvmajor1.getText() + "，" + tvminor1.getText()  + String_displaytime_1 );
                         tv_ei.setText("以下是您的結果");
-                        //Toast test1 = Toast.makeText(MainActivity.this,String_rssi_1+"",Toast.LENGTH_SHORT);
-                        //test1.show();
+                        Toast test1 = Toast.makeText(MainActivity.this,unixtime_check1+"",Toast.LENGTH_SHORT);
+                        test1.show();
                         break;
 
                     case "1":   //rssi、距離、時間
@@ -777,8 +768,8 @@ public class MainActivity extends AppCompatActivity {
 
                         detail.setText("RSSI："+String_rssi_2 + "，儀器測距："+ display_distance_2 + " " + "\n" + tvmajor2.getText() + "，" + tvminor2.getText()  + String_displaytime_2  );
                         tv_ei.setText("以下是您的結果");
-                        //Toast test2 = Toast.makeText(MainActivity.this,String_rssi_2+"",Toast.LENGTH_SHORT);
-                        //test2.show();
+                        Toast test2 = Toast.makeText(MainActivity.this,unixtime_check2+"",Toast.LENGTH_SHORT);
+                        test2.show();
                         break;
 
                     case "2":   //rssi、距離、時間
@@ -792,8 +783,8 @@ public class MainActivity extends AppCompatActivity {
 
                         detail.setText("RSSI：" + String_rssi_3 + "，儀器測距："+ display_distance_3 + " " + "\n" + tvmajor3.getText() + "，" + tvminor3.getText()  + String_displaytime_3 );
                         tv_ei.setText("以下是您的結果");
-                        //Toast test3 = Toast.makeText(MainActivity.this,String_rssi_3+"",Toast.LENGTH_SHORT);
-                        //test3.show();
+                        Toast test3 = Toast.makeText(MainActivity.this,unixtime_check3+"",Toast.LENGTH_SHORT);
+                        test3.show();
                         break;
                 }
             } catch (Exception RSSI_not_found) {

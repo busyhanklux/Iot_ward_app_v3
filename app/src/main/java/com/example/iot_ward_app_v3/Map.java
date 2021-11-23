@@ -72,12 +72,12 @@ public class Map extends AppCompatActivity {
             rssi_1 = bundle.getInt("rssi_1");
             rssi_2 = bundle.getInt("rssi_2");
             rssi_3 = bundle.getInt("rssi_3");
-            //Toast test1 = Toast.makeText(Map.this,rssi_1+" "+rssi_2+" "+rssi_3,Toast.LENGTH_SHORT);
-            //test1.show();
 
             check1 = bundle.getLong("check_time1");
             check2 = bundle.getLong("check_time2");
             check3 = bundle.getLong("check_time3");
+            Toast test1 = Toast.makeText(Map.this,check1+" ",Toast.LENGTH_SHORT);
+            test1.show();
 
             //某某號，設備名字嘎啦嘎拉
             select_number = bundle.getInt("select_number");
