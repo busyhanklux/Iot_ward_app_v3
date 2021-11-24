@@ -91,7 +91,6 @@ public class display_Map extends AppCompatActivity {
     }
 
     public class DrawView extends View {
-        public Paint mPaint;
         public Canvas mCanvas;
 
         public DrawView(display_Map context) {
@@ -141,12 +140,9 @@ public class display_Map extends AppCompatActivity {
 
                 Path path = new Path();
 
-                //(0,0)左上、等腰直角三角 或 直角三角
-                //door1_triangle_1_x => 左 x(200) , door1_triangle_2_x => 右 x(600)
-                int door1_triangle_1_x = 250,door1_triangle_2_x = 750;
-
-                //door1_triangle_1_y => 上 y(100) , door1_triangle_2_y => 下 y(500)
-                int door1_triangle_1_y = 200,door1_triangle_2_y = 700;
+                //(0,0)左上、等腰直角三角
+                int door1_triangle_1_x = 250,door1_triangle_2_x = 750; //左右
+                int door1_triangle_1_y = 200,door1_triangle_2_y = 700; //上下
 
                 // moveTo：此點為多邊形的起點
                 path.moveTo(door1_triangle_1_x, door1_triangle_1_y); //1號
@@ -162,9 +158,8 @@ public class display_Map extends AppCompatActivity {
                 canvas.drawText("門斜牆角" ,675,100,p);
                 canvas.drawText("門平行牆角",650,800,p);
 
-                //圖例：用ppt丟imageView
-
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
+
                 //根據規則有不同的動作，cx,cy為圓的圓心位置
                 if (rule == -1) { //只有第一個esp被偵測
                     canvas.drawCircle(door1_triangle_1_x - 100, door1_triangle_1_y - 50, 20, circle); //(150,150)
@@ -255,12 +250,10 @@ public class display_Map extends AppCompatActivity {
                 canvas.drawPath(Door, rect_door);
 
                 Path path = new Path();
-                //(0,0)左上、等腰直角三角 或 直角三角
-                //door2_triangle_1_x => 右 x(600) , door2_triangle_2_x => 左 x(200)
-                int door2_triangle_1_x = 750,door2_triangle_2_x = 250;
+                //(0,0)左上、等腰直角三角
 
-                //door2_triangle_1_y => 上 y(100) , door2_triangle_2_y => 下 y(500)
-                int door2_triangle_1_y = 200,door2_triangle_2_y = 700;
+                int door2_triangle_1_x = 750,door2_triangle_2_x = 250; //右左
+                int door2_triangle_1_y = 200,door2_triangle_2_y = 700; //上下
 
                 path.moveTo(door2_triangle_1_x, door2_triangle_1_y);// 此點為多邊形的起點
                 path.lineTo(door2_triangle_2_x, door2_triangle_1_y);

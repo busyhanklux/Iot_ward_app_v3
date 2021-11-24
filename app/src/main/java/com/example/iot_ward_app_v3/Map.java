@@ -207,7 +207,7 @@ public class Map extends AppCompatActivity {
                     rule = 66;       rule_keep.setText("66");
 
                 }else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1最近
-                    if((gap2_3 < 4) & (gap2_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2,3 相似
+                    if((gap2_3 < 4) & (gap2_3 > -4) ){ // 2,3 相似
                         //conclude.setText("你要找的beacon靠近第一個esp32，但離第二與第三的距離相似");
                         description = "該設備靠近 \"門口前方牆角(第一個esp)\" " +
                                 "\n但離 \"門口斜對牆角(第二個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
@@ -218,7 +218,7 @@ public class Map extends AppCompatActivity {
                         rule = 1;       rule_keep.setText("1");
                     }
                 }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2最近
-                    if((gap1_3 < 4) & (gap1_3 > -4)  & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1,3 相似
+                    if((gap1_3 < 4) & (gap1_3 > -4) ){ // 1,3 相似
                         //conclude.setText("你要找的beacon靠近第二個esp32，但離第一與第三的距離相似");
                         description = "該設備靠近 \"門口斜對牆角(第二個esp)\" " +
                                 "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
@@ -229,7 +229,7 @@ public class Map extends AppCompatActivity {
                         rule = 2;       rule_keep.setText("2");
                     }
                 }else if((rssi_3 > rssi_1) & (rssi_3 > rssi_2) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { // 3最近
-                    if ((gap1_2 < 4) & (gap1_2 > -4) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)) { // 1,2 相似
+                    if ((gap1_2 < 4) & (gap1_2 > -4)) { // 1,2 相似
                         //conclude.setText("你要找的beacon靠近第三個esp32，但離第一與第二的距離相似");
                         description = "該設備靠近 \"門口平行牆角(第三個esp)\" " +
                                 "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似";
