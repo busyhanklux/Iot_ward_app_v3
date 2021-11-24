@@ -124,14 +124,15 @@ public class MainActivity extends AppCompatActivity {
                     number_decided = beacon_number_choice;
                     select_room = room_place;
 
-                    //當我選擇環境時，他們的room_choice會被選項跟著改動
+                    //當我選擇環境時，他們的room_choice會被選項跟著改動(0：大型空間、1：產房、2：ICU)
                     int firebase_number_1 = room_choice*3 + 1;
                     int firebase_number_2 = room_choice*3 + 2;
                     int firebase_number_3 = room_choice*3 + 3;
 
                     if( (select_major > 0) & (select_major < 20) ){
                         //搜尋有沒有該major，沒有就換找下一個
-                            DatabaseReference major1 = database_get.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("Major");
+                            DatabaseReference major1 = database_get.getReference("esp32 no_" + firebase_number_1)
+                                    .child(String.valueOf(select_major)).child("Major");
                             major1.addValueEventListener(new ValueEventListener() {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -140,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
                                         try { throw new Exception(); }
                                         catch (Exception major_esp1_notfound) {
 
-                                            DatabaseReference major2 = database_get.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("Major");
+                                            DatabaseReference major2 = database_get.getReference("esp32 no_" + firebase_number_2)
+                                                    .child(String.valueOf(select_major)).child("Major");
                                             major2.addValueEventListener(new ValueEventListener() {
                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -149,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
                                                         try { throw new Exception(); }
                                                         catch (Exception major_esp2_notfound) {
 
-                                                            DatabaseReference major3 = database_get.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("Major");
+                                                            DatabaseReference major3 = database_get.getReference("esp32 no_" + firebase_number_3)
+                                                                    .child(String.valueOf(select_major)).child("Major");
                                                             major3.addValueEventListener(new ValueEventListener() {
                                                                 public void onDataChange(DataSnapshot dataSnapshot){
                                                                     Integer major = dataSnapshot.getValue(Integer.class);
@@ -190,16 +193,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_1 = rssi1.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) {
-                                        A = 59.00; n = 3.40; }
-
-                                    if(room_choice == 1) {
-                                        A = 65.00; n = 3.40; }
-
-                                    if(room_choice == 2) {
-                                        A = 75.00; n = 3.40; }
-
-                                    //這個蠻有趣的，這邊0/0 = 無限大
+                                    if(room_choice == 0) { A = 59.00; n = 3.40; }
+                                    if(room_choice == 1) { A = 65.00; n = 3.40; }
+                                    if(room_choice == 2) { A = 75.00; n = 3.40; }
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -226,15 +222,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_2 = rssi2.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) {
-                                        A = 59.00; n = 3.40; }
-
-                                    if(room_choice == 1) {
-                                        A = 65.00; n = 3.40; }
-
-                                    if(room_choice == 2) {
-                                        A = 75.00; n = 3.40; }
-
+                                    if(room_choice == 0) { A = 59.00; n = 3.40; }
+                                    if(room_choice == 1) { A = 65.00; n = 3.40; }
+                                    if(room_choice == 2) { A = 75.00; n = 3.40; }
                                     double M_2 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -262,15 +252,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_3 = rssi3.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) {
-                                        A = 59.00; n = 3.40; }
-
-                                    if(room_choice == 1) {
-                                        A = 65.00; n = 3.40; }
-
-                                    if(room_choice == 2) {
-                                        A = 75.00; n = 3.40; }
-
+                                    if(room_choice == 0) { A = 59.00; n = 3.40; }
+                                    if(room_choice == 1) { A = 65.00; n = 3.40; }
+                                    if(room_choice == 2) { A = 75.00; n = 3.40; }
                                     double M_3 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -298,14 +282,13 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 try {
-                                    //網路時間
-                                    int time = dataSnapshot.getValue(Integer.class);
+                                    int time = dataSnapshot.getValue(Integer.class); //網路時間
                                     esp32_no1_unix_fix.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot snapshot) { //注意DataSnapshot的名字
                                             long time_switch = Long.valueOf(time) * 1000;// its need to be in milisecond
-                                            //校準時間
-                                            long fix = snapshot.getValue(Integer.class);
+
+                                            long fix = snapshot.getValue(Integer.class); //校準時間
                                             long fix_switch = Long.valueOf(fix) * 1000;
                                             long fix_add = Long.valueOf(time_switch + fix_switch);
                                             Date day_month_year = new Date(fix_add);
@@ -315,11 +298,8 @@ public class MainActivity extends AppCompatActivity {
                                             unixtime_check1 = fix + time;
                                         }
                                         @Override
-                                        public void onCancelled(DatabaseError error) {}
-                                    });
-
+                                        public void onCancelled(DatabaseError error) {}});
                                 } catch (Exception time_not_found) {
-
                                     String_displaytime_1 = "\nesp之1時間找不到，請再試一次";
                                     unixtime_check1 = Long.valueOf(0);
                                 }}
@@ -682,7 +662,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
 
-    //選擇哪個beacon：用下拉式選單，替代輸入文字(因應11/10的老師建議)
+    //選擇哪個beacon
     Spinner.OnItemSelectedListener beacon_id_spinner_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int beacon_num, long id3) {
 
