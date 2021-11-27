@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
-    String version = "1.00"; //純粹辨認版本用的
+    String version = "1.01a"; //純粹辨認版本用的
 
     //下拉式選單
-    String[] esp32_num = new String[]{ "1","2","3" }; //esp32切換
+    String[] esp32_num = new String[]{ "1.門前牆角","2.斜對牆角","3.門平行牆角" }; //esp32切換
 
     String[] environment_choice = new String[]{ "1.大型空間","2.樂得兒產房","3.ICU" }; //環境選擇
 
@@ -158,22 +158,22 @@ public class MainActivity extends AppCompatActivity {
                                                                     Integer major = dataSnapshot.getValue(Integer.class);
                                                                     if(major == null){
                                                                         //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
-                                                                        tv_ei.setText("三個esp32都沒有上傳過 "+ select_major +"號 "+ beacon_name + " 的資料，請換編號查詢");
+                                                                        tv_ei.setText("三個esp32裝置都沒有上傳過 "+ select_major +"號 "+ beacon_name + " 的資料，請換編號查詢");
                                                                         detail.setText("請重新選擇要查詢的設備(beacon)編號");}
                                                                     else{
                                                                         //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
-                                                                        tv_ei.setText("至少有一個esp32有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
+                                                                        tv_ei.setText("至少有一個esp32裝置有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                                                         detail.setText("查找完畢");}
                                                             }
                                                                 public void onCancelled(DatabaseError error) { }});}
                                                         }else{
                                                         //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
-                                                        tv_ei.setText("至少有一個esp32有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
+                                                        tv_ei.setText("至少有一個esp32裝置有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                                         detail.setText("查找完畢");
                                                     }}
                                                 public void onCancelled(DatabaseError error) { }});
                                                 }}else{
-                                        tv_ei.setText("至少有一個esp32有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
+                                        tv_ei.setText("至少有一個esp32裝置有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                         detail.setText("查找完畢");
                                     }}
                                 public void onCancelled(DatabaseError error) { }});

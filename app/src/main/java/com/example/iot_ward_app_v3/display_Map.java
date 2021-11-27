@@ -154,9 +154,9 @@ public class display_Map extends AppCompatActivity {
                 p.setColor(Color.WHITE);							// 設置白色
                 //建議：圖例
                 p.setTextSize(40);
-                canvas.drawText("門前牆角" ,150,100,p);
-                canvas.drawText("門斜牆角" ,675,100,p);
-                canvas.drawText("門平行牆角",650,800,p);
+                canvas.drawText("1.門前牆角" ,150,100,p);
+                canvas.drawText("2.門斜牆角" ,675,100,p);
+                canvas.drawText("3.門平行牆角",650,800,p);
 
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
 
@@ -264,9 +264,9 @@ public class display_Map extends AppCompatActivity {
                 p.setColor(Color.WHITE);							// 設置白色
                 //建議：圖例
                 p.setTextSize(40);
-                canvas.drawText("門前牆角" ,675,100,p);
-                canvas.drawText("門斜牆角" ,150,100,p);
-                canvas.drawText("門平行牆角",125,800,p);
+                canvas.drawText("1.門前牆角" ,675,100,p);
+                canvas.drawText("2.門斜牆角" ,150,100,p);
+                canvas.drawText("3.門平行牆角",125,800,p);
 
                 //根據規則有不同的動作
                 circle.setAntiAlias(true);  circle.setColor(Color.RED);
