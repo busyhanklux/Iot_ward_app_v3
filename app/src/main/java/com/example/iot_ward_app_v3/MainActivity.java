@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,15 +27,20 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+//https://you2be.pixnet.net/blog/post/41235995 -> imageview_onclick
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView tv_ei,conclude,detail;
     private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
     private Button btMap,btStatus,esp32_switch,find_major;
+    private ImageView To_adminster_page;
 
     int room_choice,beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
     int rssi_1,rssi_2,rssi_3; //存放rssi
+    int To_adminster_page_TapCount = 0; //如同成為開發者一般
+
     String sw_number; //放esp32切換
     String String_rssi_1,String_rssi_2,String_rssi_3; //存放rssi，用於顯示在esp32切換
     String String_distance_1,String_distance_2,String_distance_3; //存放距離，用於顯示儀器測距
@@ -47,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
-    String version = "1.01a"; //純粹辨認版本用的
+    String version = "1.02.00"; //純粹辨認版本用的
 
     //下拉式選單
     String[] esp32_num = new String[]{ "1.門前牆角","2.斜對牆角","3.門平行牆角" }; //esp32切換
@@ -66,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //圖片的imageview_onclick，沒錯! imageview可以onclick
+        To_adminster_page = (ImageView)findViewById(R.id.To_adminster_page);
+        To_adminster_page.setOnClickListener(To_adminster_page_L);
 
         //下拉式選單
         sp_esp32_choice = (Spinner)findViewById(R.id.sp_esp32_choice); //選擇該esp32的哪一個
@@ -193,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_1 = rssi1.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) { A = 59.00; n = 3.40; }
+                                    if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
                                     if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    if(room_choice == 2) { A = 75.00; n = 3.40; }
+                                    if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -222,9 +232,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_2 = rssi2.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) { A = 59.00; n = 3.40; }
+                                    if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
                                     if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    if(room_choice == 2) { A = 75.00; n = 3.40; }
+                                    if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
                                     double M_2 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -252,9 +262,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_3 = rssi3.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) { A = 59.00; n = 3.40; }
+                                    if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
                                     if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    if(room_choice == 2) { A = 75.00; n = 3.40; }
+                                    if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
                                     double M_3 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -720,5 +730,25 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception RSSI_not_found) {
                 detail.setText("資料有誤");
             }}};
+
+    //imageview的onclick：切到管理者頁面
+    private View.OnClickListener To_adminster_page_L = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            To_adminster_page_TapCount++;
+
+            if(To_adminster_page_TapCount == 3){
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,adminster_page.class);
+                startActivity(intent);
+                finish();
+            }
+            if(To_adminster_page_TapCount != 3)
+            {
+                Toast hint = Toast.makeText(MainActivity.this,"你已點擊"+ To_adminster_page_TapCount +"次該圖，進入管理者頁面需要再點擊" + (3-To_adminster_page_TapCount) + "次！",Toast.LENGTH_SHORT);
+                hint.show();
+            }
+        }
+    };
 }
 //firebase讀取參考來源https://mnya.tw/cc/word/1495.html
