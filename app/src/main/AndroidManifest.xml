@@ -12,21 +12,37 @@
         android:supportsRtl="true"
         android:theme= "@style/AppTheme.NoActionBar">
 
+        //地圖展示(使用者第三頁)
         <activity
             android:name=".display_Map"
             android:exported="true"
             android:screenOrientation="portrait"/> //保持直的
 
+        //環境預覽(使用者第二頁)
         <activity
             android:name=".Map"
             android:exported="true"
             android:screenOrientation="portrait"/>
 
+        //管理者選單(管理者第一頁)
         <activity
             android:name=".adminster_page"
             android:exported="true"
             android:screenOrientation="portrait"/>
 
+        //更改環境設定(管理者第二頁_其一)
+        <activity
+            android:name=".change_page__environment"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+
+        //更改設備設定(管理者第二頁_其一)
+        <activity
+            android:name=".change_page__device"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+
+        //搜尋頁面(使用者第一頁)
         <activity
             android:name=".MainActivity"
             android:exported="true"
