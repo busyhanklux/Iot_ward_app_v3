@@ -18,13 +18,13 @@ public class adminster_page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.adminster_page);
 
-        Img_v_env = findViewById(R.id.Img_v_env);
-        Img_v_env.setOnClickListener(Img_v_env_L);
-
         Img_v_device = findViewById(R.id.Img_v_device);
         Img_v_device.setOnClickListener(Img_v_device_L);
 
-        BT_adminster_back = findViewById(R.id.BT_CPD_back);
+        Img_v_env = findViewById(R.id.Img_v_env);
+        Img_v_env.setOnClickListener(Img_v_env_L);
+
+        BT_adminster_back = findViewById(R.id.BT_adminster_back);
         BT_adminster_back.setOnClickListener(BT_adminster_back_L);
 
     }

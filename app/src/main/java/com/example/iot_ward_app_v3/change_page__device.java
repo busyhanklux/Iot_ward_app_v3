@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class change_page__device extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class change_page__device extends AppCompatActivity {
 
     private Button BT_CPD_back;
 

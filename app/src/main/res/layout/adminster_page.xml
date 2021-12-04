@@ -131,7 +131,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/BT_CPD_back"
+        android:id="@+id/BT_adminster_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="回搜尋頁面"

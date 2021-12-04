@@ -18,7 +18,7 @@ public class change_page__environment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_page__environment);
 
-        BT_CPE_back = findViewById(R.id.BT_CPD_back);
+        BT_CPE_back = findViewById(R.id.BT_CPE_back);
         BT_CPE_back.setOnClickListener(BT_CPE_back_L);
     }
 
