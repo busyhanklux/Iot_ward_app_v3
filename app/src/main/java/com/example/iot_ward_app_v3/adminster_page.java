@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class adminster_page extends AppCompatActivity {
 
     private ImageView Img_v_env,Img_v_device;
-    private Button BT_adminster_back;
+    private Button BT_adminster_back,button;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,6 +26,9 @@ public class adminster_page extends AppCompatActivity {
 
         BT_adminster_back = findViewById(R.id.BT_adminster_back);
         BT_adminster_back.setOnClickListener(BT_adminster_back_L);
+
+        button = findViewById(R.id.button);
+        button.setOnClickListener(button_L);
 
     }
 
@@ -56,6 +59,13 @@ public class adminster_page extends AppCompatActivity {
         finish();
     };
 
-
+    //測試頁面
+    public View.OnClickListener button_L = view ->
+    {
+        Intent intent = new Intent();
+        intent.setClass(adminster_page.this,Text.class);
+        startActivity(intent);
+        finish();
+    };
 
 }

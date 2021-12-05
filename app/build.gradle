@@ -11,7 +11,7 @@ android {
         minSdk 22
         targetSdk 30
         versionCode 1
-        versionName "1.02.04_新的介面朋友"
+        versionName "1.02.05_檔案，惱人"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
