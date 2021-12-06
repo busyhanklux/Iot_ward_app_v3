@@ -36,6 +36,8 @@ public class Text extends AppCompatActivity {
     private EditText edt;
     private TextView txt;
     String name_all = "";
+    int iaa;
+    int the_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +56,15 @@ public class Text extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.save_btn:
                 try {
-                    if (!file.exists()) {
-                        file.createNewFile();
-                    }
+                    if (!file.exists()) { file.createNewFile(); } //如果沒有，創建這個檔案
                     /*
                     FileOutputStream fos = new FileOutputStream(file);
                     fos.write(edt.getText().toString().getBytes());
                     fos.close();
                      */
+
                     String name_temp = "";
-                    for(int iaa = 1 ; iaa<=2 ; iaa++){
+                    for(iaa = 1; iaa<=2 ; iaa++){
                         DatabaseReference get_name = database_get_name.getReference("environment").child(String.valueOf(iaa));
                         get_name.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -71,10 +72,20 @@ public class Text extends AppCompatActivity {
                                 try {
                                     //得到"大型空間"
                                     String name = dataSnapshot.getValue(String.class);
-                                    name_all = name_all + name;
+                                    name_all = name_all + name + " ";
 
                                     Toast hint = Toast.makeText(Text.this,"1_"+name_all,Toast.LENGTH_SHORT);
                                     hint.show();
+
+                                    the_count++;
+
+                                    if(the_count == 2)
+                                    {
+                                        long time_now = System.currentTimeMillis() / 1000;
+                                        name_all = name_all + "\n" + time_now;
+                                        Toast hint2 = Toast.makeText(Text.this,"1_"+time_now,Toast.LENGTH_SHORT);
+                                        hint2.show();
+                                    }
 
                                 } catch (Exception RSSI_not_found) {
 
@@ -86,6 +97,7 @@ public class Text extends AppCompatActivity {
                     }
                     //前面執行中的name_all是空的
                     //從對話框修改的name_all從有文字
+
                     AlertDialog.Builder icon_check = new AlertDialog.Builder(Text.this);
                     icon_check.setTitle("ABC");
                     icon_check.setIcon(R.drawable.logo4);
