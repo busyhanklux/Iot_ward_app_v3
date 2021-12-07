@@ -23,9 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 //https://you2be.pixnet.net/blog/post/41235995 -> imageview_onclick
 
@@ -53,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
-    String version = "1.02.00"; //純粹辨認版本用的
-
     //下拉式選單
     String[] esp32_num = new String[]{ "1.門前牆角","2.斜對牆角","3.門平行牆角" }; //esp32切換
 
@@ -72,6 +74,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //試試讀 text檔
+        try {
+            File file = new File(getFilesDir(), "times.txt");
+            FileInputStream fis = new FileInputStream(file);
+            byte[] b = new byte[1024];
+            int len = fis.read(b);
+            String str2 = new String(b, 0, len);
+
+            Toast txt = Toast.makeText(MainActivity.this,str2,Toast.LENGTH_SHORT);
+            txt.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast txt = Toast.makeText(MainActivity.this,"錯誤",Toast.LENGTH_SHORT);
+            txt.show();
+        }
 
         //圖片的imageview_onclick，沒錯! imageview可以onclick
         To_adminster_page = (ImageView)findViewById(R.id.To_adminster_page);
