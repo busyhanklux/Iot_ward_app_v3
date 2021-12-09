@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //試試讀 text檔
         try {
             File file = new File(getFilesDir(), "times.txt");
