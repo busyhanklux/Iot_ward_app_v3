@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
             int len = fis.read(b);
             String str2 = new String(b, 0, len);
 
-            Toast txt = Toast.makeText(MainActivity.this,str2,Toast.LENGTH_SHORT);
-            txt.show();
+            //Toast txt = Toast.makeText(MainActivity.this,str2,Toast.LENGTH_SHORT);
+            //txt.show();
 
         } catch (Exception e) {
             e.printStackTrace();
