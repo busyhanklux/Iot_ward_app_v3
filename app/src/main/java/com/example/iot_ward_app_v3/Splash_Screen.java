@@ -95,7 +95,7 @@ public class Splash_Screen extends AppCompatActivity {
                     //需要改動
                     if(check_time_for_text == 1)
                     {
-                        Toast hint = Toast.makeText(Splash_Screen.this, "他需要被變動",Toast.LENGTH_SHORT);
+                        //Toast hint = Toast.makeText(Splash_Screen.this, "他需要被變動",Toast.LENGTH_SHORT);
                         //hint.show();
 
                         FileOutputStream fos = null;
@@ -109,16 +109,16 @@ public class Splash_Screen extends AppCompatActivity {
 
                         } catch (IOException e) {
                             e.printStackTrace();
-                            hint = Toast.makeText(Splash_Screen.this, "錯誤",Toast.LENGTH_SHORT);
-                            hint.show();
+                            //hint = Toast.makeText(Splash_Screen.this, "錯誤",Toast.LENGTH_SHORT);
+                            //hint.show();
                         }
                     }
 
                     //檢查完畢 或 不需要改動
                     if(check_time_for_text == 2)
                     {
-                        Toast hint = Toast.makeText(Splash_Screen.this, "檢查完畢",Toast.LENGTH_SHORT);
-                        hint.show();
+                        //Toast hint = Toast.makeText(Splash_Screen.this, "檢查完畢",Toast.LENGTH_SHORT);
+                        //hint.show();
                         Intent splash_to_main = new Intent();
                         splash_to_main.setClass(Splash_Screen.this,MainActivity.class);
                         startActivity(splash_to_main);
@@ -152,8 +152,8 @@ public class Splash_Screen extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast hint = Toast.makeText(Splash_Screen.this, "錯誤",Toast.LENGTH_SHORT);
-                hint.show();
+                //Toast hint = Toast.makeText(Splash_Screen.this, "錯誤",Toast.LENGTH_SHORT);
+                //hint.show();
             }
         }
 

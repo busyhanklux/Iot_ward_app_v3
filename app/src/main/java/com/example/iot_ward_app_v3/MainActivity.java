@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast txt = Toast.makeText(MainActivity.this,"錯誤",Toast.LENGTH_SHORT);
-            txt.show();
+            //Toast txt = Toast.makeText(MainActivity.this,"錯誤",Toast.LENGTH_SHORT);
+            //txt.show();
         }
 
         //圖片的imageview_onclick，沒錯! imageview可以onclick
