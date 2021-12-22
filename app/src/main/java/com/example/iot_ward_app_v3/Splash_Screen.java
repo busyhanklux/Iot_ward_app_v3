@@ -28,8 +28,11 @@ public class Splash_Screen extends AppCompatActivity {
 
     String d_time = "";
     String e_time = "";
+    String e_name = "";
 
     int check_time_for_text;
+    int check_time_for_device_text;
+    int check_time_for_environment_text;
     //1需要被更動，2是改完了
 
     long time_now = System.currentTimeMillis() / 1000;
@@ -51,9 +54,9 @@ public class Splash_Screen extends AppCompatActivity {
         File environment_txt_time  = new File(getFilesDir(), "environment_txt_time.txt");
 
         //如果兩個檔案都存在，跑這段
-
         if(device_txt_time.exists() && environment_txt_time.exists()){
 
+            //設備號碼的檢查
             FirebaseDatabase database_device_name = FirebaseDatabase.getInstance();
             DatabaseReference device_firebase_time_check = database_device_name.getReference("device").child("change_time");
             device_firebase_time_check.addValueEventListener(new ValueEventListener() {
@@ -82,21 +85,39 @@ public class Splash_Screen extends AppCompatActivity {
 
                     //改動他
                     if (D_change_time >= device_Time) {
-                        e_time = e_time + time_now;
-                        check_time_for_text = 1;
+                        d_time = d_time + time_now;
+                        check_time_for_device_text = 1;
                     }
 
                     //不改他
                     if (D_change_time < device_Time) {
-                        check_time_for_text = 2;
+                        check_time_for_device_text = 2;
                     }
 
+                    if (check_time_for_device_text == 1) {
+
+                        FileOutputStream fos = null;
+                        try {
+                            //寫入
+                            fos = new FileOutputStream(device_txt_time);
+                            fos.write(d_time.getBytes());
+                            fos.close();
+
+                            check_time_for_device_text = 2;
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            //hint = Toast.makeText(Splash_Screen.this, "錯誤",Toast.LENGTH_SHORT);
+                            //hint.show();
+                        }
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError error) { }
             });
 
+            //環境的檢查
             FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
             DatabaseReference firebase_time_check = database_environment_name.getReference("environment").child("change_time");
             firebase_time_check.addValueEventListener(new ValueEventListener() {
@@ -126,16 +147,16 @@ public class Splash_Screen extends AppCompatActivity {
                     //改動他
                     if (E_change_time >= environment_Time) {
                         e_time = e_time + time_now;
-                        check_time_for_text = 1;
+                        check_time_for_environment_text = 1;
                     }
 
                     //不改他
                     if (E_change_time < environment_Time) {
-                        check_time_for_text = 2;
+                        check_time_for_environment_text = 2;
                     }
 
                     //需要改動
-                    if (check_time_for_text == 1) {
+                    if (check_time_for_environment_text == 1) {
                         //Toast hint = Toast.makeText(Splash_Screen.this, "他需要被變動",Toast.LENGTH_SHORT);
                         //hint.show();
 
@@ -146,7 +167,7 @@ public class Splash_Screen extends AppCompatActivity {
                             fos.write(e_time.getBytes());
                             fos.close();
 
-                            check_time_for_text = 2;
+                            check_time_for_environment_text = 2;
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -155,8 +176,9 @@ public class Splash_Screen extends AppCompatActivity {
                         }
                     }
 
+                    //全數完成
                     //檢查完畢 或 不需要改動
-                    if (check_time_for_text == 2) {
+                    if (check_time_for_environment_text == 2) {
                         //Toast hint = Toast.makeText(Splash_Screen.this, "檢查完畢",Toast.LENGTH_SHORT);
                         //hint.show();
 
@@ -170,9 +192,6 @@ public class Splash_Screen extends AppCompatActivity {
 
                     }
 
-                    //測試數字，如果他有變動就是1
-                    //Toast hint2 = Toast.makeText(Splash_Screen.this, check_time_for_text.getText() ,Toast.LENGTH_SHORT);
-                    //hint2.show();
                 }
                 @Override
                 public void onCancelled(DatabaseError error) { }
@@ -185,38 +204,36 @@ public class Splash_Screen extends AppCompatActivity {
         if(device_txt_time.exists() && !environment_txt_time.exists()){
 
             FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
-            DatabaseReference firebase_time_check = database_environment_name.getReference("environment").child("change_time");
+            DatabaseReference firebase_time_check = database_environment_name.getReference("device").child("change_time");
             firebase_time_check.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(DataSnapshot dataSnapshot_D) {
 
-                    long environment_Time = 0;
+                    long device_Time = 0;
                     try {
                         FileInputStream fis = new FileInputStream(device_txt_time);
                         byte[] b = new byte[1024];
                         int len = fis.read(b);
-                        environment_Time = Long.parseLong(new String(b, 0, len));
+                        device_Time = Long.parseLong(new String(b, 0, len));
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Toast hint = Toast.makeText(Splash_Screen.this, environment_Time+"",Toast.LENGTH_SHORT);
-                    //hint.show();
 
-                    long change_time = dataSnapshot.getValue(long.class);
+                    long D_change_time = dataSnapshot_D.getValue(long.class);
                     //改動他
-                    if (change_time >= environment_Time) {
-                        e_time = e_time + time_now;
-                        check_time_for_text = 1;
+                    if (D_change_time >= device_Time) {
+                        d_time = d_time + time_now;
+                        check_time_for_device_text = 1;
                     }
 
                     //不改他
-                    if (change_time < environment_Time) {
-                        check_time_for_text = 2;
+                    if (D_change_time < device_Time) {
+                        check_time_for_device_text = 2;
                     }
 
                     //需要改動
-                    if (check_time_for_text == 1) {
+                    if (check_time_for_device_text == 1) {
                         //Toast hint = Toast.makeText(Splash_Screen.this, "他需要被變動",Toast.LENGTH_SHORT);
                         //hint.show();
 
@@ -224,36 +241,44 @@ public class Splash_Screen extends AppCompatActivity {
                         try {
                             //寫入
                             fos = new FileOutputStream(device_txt_time);
-                            fos.write(e_time.getBytes());
+                            fos.write(d_time.getBytes());
                             fos.close();
 
-                            check_time_for_text = 2;
+                            check_time_for_device_text = 2;
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
-                            //hint = Toast.makeText(Splash_Screen.this, "錯誤",Toast.LENGTH_SHORT);
-                            //hint.show();
+
                         }
                     }
 
                     //檢查完畢 或 不需要改動
-                    if (check_time_for_text == 2) {
-                        //Toast hint = Toast.makeText(Splash_Screen.this, "檢查完畢",Toast.LENGTH_SHORT);
-                        //hint.show();
+                    if (check_time_for_device_text == 2) {
+                        FileOutputStream fos = null;
+                        //寫入環境
+                        try {
+                            //創造環境
+                            environment_txt_time.createNewFile();
+                            e_time = e_time + time_now;
 
-                        hint = Toast.makeText(Splash_Screen.this, e_time,Toast.LENGTH_SHORT);
-                        hint.show();
+                            fos = new FileOutputStream(environment_txt_time);
+                            //寫入
+                            fos.write(e_time.getBytes());
+                            //fos關閉(結尾時必要)
+                            fos.close();
+
+                        }catch (IOException e) {
+                            e.printStackTrace();
+
+                        }
 
                         Intent splash_to_main = new Intent();
                         splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
                         startActivity(splash_to_main);
                         finish();
-
                     }
 
-                    //測試數字，如果他有變動就是1
-                    //Toast hint2 = Toast.makeText(Splash_Screen.this, check_time_for_text.getText() ,Toast.LENGTH_SHORT);
-                    //hint2.show();
                 }
                 @Override
                 public void onCancelled(DatabaseError error) { }
@@ -272,7 +297,7 @@ public class Splash_Screen extends AppCompatActivity {
 
                     long environment_Time = 0;
                     try {
-                        FileInputStream fis = new FileInputStream(device_txt_time);
+                        FileInputStream fis = new FileInputStream(environment_txt_time);
                         byte[] b = new byte[1024];
                         int len = fis.read(b);
                         environment_Time = Long.parseLong(new String(b, 0, len));
@@ -283,31 +308,31 @@ public class Splash_Screen extends AppCompatActivity {
                     Toast hint = Toast.makeText(Splash_Screen.this, environment_Time+"",Toast.LENGTH_SHORT);
                     //hint.show();
 
-                    long change_time = dataSnapshot.getValue(long.class);
+                    long E_change_time = dataSnapshot.getValue(long.class);
                     //改動他
-                    if (change_time >= environment_Time) {
+                    if (E_change_time >= environment_Time) {
                         e_time = e_time + time_now;
-                        check_time_for_text = 1;
+                        check_time_for_environment_text = 1;
                     }
 
                     //不改他
-                    if (change_time < environment_Time) {
-                        check_time_for_text = 2;
+                    if (E_change_time < environment_Time) {
+                        check_time_for_environment_text = 2;
                     }
 
                     //需要改動
-                    if (check_time_for_text == 1) {
+                    if (check_time_for_environment_text == 1) {
                         //Toast hint = Toast.makeText(Splash_Screen.this, "他需要被變動",Toast.LENGTH_SHORT);
                         //hint.show();
 
                         FileOutputStream fos = null;
                         try {
                             //寫入
-                            fos = new FileOutputStream(device_txt_time);
+                            fos = new FileOutputStream(environment_txt_time);
                             fos.write(e_time.getBytes());
                             fos.close();
 
-                            check_time_for_text = 2;
+                            check_time_for_environment_text = 2;
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -317,23 +342,28 @@ public class Splash_Screen extends AppCompatActivity {
                     }
 
                     //檢查完畢 或 不需要改動
-                    if (check_time_for_text == 2) {
-                        //Toast hint = Toast.makeText(Splash_Screen.this, "檢查完畢",Toast.LENGTH_SHORT);
-                        //hint.show();
+                    if (check_time_for_environment_text == 2) {
+                        FileOutputStream fos = null;
+                        //寫入環境
+                        try {
+                            device_txt_time.createNewFile();
+                            d_time = d_time + time_now;
 
-                        hint = Toast.makeText(Splash_Screen.this, e_time,Toast.LENGTH_SHORT);
-                        hint.show();
+                            fos = new FileOutputStream(device_txt_time);
+                            //寫入
+                            fos.write(d_time.getBytes());
+                            //fos關閉(結尾時必要)
+                            fos.close();
+
+                        }catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         Intent splash_to_main = new Intent();
                         splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
                         startActivity(splash_to_main);
                         finish();
-
                     }
-
-                    //測試數字，如果他有變動就是1
-                    //Toast hint2 = Toast.makeText(Splash_Screen.this, check_time_for_text.getText() ,Toast.LENGTH_SHORT);
-                    //hint2.show();
                 }
                 @Override
                 public void onCancelled(DatabaseError error) { }
@@ -354,10 +384,6 @@ public class Splash_Screen extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
-        //測試數字，這邊不會被void onDataChange改動，所以...
-        //Toast hint2 = Toast.makeText(Splash_Screen.this, check_time_for_text.getText() ,Toast.LENGTH_SHORT);
-        //hint2.show();
 
         //如果它存在了，這段不會跑
         if(check_time_for_text == 1)
