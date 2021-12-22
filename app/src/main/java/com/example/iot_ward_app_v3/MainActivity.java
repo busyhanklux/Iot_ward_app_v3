@@ -252,9 +252,9 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_2 = rssi2.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
-                                    if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
+                                    if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
+                                    if(room_choice == 1) { A = 65.00; n = 3.85; } //產房
+                                    if(room_choice == 2) { A = 70.00; n = 3.60; } //原本75，改70，ICU
                                     double M_2 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
