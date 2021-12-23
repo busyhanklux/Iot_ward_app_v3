@@ -29,6 +29,9 @@ public class Splash_Screen extends AppCompatActivity {
     String d_time = "";
     String e_time = "";
     String e_name = "";
+    String e_door = "";
+    String e_number = "";
+    String e_list = "";
 
     int check_time_for_text;
     int check_time_for_device_text;
@@ -50,8 +53,12 @@ public class Splash_Screen extends AppCompatActivity {
 
         //流程，先檢查 device_txt_time 和 environment_txt_time 是否存在
 
-        File device_txt_time       = new File(getFilesDir(), "device_txt_time.txt");
-        File environment_txt_time  = new File(getFilesDir(), "environment_txt_time.txt");
+        File device_txt_time       = new File(getFilesDir(), "device_time.txt");
+        File environment_txt_time  = new File(getFilesDir(), "environment_time.txt");   //時間
+        File environment_txt_door  = new File(getFilesDir(), "environment_door.txt");   //門口
+        File environment_txt_name  = new File(getFilesDir(), "environment_name.txt");   //環境名稱
+        File environment_txt_number= new File(getFilesDir(), "environment_number.txt"); //環境總數
+        File environment_txt_list  = new File(getFilesDir(), "environment_list.txt");   //環境的數字代碼
 
         //如果兩個檔案都存在，跑這段
         if(device_txt_time.exists() && environment_txt_time.exists()){
@@ -373,12 +380,79 @@ public class Splash_Screen extends AppCompatActivity {
         //如果兩個檔案都不存在，跑這段
         if (!device_txt_time.exists() && !environment_txt_time.exists()) {
             try {
+                int check_loop_E = 0;
+
                 device_txt_time.createNewFile();
+
                 environment_txt_time.createNewFile();
+                environment_txt_number.createNewFile(); //環境數量
+                environment_txt_name.createNewFile();   //環境名稱
+
+
+                //環境數量
+                FirebaseDatabase database_device_name = FirebaseDatabase.getInstance();
+                DatabaseReference device_firebase_time_check = database_device_name.getReference("environment").child("number");
+                device_firebase_time_check.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot Data_E_number) {
+
+                        int E_number = Data_E_number.getValue(int.class);
+
+                        //小的是String，大的是int
+                        e_number = e_number + E_number;
+
+                        //寫入有幾個環境
+                        try {
+                            FileOutputStream E_T_T = null;
+
+                            E_T_T = new FileOutputStream(environment_txt_number);
+                            E_T_T.write(e_number.getBytes());
+                            E_T_T.close();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast hint = Toast.makeText(Splash_Screen.this, "E_number錯誤",Toast.LENGTH_SHORT);
+                            hint.show();
+                        }
+
+                        //處理list
+                        FirebaseDatabase database_device_name = FirebaseDatabase.getInstance();
+                        DatabaseReference device_firebase_time_check = database_device_name.getReference("environment").child("list");
+                        device_firebase_time_check.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot Data_E_list) {
+
+                                String E_list = Data_E_list.getValue(String.class);
+
+                                //寫入有幾個環境
+                                try {
+                                    FileOutputStream E_L = null;
+
+                                    E_L = new FileOutputStream(environment_txt_list);
+                                    E_L.write(E_list.getBytes());
+                                    E_L.close();
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Toast hint = Toast.makeText(Splash_Screen.this, "E_list錯誤",Toast.LENGTH_SHORT);
+                                    hint.show();
+                                }
+
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError error) { }
+                        });
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError error) { }
+                });
+
+
 
                 check_time_for_text = 1;
                 d_time = d_time + time_now;
                 e_time = e_time + time_now;
+
 
             } catch (IOException e) {
                 e.printStackTrace();
