@@ -37,6 +37,7 @@ public class Splash_Screen extends AppCompatActivity {
     int check_time_for_device_text;
     int check_time_for_environment_text;
     //1需要被更動，2是改完了
+    int run_count;
 
     long time_now = System.currentTimeMillis() / 1000;
 
@@ -270,10 +271,126 @@ public class Splash_Screen extends AppCompatActivity {
                             e_time = e_time + time_now;
 
                             fos = new FileOutputStream(environment_txt_time);
-                            //寫入
                             fos.write(e_time.getBytes());
-                            //fos關閉(結尾時必要)
                             fos.close();
+
+                            environment_txt_number.createNewFile(); //環境數量
+                            environment_txt_name.createNewFile();   //環境名稱
+
+                            //環境數量
+                            FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
+                            DatabaseReference environment_number_check = database_environment_name.getReference("environment").child("number");
+                            environment_number_check.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot Data_E_number) {
+
+                                    int E_number = Data_E_number.getValue(int.class);
+
+                                    //小的是String，大的是int
+                                    e_number = e_number + E_number;
+
+                                    //寫入有幾個環境
+                                    try {
+                                        FileOutputStream E_T_T = null;
+
+                                        E_T_T = new FileOutputStream(environment_txt_number);
+                                        E_T_T.write(e_number.getBytes());
+                                        E_T_T.close();
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        Toast hint = Toast.makeText(Splash_Screen.this, "E_number錯誤",Toast.LENGTH_SHORT);
+                                        hint.show();
+                                    }
+
+                                    //處理編號list(1 2 3)
+                                    DatabaseReference environment_list_check = database_environment_name.getReference("environment").child("list");
+                                    environment_list_check.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot Data_E_list) {
+
+                                            String E_list = Data_E_list.getValue(String.class);
+                                            String []E_multilist = E_list.split(" ");
+
+                                            //寫入有幾個環境
+                                            try {
+                                                FileOutputStream E_L = null;
+
+                                                E_L = new FileOutputStream(environment_txt_list);
+                                                E_L.write(E_list.getBytes());
+                                                E_L.close();
+
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                                Toast hint = Toast.makeText(Splash_Screen.this, "E_list錯誤",Toast.LENGTH_SHORT);
+                                                hint.show();
+                                            }
+
+                                            run_count = 0;
+                                            for(int i = 0; i < E_multilist.length; i++){
+
+                                                run_count++;
+
+                                                //環境名稱
+                                                DatabaseReference environment_name_check = database_environment_name.getReference("environment").child(String.valueOf(E_multilist[i]));
+                                                environment_name_check.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot Data_E_name) {
+
+                                                        String E_name = Data_E_name.getValue(String.class);
+                                                        e_name = e_name + E_name + " ";
+
+                                                        if (run_count == E_number)
+                                                        {
+                                                            FileOutputStream E_N_N = null;
+                                                            try {
+                                                                E_N_N = new FileOutputStream(environment_txt_name);
+                                                                E_N_N.write(e_name.getBytes());
+                                                                E_N_N.close();
+
+                                                            } catch (IOException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(DatabaseError error) { }
+                                                });
+                                            }
+
+                                            //門的方向
+                                            DatabaseReference environment_door_check = database_environment_name.getReference("environment").child("door");
+                                            environment_door_check.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot Data_E_door) {
+
+                                                    String E_door = Data_E_door.getValue(String.class);
+                                                    e_door = e_door + E_door;
+
+                                                    if (run_count == E_number) {
+                                                        FileOutputStream E_D_D = null; //Let them come(X)
+                                                        try {
+                                                            E_D_D = new FileOutputStream(environment_txt_door);
+                                                            E_D_D.write(e_door.getBytes());
+                                                            E_D_D.close();
+
+                                                        } catch (IOException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                                @Override
+                                                public void onCancelled(DatabaseError error) {
+                                                }
+                                            });
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError error) { }
+                                    });
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError error) { }
+                            });
 
                         }catch (IOException e) {
                             e.printStackTrace();
@@ -380,7 +497,6 @@ public class Splash_Screen extends AppCompatActivity {
         //如果兩個檔案都不存在，跑這段
         if (!device_txt_time.exists() && !environment_txt_time.exists()) {
             try {
-                int check_loop_E = 0;
 
                 device_txt_time.createNewFile();
 
@@ -388,11 +504,10 @@ public class Splash_Screen extends AppCompatActivity {
                 environment_txt_number.createNewFile(); //環境數量
                 environment_txt_name.createNewFile();   //環境名稱
 
-
                 //環境數量
-                FirebaseDatabase database_device_name = FirebaseDatabase.getInstance();
-                DatabaseReference device_firebase_time_check = database_device_name.getReference("environment").child("number");
-                device_firebase_time_check.addValueEventListener(new ValueEventListener() {
+                FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
+                DatabaseReference environment_number_check = database_environment_name.getReference("environment").child("number");
+                environment_number_check.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot Data_E_number) {
 
@@ -415,14 +530,14 @@ public class Splash_Screen extends AppCompatActivity {
                             hint.show();
                         }
 
-                        //處理list
-                        FirebaseDatabase database_device_name = FirebaseDatabase.getInstance();
-                        DatabaseReference device_firebase_time_check = database_device_name.getReference("environment").child("list");
-                        device_firebase_time_check.addValueEventListener(new ValueEventListener() {
+                        //處理編號list(1 2 3)
+                        DatabaseReference environment_list_check = database_environment_name.getReference("environment").child("list");
+                        environment_list_check.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot Data_E_list) {
 
                                 String E_list = Data_E_list.getValue(String.class);
+                                String []E_multilist = E_list.split(" ");
 
                                 //寫入有幾個環境
                                 try {
@@ -438,7 +553,64 @@ public class Splash_Screen extends AppCompatActivity {
                                     hint.show();
                                 }
 
-                            }
+                                run_count = 0;
+                                for(int i = 0; i < E_multilist.length; i++){
+
+                                    run_count++;
+
+                                    //環境名稱
+                                    DatabaseReference environment_name_check = database_environment_name.getReference("environment").child(String.valueOf(E_multilist[i]));
+                                    environment_name_check.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot Data_E_name) {
+
+                                            String E_name = Data_E_name.getValue(String.class);
+                                            e_name = e_name + E_name + " ";
+
+                                            if (run_count == E_number)
+                                            {
+                                                FileOutputStream E_N_N = null;
+                                                try {
+                                                    E_N_N = new FileOutputStream(environment_txt_name);
+                                                    E_N_N.write(e_name.getBytes());
+                                                    E_N_N.close();
+
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError error) { }
+                                    });
+                                }
+
+                                    //門的方向
+                                    DatabaseReference environment_door_check = database_environment_name.getReference("environment").child("door");
+                                    environment_door_check.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot Data_E_door) {
+
+                                            String E_door = Data_E_door.getValue(String.class);
+                                            e_door = e_door + E_door;
+
+                                            if (run_count == E_number) {
+                                                FileOutputStream E_D_D = null; //Let them come(X)
+                                                try {
+                                                    E_D_D = new FileOutputStream(environment_txt_door);
+                                                    E_D_D.write(e_door.getBytes());
+                                                    E_D_D.close();
+
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError error) {
+                                        }
+                                    });
+                                }
                             @Override
                             public void onCancelled(DatabaseError error) { }
                         });
@@ -447,12 +619,9 @@ public class Splash_Screen extends AppCompatActivity {
                     public void onCancelled(DatabaseError error) { }
                 });
 
-
-
                 check_time_for_text = 1;
                 d_time = d_time + time_now;
                 e_time = e_time + time_now;
-
 
             } catch (IOException e) {
                 e.printStackTrace();
