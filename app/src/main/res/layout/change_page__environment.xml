@@ -23,8 +23,8 @@
 
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="550dp"
+        android:layout_width="410dp"
+        android:layout_height="530dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -384,17 +384,65 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.937" />
 
-    <TextView
-        android:id="@+id/Hint"
+    <LinearLayout
+        android:id="@+id/Hint_Text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.108"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:text="T" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <TextView
+            android:id="@+id/Hint_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="目前資料庫含有 "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            tools:text="T" />
+
+        <TextView
+            android:id="@+id/Hint_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 個環境的設定"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Synchronize_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Hint_Text"
+        app:layout_constraintTop_toBottomOf="@+id/Hint_Text">
+
+        <TextView
+            android:id="@+id/Synchronize_Left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="資料同步時間："
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/synchronize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="T"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
