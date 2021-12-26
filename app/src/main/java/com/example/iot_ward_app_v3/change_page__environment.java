@@ -3,6 +3,8 @@ package com.example.iot_ward_app_v3;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.renderscript.Sampler;
 import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class change_page__environment extends AppCompatActivity {
+public class change_page__environment<Global> extends AppCompatActivity {
 
     private Button BT_CPE_back;
     TextView Hint,synchronize;
@@ -45,6 +47,7 @@ public class change_page__environment extends AppCompatActivity {
     String   door_SP[]  = {"主要門口方向","1.左","2.右"};
     String   Strength[] = {"環境訊號概況","1.強","2.中","3.弱"};
     String   Add_door,Add_strength;
+    int Add_number = 0;
 
     String e_time = "";
     String e_name = "";
@@ -132,20 +135,6 @@ public class change_page__environment extends AppCompatActivity {
         sp_add_CPE_strength.setAdapter(sp_add_CPE_strength_S); //設定資料來源
         sp_add_CPE_strength.setOnItemSelectedListener(sp_add_CPE_strength_L);
 
-        //減少傳輸浪費
-        try {
-            //讀檔案
-            FileInputStream fis = new FileInputStream(environment_txt_time);
-            byte[] b = new byte[1024];
-            int len = fis.read(b);
-
-            //從文字檔獲取時間(環境)
-            environment_Time = Long.parseLong(new String(b, 0, len));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         //數量
         FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
         DatabaseReference firebase_number_check = database_environment_name.getReference("environment").child("number");
@@ -175,15 +164,13 @@ public class change_page__environment extends AppCompatActivity {
                 e_time = e_time + time_now;
 
                 //寫入
-                try {
-                    FileOutputStream ETT = null;
-                    ETT = new FileOutputStream(environment_txt_time);
-                    ETT.write(e_time.getBytes());
-                    ETT.close();
+                /*
+                FileOutputStream ETT = null;
+                ETT = new FileOutputStream(environment_txt_time);
+                ETT.write(e_time.getBytes());
+                ETT.close();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                 */
 
                 Toast hint = Toast.makeText(change_page__environment.this, e_time+"",Toast.LENGTH_SHORT);
                 //hint.show();
@@ -195,166 +182,128 @@ public class change_page__environment extends AppCompatActivity {
                     //hint.show();
 
                     FileOutputStream fos = null;
-                    try {
-                        //寫入
-                        fos = new FileOutputStream(environment_txt_time);
-                        fos.write(e_time.getBytes());
-                        fos.close();
 
-                        //環境數量
-                        FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
-                        DatabaseReference environment_number_check = database_environment_name.getReference("environment").child("number");
-                        environment_number_check.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot Data_E_number) {
+                    //環境數量
+                    FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
+                    DatabaseReference environment_number_check = database_environment_name.getReference("environment").child("number");
+                    environment_number_check.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot Data_E_number) {
 
-                                int E_number = Data_E_number.getValue(int.class);
+                            int E_number = Data_E_number.getValue(int.class);
 
-                                //小的是String，大的是int
-                                e_number = e_number + E_number;
+                            //小的是String，大的是int
+                            e_number = e_number + E_number;
 
-                                //寫入有幾個環境
-                                try {
-                                    FileOutputStream E_T_T = null;
+                            //處理編號list(1 2 3)
+                            DatabaseReference environment_list_check = database_environment_name.getReference("environment").child("list");
+                            environment_list_check.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot Data_E_list) {
 
-                                    E_T_T = new FileOutputStream(environment_txt_number);
-                                    E_T_T.write(e_number.getBytes());
-                                    E_T_T.close();
+                                    String E_list = Data_E_list.getValue(String.class);
+                                    String []E_multilist = E_list.split(" ");
 
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    Toast hint = Toast.makeText(change_page__environment.this, "E_number錯誤",Toast.LENGTH_SHORT);
-                                    hint.show();
-                                }
+                                    run_count = 0;
 
-                                //處理編號list(1 2 3)
-                                DatabaseReference environment_list_check = database_environment_name.getReference("environment").child("list");
-                                environment_list_check.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot Data_E_list) {
+                                    ArrayList<String> room_name = new ArrayList<String>();
+                                    room_name.add("請選擇環境");
 
-                                        String E_list = Data_E_list.getValue(String.class);
-                                        String []E_multilist = E_list.split(" ");
+                                    for(int i = 0; i < E_multilist.length; i++){
 
-                                        //寫入有幾個環境
-                                        try {
-                                            FileOutputStream E_L = null;
+                                        run_count++;
 
-                                            E_L = new FileOutputStream(environment_txt_list);
-                                            E_L.write(E_list.getBytes());
-                                            E_L.close();
+                                        //環境名稱
+                                        DatabaseReference environment_name_check = database_environment_name.getReference("environment").child(String.valueOf(E_multilist[i]));
 
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                            Toast hint = Toast.makeText(change_page__environment.this, "E_list錯誤",Toast.LENGTH_SHORT);
-                                            hint.show();
-                                        }
+                                        String add_number = E_multilist[i]; //取得資料庫之list的數字
 
-                                        run_count = 0;
-
-                                        ArrayList<String> room_name = new ArrayList<String>();
-                                        room_name.add("請選擇環境");
-
-                                        for(int i = 0; i < E_multilist.length; i++){
-
-                                            run_count++;
-
-                                            //環境名稱
-                                            DatabaseReference environment_name_check = database_environment_name.getReference("environment").child(String.valueOf(E_multilist[i]));
-
-                                            String add_number = E_multilist[i]; //取得資料庫之list的數字
-
-                                            environment_name_check.addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot Data_E_name) {
-
-                                                    String E_name = Data_E_name.getValue(String.class);
-                                                    e_name = e_name + E_name + " ";
-
-                                                    room_name.add(add_number+". "+E_name); //(左)位置，(右)名稱，1. ____ 2. ____
-
-                                                    //Toast hint = Toast.makeText(change_page__environment.this, add_number +"",Toast.LENGTH_SHORT);
-                                                    //hint.show();
-
-                                                    if (run_count == E_number)
-                                                    {
-                                                        FileOutputStream E_N_N = null;
-                                                        try {
-                                                            E_N_N = new FileOutputStream(environment_txt_name);
-                                                            E_N_N.write(e_name.getBytes());
-                                                            E_N_N.close();
-
-                                                            //spinner相關，你需要一個xml來調整大小(把android拿掉
-                                                            //Spinner(sp_look_CPE_name_S)
-                                                            ArrayAdapter<String> sp_look_CPE_name_S =
-                                                                    new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
-
-                                                            sp_look_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                            sp_look_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
-                                                            sp_look_CPE_name.setOnItemSelectedListener(sp_look_CPE_name_L);
-
-                                                            //Spinner(sp_change_CPE_name_S)
-                                                            ArrayAdapter<String> sp_change_CPE_name_S =
-                                                                    new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
-
-                                                            sp_change_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                            sp_change_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
-
-                                                            //Spinner(sp_delete_CPE_name_S)
-                                                            ArrayAdapter<String> sp_delete_CPE_name_S =
-                                                                    new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
-
-                                                            sp_delete_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                            sp_delete_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
-
-                                                        } catch (IOException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                }
-                                                @Override
-                                                public void onCancelled(DatabaseError error) { }
-                                            });
-                                        }
-
-                                        //門的方向
-                                        DatabaseReference environment_door_check = database_environment_name.getReference("environment").child("door");
-                                        environment_door_check.addValueEventListener(new ValueEventListener() {
+                                        environment_name_check.addValueEventListener(new ValueEventListener() {
                                             @Override
-                                            public void onDataChange(DataSnapshot Data_E_door) {
+                                            public void onDataChange(DataSnapshot Data_E_name) {
 
-                                                String E_door = Data_E_door.getValue(String.class);
-                                                e_door = e_door + E_door;
+                                                String E_name = Data_E_name.getValue(String.class);
+                                                e_name = e_name + E_name + " ";
 
-                                                if (run_count == E_number) {
-                                                    FileOutputStream E_D_D = null; //Let them come(X)
-                                                    try {
-                                                        E_D_D = new FileOutputStream(environment_txt_door);
-                                                        E_D_D.write(e_door.getBytes());
-                                                        E_D_D.close();
+                                                room_name.add(add_number+". "+E_name); //(左)位置，(右)名稱，1. ____ 2. ____
 
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    }
+                                                //Toast hint = Toast.makeText(change_page__environment.this, add_number +"",Toast.LENGTH_SHORT);
+                                                //hint.show();
+
+                                                if (run_count == E_number)
+                                                {
+                                                    FileOutputStream E_N_N = null;
+                                                    /*
+                                                    E_N_N = new FileOutputStream(environment_txt_name);
+                                                    E_N_N.write(e_name.getBytes());
+                                                    E_N_N.close();
+
+                                                     */
+
+                                                    //spinner相關，你需要一個xml來調整大小(把android拿掉
+                                                    //Spinner(sp_look_CPE_name_S)
+                                                    ArrayAdapter<String> sp_look_CPE_name_S =
+                                                            new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
+
+                                                    sp_look_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                    sp_look_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
+                                                    sp_look_CPE_name.setOnItemSelectedListener(sp_look_CPE_name_L);
+
+                                                    //Spinner(sp_change_CPE_name_S)
+                                                    ArrayAdapter<String> sp_change_CPE_name_S =
+                                                            new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
+
+                                                    sp_change_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                    sp_change_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
+
+                                                    //Spinner(sp_delete_CPE_name_S)
+                                                    ArrayAdapter<String> sp_delete_CPE_name_S =
+                                                            new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
+
+                                                    sp_delete_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                    sp_delete_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
+
                                                 }
                                             }
                                             @Override
-                                            public void onCancelled(DatabaseError error) {
-                                            }
+                                            public void onCancelled(DatabaseError error) { }
                                         });
                                     }
-                                    @Override
-                                    public void onCancelled(DatabaseError error) { }
-                                });
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError error) { }
-                        });
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                                    //門的方向
+                                    DatabaseReference environment_door_check = database_environment_name.getReference("environment").child("door");
+                                    environment_door_check.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot Data_E_door) {
 
-                    }
+                                            String E_door = Data_E_door.getValue(String.class);
+                                            e_door = e_door + E_door;
+
+                                            /*
+                                            if (run_count == E_number) {
+                                                FileOutputStream E_D_D = null; //Let them come(X)
+                                                try {
+                                                    E_D_D = new FileOutputStream(environment_txt_door);
+                                                    E_D_D.write(e_door.getBytes());
+                                                    E_D_D.close();
+
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }*/
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError error) {
+                                        }
+                                    });
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError error) { }
+                            });
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) { }
+                    });
 
                     check_for_environment_text = 2;
 
@@ -378,6 +327,7 @@ public class change_page__environment extends AppCompatActivity {
 
     }
 
+    //離開時，更新txt檔案
     public View.OnClickListener BT_CPE_back_L = view ->
     {
 
@@ -540,17 +490,28 @@ public class change_page__environment extends AppCompatActivity {
             ADD.setIcon(R.drawable.logo4);
             ADD.setMessage("是否確認新增?"+"\n"+"新增後如有輸入失誤，請藉由修改調整" + "\n"+ "或使用刪除處理失誤之輸入");
 
+            //流程：確認是否重複 (否)-> 加入環境 -> 數字追加 -> 門的代號追加 -> 環境代碼追加 -> 環境強度追加
             ADD.setPositiveButton("確定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
                     FirebaseDatabase database_environment_ADD = FirebaseDatabase.getInstance();
+
+                    //確認是否重複
+                    //加入環境
                     DatabaseReference firebase_name_ADD = database_environment_ADD.getReference("environment"); //選擇母位置
 
                     firebase_name_ADD.child(ed_add_CPE_number_C).setValue(ed_add_CPE_name_C); //在分支加入資料
 
                     hint = Toast.makeText(change_page__environment.this, "確定",Toast.LENGTH_SHORT);
                     hint.show();
+
+                    //環境的數字追加
+                    Add_number = Integer.parseInt(Hint.getText().toString()) +1;
+                    firebase_name_ADD.child("number").setValue(Add_number); //在分支加入資料
+
+                    //門的代號追加
+                    //環境強度追加
                     dialog.dismiss();
                 }
             });
