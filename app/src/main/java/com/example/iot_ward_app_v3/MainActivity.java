@@ -771,4 +771,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 }
-//firebase讀取參考來源https://mnya.tw/cc/word/1495.html
+//firebase讀取參考來源：
+//https://mnya.tw/cc/word/1495.html
+//https://kk665403.pixnet.net/blog/post/403284134-android-firebaseact

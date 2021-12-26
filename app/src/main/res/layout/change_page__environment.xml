@@ -7,24 +7,10 @@
     android:background="@color/colorBackground"
     android:textColor="@color/white">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="更改環境"
-        android:textColor="#FFFFFF"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
-
 
     <ScrollView
-        android:layout_width="410dp"
-        android:layout_height="530dp"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +21,118 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="108dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="15dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="更改環境"
+                        android:textColor="#FFFFFF"
+                        android:textSize="34sp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:id="@+id/BT_CPE_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="回上頁"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.916"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Hint_Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="15dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/Hint_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="目前資料庫含有 "
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/Hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        tools:text="T" />
+
+                    <TextView
+                        android:id="@+id/Hint_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 個環境的設定"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Synchronize_Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/Hint_Text"
+                    app:layout_constraintTop_toBottomOf="@+id/Hint_Text">
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="15dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/Synchronize_Left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="資料同步時間："
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/synchronize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="T"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout_CPE_look"
@@ -77,31 +175,143 @@
                     <TextView
                         android:id="@+id/space_CPE_002"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="30dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/space_CPE_0001"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.55" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="65dp"
+                            android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/BT_look_CPE"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="確認查看" />
+                            <TextView
+                                android:id="@+id/space_CPE_0001"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.55" />
 
-                        <TextView
-                            android:id="@+id/space_CPE_0002"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.55" />
+                            <Button
+                                android:id="@+id/BT_look_CPE"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="確認查看" />
+
+                            <TextView
+                                android:id="@+id/space_CPE_0002"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.55" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/L_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/L_N_L"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="環境名稱："
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+
+                                <TextView
+                                    android:id="@+id/L_N_R"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/L_number"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/L_Nu_L"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="環境編號："
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+
+                                <TextView
+                                    android:id="@+id/L_Nu_R"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/L_door"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/L_D_L"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="主要門口方向："
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+
+                                <TextView
+                                    android:id="@+id/L_D_R"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+
+                                <Button
+                                    android:id="@+id/CPE_look_explain"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="說明"
+                                    tools:ignore="TouchTargetSizeCheck" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/L_strength"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/L_S_L"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="環境訊號概況："
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+
+                                <TextView
+                                    android:id="@+id/L_S_R"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -113,6 +323,15 @@
                     android:layout_weight="0.25" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/CPE_look_add__"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="----------------------------------------"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/CPE_look_add"
@@ -150,12 +369,51 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp" />
 
-                    <Spinner
-                        android:id="@+id/sp_add_CPE_name"
+                    <EditText
+                        android:id="@+id/ed_add_CPE_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="在此輸入環境名稱"
+                        android:inputType="text"
                         android:minHeight="60dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#FFFFFF"
+                        android:textSize="24sp"
                         tools:ignore="SpeakableTextPresentCheck" />
+
+                    <EditText
+                        android:id="@+id/ed_add_CPE_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="在此輸入環境編號"
+                        android:inputType="number"
+                        android:minHeight="60dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#FFFFFF"
+                        android:textSize="24sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/sp_add_CPE_door"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minHeight="60dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+
+                        <Spinner
+                            android:id="@+id/sp_add_CPE_strength"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minHeight="60dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/space_CPE_112"
@@ -196,6 +454,15 @@
                     android:layout_weight="0.25" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/CPE_add_change__"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="----------------------------------------"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/CPE_add_change"
@@ -282,6 +549,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/CPE_change_delete__"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="----------------------------------------"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/CPE_change_delete"
@@ -371,78 +647,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/BT_CPE_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="回管理者首頁"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937" />
-
-    <LinearLayout
-        android:id="@+id/Hint_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
-
-        <TextView
-            android:id="@+id/Hint_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="目前資料庫含有 "
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/Hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            tools:text="T" />
-
-        <TextView
-            android:id="@+id/Hint_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 個環境的設定"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/Synchronize_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/Hint_Text"
-        app:layout_constraintTop_toBottomOf="@+id/Hint_Text">
-
-        <TextView
-            android:id="@+id/Synchronize_Left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="資料同步時間："
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/synchronize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="T"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
