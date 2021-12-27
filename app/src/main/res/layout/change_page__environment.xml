@@ -341,7 +341,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout_CPE_add"
                 android:layout_width="match_parent"
-                android:layout_height="420dp">
+                android:layout_height="440dp">
 
                 <TextView
                     android:id="@+id/space_CPE_11"
@@ -422,7 +422,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <TextView
@@ -435,15 +435,44 @@
                             android:id="@+id/BT_add_CPE"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="確認新增" />
+                            android:layout_weight="0.55"
+                            android:text="新增檢查" />
 
                         <TextView
                             android:id="@+id/space_CPE_1112"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.55" />
+
+                        <Button
+                            android:id="@+id/BT_add_CPE_Decide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.55"
+                            android:text="進行上傳"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:id="@+id/space_CPE_1113"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.55" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/add_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/add_hint_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:gravity="center"
+                        android:text="需先使用「新增檢查」進行檢查\n成功後，「進行上傳」按鈕才會出現\n注意：如果編號在資料庫存在，則不顯示按鈕"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -510,6 +539,40 @@
                         android:layout_height="wrap_content"
                         android:minHeight="60dp"
                         tools:ignore="SpeakableTextPresentCheck" />
+
+                    <EditText
+                        android:id="@+id/ed_change_CPE_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="輸入欲更改之名稱\n(如不改動此項可忽略此欄)"
+                        android:inputType="number"
+                        android:minHeight="60dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#FFFFFF"
+                        android:textSize="24sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/sp_change_CPE_door"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minHeight="60dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+
+                        <Spinner
+                            android:id="@+id/sp_change_CPE_strength"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minHeight="60dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/space_CPE_222"
