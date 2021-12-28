@@ -38,8 +38,9 @@ public class change_page__environment<Global> extends AppCompatActivity {
     private Button BT_CPE_back;
     TextView Hint,synchronize;
     TextView L_N_L,L_N_R,L_Nu_L,L_Nu_R,L_D_L,L_D_R,L_S_L,L_S_R;
+    TextView D_N_L,D_N_R,D_Nu_L,D_Nu_R,D_D_L,D_D_R,D_S_L,D_S_R;
     Spinner sp_look_CPE_name,sp_change_CPE_name,sp_delete_CPE_name;
-    Button  BT_look_CPE,BT_add_CPE,BT_add_CPE_Decide,BT_change_CPE,BT_delete_CPE;
+    Button  BT_look_CPE,BT_add_CPE,BT_add_CPE_Decide,BT_change_CPE,BT_change_CPE_Decide,BT_delete_CPE,BT_Dlook_CPE,BT_delete_CPE_decide;
 
     Button  CPE_look_explain;
 
@@ -51,8 +52,16 @@ public class change_page__environment<Global> extends AppCompatActivity {
     int      FB_ADD_number,ADD_lock = 0;
     long     FB_ADD_time;
 
-    Spinner sp_change_CPE_door,sp_change_CPE_strength;
-    String  Change_door,Change_strength;
+    EditText ed_change_CPE_name;
+    Spinner  sp_change_CPE_door,sp_change_CPE_strength;
+    String   Change_door,Change_strength;
+    String   FB_CHANGE_name,FB_CHANGE_door,FB_CHANGE_strength;
+    int      Change_name_lock = 0,Change_door_lock = 0,Change_strength_lock = 0;
+
+    String   minus_door,minus_strength;
+    String   FB_DELETE_list,FB_DELETE_door,FB_DELETE_strength;
+    int      Delete_number = 0;
+    int      FB_DELETE_number,Delete_lock = 0;
 
     String e_time = "";
     String e_name = "";
@@ -63,14 +72,15 @@ public class change_page__environment<Global> extends AppCompatActivity {
 
     String add_door_SP[]  = {"主要門口方向","1.左","2.右"};
     String add_Strength[] = {"環境訊號概況","1.強","2.中","3.弱"};
-    String change_door_SP[] = {"更改主要門口方向\n(如不改動此項可忽略此欄)","1.左","2.右"};
-    String change_Strength[] = {"環境訊號概況\n(如不改動此項可忽略此欄)","1.強","2.中","3.弱"};
+    String change_door_SP[] = {"更改主要門口方向\n(如不改動請保持此選項)","1.左","2.右"};
+    String change_Strength[] = {"環境訊號概況\n(如不改動請保持此選項)","1.強","2.中","3.弱"};
 
     Toast hint;
 
-    String room_place_number; //房間編號
-    int    room_place_list;
-    int list_rank_before,list_rank_after;
+    String room_place_number,change_room_place_number,delete_room_place_number; //房間編號
+    int    room_place_list,change_room_place_list = 0,delete_room_place_list;
+    int    list_rank_before,list_rank_after;
+    int    delete_list_rank_before,delete_list_rank_after;
 
     ArrayList E_room_name = new ArrayList();
 
@@ -86,7 +96,6 @@ public class change_page__environment<Global> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_page__environment);
 
-        File environment_txt_time  = new File(getFilesDir(), "environment_time.txt");   //時間
         File environment_txt_door  = new File(getFilesDir(), "environment_door.txt");   //門口
         File environment_txt_name  = new File(getFilesDir(), "environment_name.txt");   //環境名稱
         File environment_txt_number= new File(getFilesDir(), "environment_number.txt"); //環境總數
@@ -106,9 +115,20 @@ public class change_page__environment<Global> extends AppCompatActivity {
         L_S_L = findViewById(R.id.L_S_L);
         L_S_R = findViewById(R.id.L_S_R);
 
+        D_N_L = findViewById(R.id.D_N_L);
+        D_N_R = findViewById(R.id.D_N_R);
+        D_Nu_L = findViewById(R.id.D_Nu_L);
+        D_Nu_R = findViewById(R.id.D_Nu_R);
+        D_D_L = findViewById(R.id.D_D_L);
+        D_D_R = findViewById(R.id.D_D_R);
+        D_S_L = findViewById(R.id.D_S_L);
+        D_S_R = findViewById(R.id.D_S_R);
+
         //新增
         ed_add_CPE_name = findViewById(R.id.ed_add_CPE_name);
         ed_add_CPE_number = findViewById(R.id.ed_add_CPE_number);
+        //修改
+        ed_change_CPE_name = findViewById(R.id.ed_change_CPE_name);
 
         //回上頁
         BT_CPE_back = findViewById(R.id.BT_CPE_back);
@@ -127,9 +147,17 @@ public class change_page__environment<Global> extends AppCompatActivity {
         //修改
         BT_change_CPE = findViewById(R.id.BT_change_CPE);
         BT_change_CPE.setOnClickListener(BT_change_CPE_L);
+        BT_change_CPE_Decide = findViewById(R.id.BT_change_CPE_Decide);
+        BT_change_CPE_Decide.setOnClickListener(BT_change_CPE_Decide_L);
+        BT_change_CPE_Decide.setVisibility(View.INVISIBLE);
         //刪除
         BT_delete_CPE = findViewById(R.id.BT_delete_CPE);
         BT_delete_CPE.setOnClickListener(BT_delete_CPE_L);
+        BT_Dlook_CPE = findViewById(R.id.BT_Dlook_CPE);
+        BT_Dlook_CPE.setOnClickListener(BT_Dlook_CPE_L);
+        BT_delete_CPE_decide = findViewById(R.id.BT_delete_CPE_Decide);
+        BT_delete_CPE_decide.setOnClickListener(BT_delete_CPE_Decide_L);
+        BT_delete_CPE_decide.setVisibility(View.INVISIBLE);
 
         sp_look_CPE_name       = (Spinner)findViewById(R.id.sp_look_CPE_name);
         sp_add_CPE_door        = (Spinner)findViewById(R.id.sp_add_CPE_door);
@@ -282,14 +310,16 @@ public class change_page__environment<Global> extends AppCompatActivity {
                                                             new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
 
                                                     sp_change_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                    sp_change_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
+                                                    sp_change_CPE_name.setAdapter(sp_change_CPE_name_S); //設定資料來源
+                                                    sp_change_CPE_name.setOnItemSelectedListener(sp_change_CPE_name_L);
 
                                                     //Spinner(sp_delete_CPE_name_S)
                                                     ArrayAdapter<String> sp_delete_CPE_name_S =
                                                             new ArrayAdapter<String>(change_page__environment.this,R.layout.spinner_value_choice_color,room_name);
 
                                                     sp_delete_CPE_name_S.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                                    sp_delete_CPE_name.setAdapter(sp_look_CPE_name_S); //設定資料來源
+                                                    sp_delete_CPE_name.setAdapter(sp_delete_CPE_name_S); //設定資料來源
+                                                    sp_delete_CPE_name.setOnItemSelectedListener(sp_delete_CPE_name_L);
 
                                                 }
                                             }
@@ -387,8 +417,8 @@ public class change_page__environment<Global> extends AppCompatActivity {
                 room_place_number = room_place.substring(0,room_place_number_dot);
                 room_place_list   = look_CPE;
 
-                hint = Toast.makeText(change_page__environment.this, room_place.substring(0,room_place_number_dot)+"",Toast.LENGTH_SHORT);
-                hint.show();
+                //hint = Toast.makeText(change_page__environment.this, room_place.substring(0,room_place_number_dot)+"",Toast.LENGTH_SHORT);
+                //hint.show();
             }
         }
         @Override
@@ -416,15 +446,15 @@ public class change_page__environment<Global> extends AppCompatActivity {
 
                             String E_door = dataSnapshot_2.getValue(String.class);
 
-                            hint = Toast.makeText(change_page__environment.this, room_place_list+"",Toast.LENGTH_SHORT);
-                            hint.show();
+                            //hint = Toast.makeText(change_page__environment.this, room_place_list+"",Toast.LENGTH_SHORT);
+                            //hint.show();
 
                             for(int i = 0; i < E_door.length(); i++)
                             {
                                 if((room_place_list-1) == i)
                                 {
-                                    hint = Toast.makeText(change_page__environment.this, E_door.substring(i,i+1)+"",Toast.LENGTH_SHORT);
-                                    hint.show();
+                                    //hint = Toast.makeText(change_page__environment.this, E_door.substring(i,i+1)+"",Toast.LENGTH_SHORT);
+                                    //hint.show();
 
                                     if(E_door.substring(i, i + 1).equals("1")) { L_D_R.setText("左側"); } //左
                                     if(E_door.substring(i, i + 1).equals("2")) { L_D_R.setText("右側"); } //右
@@ -480,6 +510,8 @@ public class change_page__environment<Global> extends AppCompatActivity {
             }
         }).show();
     };
+
+    // -----------------------ADD -------------------------
 
     Spinner.OnItemSelectedListener sp_add_CPE_door_L = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int add_CPE_D, long id) {
@@ -745,10 +777,237 @@ public class change_page__environment<Global> extends AppCompatActivity {
         BT_add_CPE_Decide.setVisibility(View.INVISIBLE);
     };
 
+    //-----------------CHANGE-----------------
+
     public View.OnClickListener BT_change_CPE_L = view ->
     {
+        if(change_room_place_list != 0)
+        {
+            String ed_change_CPE_name_C = ed_change_CPE_name.getText().toString();
+
+            //如果想改名稱
+            if(!ed_change_CPE_name_C.equals(""))
+            {
+                FB_CHANGE_name = ed_change_CPE_name_C;
+                //hint = Toast.makeText(change_page__environment.this, "更改名稱", Toast.LENGTH_SHORT);
+                //hint.show();
+
+                Change_name_lock = 1;
+            }
+
+            //如果想改門的方位
+            if (Change_door != null)
+            {
+                FirebaseDatabase database_environment_CHANGE = FirebaseDatabase.getInstance();
+
+                DatabaseReference environment_CHANGE_check = database_environment_CHANGE.getReference("environment").child("door");
+                environment_CHANGE_check.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot CHANGE_1) {
+
+                        String E_door = CHANGE_1.getValue(String.class);
+
+                        //hint = Toast.makeText(change_page__environment.this, "更改方位", Toast.LENGTH_SHORT);
+                        //hint.show();
+
+                        String another_door_before = "";
+
+                        if (change_room_place_list != 1)
+                        {
+                            another_door_before = E_door.substring(0,change_room_place_list-1);
+                            //hint = Toast.makeText(change_page__environment.this, another_door_before+"A", Toast.LENGTH_SHORT);
+                            //hint.show();
+
+                        }
+
+                        String another_door_change = Change_door;
+
+                        //hint = Toast.makeText(change_page__environment.this, another_door_change+"B", Toast.LENGTH_SHORT);
+                        //hint.show();
+
+                        String another_door_after = "";
+
+                        try {
+                            another_door_after = E_door.substring(change_room_place_list);
+
+                            //hint = Toast.makeText(change_page__environment.this, another_door_after+"C", Toast.LENGTH_SHORT);
+                            //hint.show();
+
+                        }catch (Exception e) {
+
+                        }
+
+                        String another_door = another_door_before + another_door_change + another_door_after;
+
+                        FB_CHANGE_door = another_door;
+                        //hint = Toast.makeText(change_page__environment.this, another_door, Toast.LENGTH_SHORT);
+                        //hint.show();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                Change_door_lock = 1;
+            }
+
+            //如果想改環境訊號強度
+            if(Change_strength != null)
+            {
+
+                //hint = Toast.makeText(change_page__environment.this, "更改強度", Toast.LENGTH_SHORT);
+                //hint.show();
+
+                FirebaseDatabase database_environment_CHANGE = FirebaseDatabase.getInstance();
+
+                DatabaseReference environment_CHANGE_check = database_environment_CHANGE.getReference("environment").child("strength");
+                environment_CHANGE_check.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot CHANGE_2) {
+
+                        String E_strength = CHANGE_2.getValue(String.class);
+
+                        //hint = Toast.makeText(change_page__environment.this, "更改方位", Toast.LENGTH_SHORT);
+                        //hint.show();
+
+                        String another_strength_before = "";
+
+                        if (change_room_place_list != 1)
+                        {
+                            another_strength_before = E_strength.substring(0,change_room_place_list-1);
+                            //hint = Toast.makeText(change_page__environment.this, another_strength_before+"A", Toast.LENGTH_SHORT);
+                            //hint.show();
+
+                        }
+
+                        String another_strength_change = Change_strength;
+
+                        //hint = Toast.makeText(change_page__environment.this, another_strength_change+"B", Toast.LENGTH_SHORT);
+                        //hint.show();
+
+                        String another_strength_after = "";
+
+                        try {
+                            another_strength_after = E_strength.substring(change_room_place_list);
+
+                            //hint = Toast.makeText(change_page__environment.this, another_strength_after+"C", Toast.LENGTH_SHORT);
+                            //hint.show();
+
+                        }catch (Exception e) {
+
+                        }
+
+                        String another_strength = another_strength_before + another_strength_change + another_strength_after;
+
+                        FB_CHANGE_strength = another_strength;
+                        hint = Toast.makeText(change_page__environment.this, another_strength, Toast.LENGTH_SHORT);
+                        hint.show();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                Change_strength_lock = 1;
+            }
+
+            BT_change_CPE_Decide.setVisibility(View.VISIBLE);
+
+            //你是來亂的
+            if (ed_change_CPE_name_C.equals("") && (Change_door == null) && (Change_strength == null))
+            {
+                hint = Toast.makeText(change_page__environment.this, "你未輸入任何設定", Toast.LENGTH_SHORT);
+                hint.show();
+
+                BT_change_CPE_Decide.setVisibility(View.INVISIBLE);
+                return;
+            }
+        }else{
+            hint = Toast.makeText(change_page__environment.this, "請選擇要更改的項目", Toast.LENGTH_SHORT);
+            hint.show();
+        }
 
     };
+
+    public View.OnClickListener BT_change_CPE_Decide_L = view ->
+    {
+
+        FirebaseDatabase database_environment_CHANGE = FirebaseDatabase.getInstance();
+        DatabaseReference firebase_name_CHANGE = database_environment_CHANGE.getReference("environment"); //選擇母位置
+
+        if (Change_name_lock == 1)
+        {
+            //hint = Toast.makeText(change_page__environment.this, FB_CHANGE_name,Toast.LENGTH_SHORT);
+            //hint.show();
+
+            firebase_name_CHANGE.child(change_room_place_number).setValue(FB_CHANGE_name); //在分支加入資料
+            Change_name_lock = 0;
+        }
+
+        if (Change_door_lock == 1)
+        {
+            hint = Toast.makeText(change_page__environment.this, FB_CHANGE_door,Toast.LENGTH_SHORT);
+            hint.show();
+
+            firebase_name_CHANGE.child("door").setValue(FB_CHANGE_door); //在分支加入資料
+            Change_door_lock = 0;
+        }
+
+        if (Change_strength_lock == 1)
+        {
+            hint = Toast.makeText(change_page__environment.this, FB_CHANGE_strength,Toast.LENGTH_SHORT);
+            hint.show();
+
+            firebase_name_CHANGE.child("strength").setValue(FB_CHANGE_strength); //在分支加入資料
+            Change_door_lock = 0;
+        }
+
+
+        hint = Toast.makeText(change_page__environment.this, "成功更新資料", Toast.LENGTH_SHORT);
+        hint.show();
+
+        Intent CPE_turn = new Intent();
+        CPE_turn.setClass(change_page__environment.this,change_page__environment.class);
+        startActivity(CPE_turn);
+        finish();
+
+        BT_change_CPE_Decide.setVisibility(View.INVISIBLE);
+    };
+
+    Spinner.OnItemSelectedListener sp_change_CPE_name_L = new Spinner.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int chagne_CPE, long id) {
+
+            //Toast hint = Toast.makeText(change_page__environment.this, parent.getItemAtPosition(look_CPE).toString()+"",Toast.LENGTH_SHORT);
+            //hint.show();
+
+            //剛才的設定：1. 2. 3. ... 11.
+            //個位數時，空白是第3位，十位數則是第4位
+
+            String room_place = parent.getItemAtPosition(chagne_CPE).toString(); //取得文字
+
+            //剔除請選擇環境
+
+            if (chagne_CPE != 0)
+            {
+                int room_place_number_dot = room_place.indexOf('.');
+                change_room_place_number = room_place.substring(0,room_place_number_dot);
+            }
+
+            change_room_place_list = chagne_CPE;
+
+            hint = Toast.makeText(change_page__environment.this, change_room_place_list+"",Toast.LENGTH_SHORT);
+            hint.show();
+
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) { }};
+
 
     Spinner.OnItemSelectedListener sp_change_CPE_door_L = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int chagne_CPE_S, long id) {
@@ -760,6 +1019,8 @@ public class change_page__environment<Global> extends AppCompatActivity {
 
                 //hint = Toast.makeText(change_page__environment.this, Add_strength+"",Toast.LENGTH_SHORT);
                 //hint.show();
+            }else{
+                Change_door = null;
             }
 
         }
@@ -776,16 +1037,267 @@ public class change_page__environment<Global> extends AppCompatActivity {
 
                 //hint = Toast.makeText(change_page__environment.this, Add_strength+"",Toast.LENGTH_SHORT);
                 //hint.show();
+            }else{
+                Change_strength = null;
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) { }};
+
+
+    //---------------------delete---------------------
+
+    Spinner.OnItemSelectedListener sp_delete_CPE_name_L = new Spinner.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent, View view, int delete_CPE_S, long id) {
+
+            String room_place = parent.getItemAtPosition(delete_CPE_S).toString(); //取得文字
+
+            //剔除請選擇環境
+            if (delete_CPE_S != 0)
+            {
+                //String.indexOf -> 回傳字串第一次出現的位置
+                //個位數時，"."的index = 1，十位數則是2
+
+                int room_place_number_dot = room_place.indexOf('.');
+                delete_room_place_number = room_place.substring(0,room_place_number_dot);
+                delete_room_place_list   = delete_CPE_S;
+
+                //hint = Toast.makeText(change_page__environment.this, room_place.substring(0,room_place_number_dot)+"",Toast.LENGTH_SHORT);
+                //hint.show();
             }
 
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};
 
+    public View.OnClickListener BT_Dlook_CPE_L = view ->
+    {
 
+        if(delete_room_place_list != 0 )
+        {
+            FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
+            DatabaseReference firebase_name_find = database_environment_name.getReference("environment").child(delete_room_place_number);
+            firebase_name_find.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot_1) {
+
+                    String name = dataSnapshot_1.getValue(String.class);
+                    D_N_R.setText(name);
+                    D_Nu_R.setText(delete_room_place_number);
+
+                    DatabaseReference firebase_list_find = database_environment_name.getReference("environment").child("door");
+                    firebase_list_find.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot_2) {
+
+                            String E_door = dataSnapshot_2.getValue(String.class);
+
+                            //hint = Toast.makeText(change_page__environment.this, room_place_list+"",Toast.LENGTH_SHORT);
+                            //hint.show();
+
+                            for(int i = 0; i < E_door.length(); i++)
+                            {
+                                if((delete_room_place_list-1) == i)
+                                {
+                                    //hint = Toast.makeText(change_page__environment.this, E_door.substring(i,i+1)+"",Toast.LENGTH_SHORT);
+                                    //hint.show();
+
+                                    if(E_door.substring(i, i + 1).equals("1")) { D_D_R.setText("左側"); } //左
+                                    if(E_door.substring(i, i + 1).equals("2")) { D_D_R.setText("右側"); } //右
+                                }
+                            }
+
+                            DatabaseReference firebase_number_check = database_environment_name.getReference("environment").child("strength");
+                            firebase_number_check.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot_3) {
+
+                                    String E_strength = dataSnapshot_3.getValue(String.class);
+
+                                    for(int i = 0; i < E_door.length(); i++)
+                                    {
+                                        if((delete_room_place_list-1) == i)
+                                        {
+                                            if(E_strength.substring(i, i + 1).equals("1")) { D_S_R.setText("強"); } //強
+                                            if(E_strength.substring(i, i + 1).equals("2")) { D_S_R.setText("中"); } //中
+                                            if(E_strength.substring(i, i + 1).equals("3")) { D_S_R.setText("弱"); } //弱
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError error) { }
+                            });
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) { }
+                    });
+
+                }
+                @Override
+                public void onCancelled(DatabaseError error) { }
+            });
+        }else{
+
+            hint = Toast.makeText(change_page__environment.this, "請先選擇目標",Toast.LENGTH_SHORT);
+            hint.show();
+        }
+
+    };
 
     public View.OnClickListener BT_delete_CPE_L = view ->
     {
+        Delete_lock = 1;
+        BT_delete_CPE_decide.setVisibility(View.VISIBLE);
 
+        try {
+            FirebaseDatabase database_environment_DELETE = FirebaseDatabase.getInstance();
+            DatabaseReference firebase_name_DELETE = database_environment_DELETE.getReference("environment"); //選擇母位置
+            DatabaseReference environment_list_check = database_environment_DELETE.getReference("environment").child("list");
+
+            environment_list_check.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot DELETE_1) {
+
+                    String E_list = DELETE_1.getValue(String.class);
+                    String[] E_multilist = E_list.split(" ");
+
+                    delete_list_rank_before = 0;
+                    delete_list_rank_after = 0;
+
+                    //假如說 1 2 3 24 25，刪除24
+                    //處理完變成 1 2 3 25
+
+                    String new_list = "";
+
+                    for (int i = 0; i < E_multilist.length; i++) {
+
+                        if(!delete_room_place_number.equals(E_multilist[i]))
+                        {
+                            new_list = new_list + E_multilist[i] + " ";
+                        }
+                    }
+
+                    hint = Toast.makeText(change_page__environment.this, new_list, Toast.LENGTH_SHORT);
+                    hint.show(); //都這邊都沒問題
+
+                    FB_DELETE_list = new_list;
+
+                    DatabaseReference environment_door_check = database_environment_DELETE.getReference("environment").child("door");
+                    environment_door_check.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot DELETE_2) {
+
+                            String E_door = DELETE_2.getValue(String.class);
+
+                            minus_door = "";
+
+                            try {
+                                for (int i = 0; i < E_multilist.length; i++) {
+
+                                    if(!delete_room_place_number.equals(E_multilist[i]))
+                                    {
+                                        minus_door = minus_door + E_door.substring(i,i+1) + "";
+                                    }
+                                }
+                            }catch (Exception e){
+
+                            }
+
+                            hint = Toast.makeText(change_page__environment.this, minus_door, Toast.LENGTH_SHORT); //沒問題
+                            hint.show();
+
+                            FB_DELETE_door = minus_door;
+
+                            DatabaseReference firebase_strength_delete = database_environment_DELETE.getReference("environment").child("strength");
+                            firebase_strength_delete.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot DELETE_3) {
+
+                                    String E_strength = DELETE_3.getValue(String.class);
+
+                                    minus_strength = "";
+
+                                    try {
+                                        for (int i = 0; i < E_multilist.length; i++) {
+
+                                            if(!delete_room_place_number.equals(E_multilist[i]))
+                                            {
+                                                minus_strength = minus_strength + E_strength.substring(i,i+1) + "";
+                                            }
+                                        }
+
+                                    }catch (Exception e) {
+
+                                    }
+
+                                    FB_DELETE_strength = minus_strength;
+                                    Delete_number = Integer.parseInt(Hint.getText().toString()) - 1;
+                                    FB_DELETE_number = Delete_number;
+
+                                    return;
+
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) { }
+                    });
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+
+            });
+
+        }catch (Exception e) {
+
+        }
+
+    };
+
+    public View.OnClickListener BT_delete_CPE_Decide_L = view ->
+    {
+        if (Delete_lock == 1)
+        {
+            /*
+            hint = Toast.makeText(change_page__environment.this, FB_DELETE_list,Toast.LENGTH_SHORT);
+            hint.show();
+            hint = Toast.makeText(change_page__environment.this, FB_DELETE_door,Toast.LENGTH_SHORT);
+            hint.show();
+            hint = Toast.makeText(change_page__environment.this, FB_DELETE_strength,Toast.LENGTH_SHORT);
+            hint.show();
+            hint = Toast.makeText(change_page__environment.this, FB_DELETE_number+"",Toast.LENGTH_SHORT);
+            hint.show();
+             */
+
+            hint = Toast.makeText(change_page__environment.this, "成功刪除資料", Toast.LENGTH_SHORT);
+            hint.show();
+
+            FirebaseDatabase database_environment_DELETE = FirebaseDatabase.getInstance();
+            DatabaseReference firebase_name_DELETE = database_environment_DELETE.getReference("environment"); //選擇母位置
+
+
+            firebase_name_DELETE.child("list").setValue(FB_DELETE_list); //在分支加入資料
+            firebase_name_DELETE.child("door").setValue(FB_DELETE_door); //在分支加入資料
+            firebase_name_DELETE.child("strength").setValue(FB_DELETE_strength); //在分支加入資料
+            firebase_name_DELETE.child("number").setValue(FB_DELETE_number); //在分支加入資料
+            firebase_name_DELETE.child(delete_room_place_number).removeValue(); //在分支加入資料
+
+        }
+
+        if (Delete_lock == 0)
+        {
+            hint = Toast.makeText(change_page__environment.this, "你尚未檢查輸入", Toast.LENGTH_SHORT);
+            hint.show();
+        }
+        Delete_lock = 0;
+        BT_delete_CPE_decide.setVisibility(View.INVISIBLE);
     };
 }
