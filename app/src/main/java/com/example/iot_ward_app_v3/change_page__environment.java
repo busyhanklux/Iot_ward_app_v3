@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class change_page__environment<Global> extends AppCompatActivity {
+public class change_page__environment extends AppCompatActivity {
 
     private Button BT_CPE_back;
     TextView Hint,synchronize;
