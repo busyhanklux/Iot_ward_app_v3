@@ -456,8 +456,15 @@ public class change_page__environment extends AppCompatActivity {
                                     //hint = Toast.makeText(change_page__environment.this, E_door.substring(i,i+1)+"",Toast.LENGTH_SHORT);
                                     //hint.show();
 
-                                    if(E_door.substring(i, i + 1).equals("1")) { L_D_R.setText("左側"); } //左
-                                    if(E_door.substring(i, i + 1).equals("2")) { L_D_R.setText("右側"); } //右
+                                    try {
+
+                                        if(E_door.substring(i, i + 1).equals("1")) { L_D_R.setText("左側"); } //左
+                                        if(E_door.substring(i, i + 1).equals("2")) { L_D_R.setText("右側"); } //右
+
+                                    }catch (Exception e){
+
+                                    }
+
                                 }
                             }
 
@@ -470,12 +477,17 @@ public class change_page__environment extends AppCompatActivity {
 
                                     for(int i = 0; i < E_door.length(); i++)
                                     {
-                                        if((room_place_list-1) == i)
-                                        {
-                                            if(E_strength.substring(i, i + 1).equals("1")) { L_S_R.setText("強"); } //強
-                                            if(E_strength.substring(i, i + 1).equals("2")) { L_S_R.setText("中"); } //中
-                                            if(E_strength.substring(i, i + 1).equals("3")) { L_S_R.setText("弱"); } //弱
+                                        try {
+                                            if((room_place_list-1) == i)
+                                            {
+                                                if(E_strength.substring(i, i + 1).equals("1")) { L_S_R.setText("強"); } //強
+                                                if(E_strength.substring(i, i + 1).equals("2")) { L_S_R.setText("中"); } //中
+                                                if(E_strength.substring(i, i + 1).equals("3")) { L_S_R.setText("弱"); } //弱
+                                            }
+                                        }catch (Exception e){
+
                                         }
+
                                     }
                                 }
                                 @Override
@@ -563,6 +575,18 @@ public class change_page__environment extends AppCompatActivity {
                     return;
                 }
 
+                for (int i = 0; i < ed_add_CPE_name_C.length(); i++) {
+                    if(ed_add_CPE_name_C.charAt(i) == ' ')
+                    {
+                        hint = Toast.makeText(change_page__environment.this, "請勿使用空白字元", Toast.LENGTH_SHORT);
+                        hint.show();
+
+                        ADD_lock = 0;
+
+                        return;
+                    }
+                }
+
                     ADD_lock = 1;
                     BT_add_CPE_Decide.setVisibility(View.VISIBLE);
 
@@ -647,17 +671,21 @@ public class change_page__environment extends AppCompatActivity {
 
                                     new_door = "";
 
-                                    for (int i = 0; i < list_rank_before + list_rank_after + 1; i++) {
+                                    try {
+                                        for (int i = 0; i < list_rank_before + list_rank_after + 1; i++) {
 
-                                        if (i < list_rank_before) {
-                                            new_door = new_door + E_door.substring(i, i + 1) + "";
+                                            if (i < list_rank_before) {
+                                                new_door = new_door + E_door.substring(i, i + 1) + "";
+                                            }
+                                            if (i == list_rank_before) {
+                                                new_door = new_door + Add_door + "";
+                                            }
+                                            if (i > list_rank_before) {
+                                                new_door = new_door + E_door.substring(i - 1, i) + "";
+                                            }
                                         }
-                                        if (i == list_rank_before) {
-                                            new_door = new_door + Add_door + "";
-                                        }
-                                        if (i > list_rank_before) {
-                                            new_door = new_door + E_door.substring(i - 1, i) + "";
-                                        }
+                                    }catch (Exception e){
+
                                     }
 
                                     //hint = Toast.makeText(change_page__environment.this, new_door, Toast.LENGTH_SHORT); //沒問題
@@ -676,17 +704,22 @@ public class change_page__environment extends AppCompatActivity {
 
                                             new_strength = "";
 
-                                            for (int i = 0; i < list_rank_before + list_rank_after + 1; i++) {
+                                            try {
+                                                for (int i = 0; i < list_rank_before + list_rank_after + 1; i++) {
 
-                                                if (i < list_rank_before) {
-                                                    new_strength = new_strength + E_strength.substring(i, i + 1) + "";
+                                                    if (i < list_rank_before) {
+                                                        new_strength = new_strength + E_strength.substring(i, i + 1) + "";
+                                                    }
+                                                    if (i == list_rank_before) {
+                                                        new_strength = new_strength + Add_strength + "";
+                                                    }
+                                                    if (i > list_rank_before) {
+                                                        new_strength = new_strength + E_strength.substring(i - 1, i) + "";
+                                                    }
                                                 }
-                                                if (i == list_rank_before) {
-                                                    new_strength = new_strength + Add_strength + "";
-                                                }
-                                                if (i > list_rank_before) {
-                                                    new_strength = new_strength + E_strength.substring(i - 1, i) + "";
-                                                }
+
+                                            }catch (Exception e){
+
                                             }
 
                                             FB_ADD_strength = new_strength;
@@ -777,6 +810,11 @@ public class change_page__environment extends AppCompatActivity {
             firebase_name_ADD.child("number").setValue(FB_ADD_number); //在分支加入資料
             //firebase_name_ADD.child("change_time").setValue(FB_ADD_time);
             firebase_name_ADD.child(ed_add_CPE_number.getText().toString()).setValue(ed_add_CPE_name.getText().toString()); //在分支加入資料
+
+            Intent CPE_turn = new Intent();
+            CPE_turn.setClass(change_page__environment.this,change_page__environment.class);
+            startActivity(CPE_turn);
+            finish();
         }
 
         if (ADD_lock == 0)
@@ -799,6 +837,18 @@ public class change_page__environment extends AppCompatActivity {
             //如果想改名稱
             if(!ed_change_CPE_name_C.equals(""))
             {
+                for (int i = 0; i < ed_change_CPE_name_C.length(); i++) {
+                    if(ed_change_CPE_name_C.charAt(i) == ' ')
+                    {
+                        hint = Toast.makeText(change_page__environment.this, "請勿使用空白字元", Toast.LENGTH_SHORT);
+                        hint.show();
+
+                        Change_name_lock = 0;
+
+                        return;
+                    }
+                }
+
                 FB_CHANGE_name = ed_change_CPE_name_C;
                 //hint = Toast.makeText(change_page__environment.this, "更改名稱", Toast.LENGTH_SHORT);
                 //hint.show();

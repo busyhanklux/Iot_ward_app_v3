@@ -389,6 +389,18 @@ public class change_page__device extends AppCompatActivity {
                 return;
             }
 
+            for (int i = 0; i < ed_add_CPD_name_C.length(); i++) {
+                if(ed_add_CPD_name_C.charAt(i) == ' ')
+                {
+                    hint = Toast.makeText(change_page__device.this, "請勿使用空白字元", Toast.LENGTH_SHORT);
+                    hint.show();
+
+                    ADD_lock = 0;
+
+                    return;
+                }
+            }
+
             ADD_lock = 1;
             BT_add_CPD_Decide.setVisibility(View.VISIBLE);
 
@@ -533,6 +545,18 @@ public class change_page__device extends AppCompatActivity {
             //如果想改名稱
             if(!ed_change_CPD_name_C.equals(""))
             {
+                for (int i = 0; i < ed_change_CPD_name_C.length(); i++) {
+                    if(ed_change_CPD_name_C.charAt(i) == ' ')
+                    {
+                        hint = Toast.makeText(change_page__device.this, "請勿使用空白字元", Toast.LENGTH_SHORT);
+                        hint.show();
+
+                        Change_name_lock = 0;
+
+                        return;
+                    }
+                }
+
                 FB_CHANGE_name = ed_change_CPD_name_C;
                 //hint = Toast.makeText(change_page__device.this, "更改名稱", Toast.LENGTH_SHORT);
                 //hint.show();

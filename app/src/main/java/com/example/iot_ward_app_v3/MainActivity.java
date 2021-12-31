@@ -37,7 +37,7 @@ import java.util.Hashtable;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tv_ei,conclude,detail;
-    private Spinner  sp_esp32_choice,beacon_spinner,beacon_idnum_spinner;
+    private Spinner  sp_esp32_choice,beacon_spinner,beacon_id_num_spinner;
     private Button btMap,btStatus,esp32_switch,find_major;
     private ImageView To_adminster_page;
 
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
             "16.點滴架","17.調試用編號，僅供測試使用"
     };
 
-    ArrayList<String> firebase_device_sp = new ArrayList<String>();
     String firebase_environment_sp[];
+    String firebase_device_sp[];
     Toast txt;
 
     String str_Estrength,strength_choice,str_Door,door_choice;
@@ -133,6 +133,35 @@ public class MainActivity extends AppCompatActivity {
             int len_Edoor = fis_Edoor.read(E_door);
             str_Door = new String(E_door , 0, len_Edoor);
 
+            //-------------------------------------------------------
+
+            FileInputStream fis_Dnumber = new FileInputStream(device_txt_number);
+            FileInputStream fis_Dname = new FileInputStream(device_txt_name);
+            FileInputStream fis_Dlist = new FileInputStream(device_txt_list);
+
+            byte[] D_number = new byte[1024];
+            int len_Dnumber = fis_Dnumber.read(D_number);
+            String str_Dnumber = new String(D_number , 0,len_Dnumber);
+
+            byte[] D_name = new byte[100000];
+            int len_Dname = fis_Dname.read(D_name);
+            String str_Dname = new String(D_name , 0, len_Dname);
+            String str_Dmultiname [] = str_Dname.split(" ");
+
+            byte[] D_list = new byte[1024];
+            int len_Dlist = fis_Dlist.read(D_list);
+            String str_Dlist = new String(D_list , 0, len_Dlist);
+            String str_Dmultilist [] = str_Dlist.split(" ");
+
+            firebase_device_sp = new String[Integer.parseInt(str_Dnumber)];
+
+            for (int i = 0; i < Integer.parseInt(str_Dnumber); i++) {
+
+                firebase_device_sp[i] = str_Dmultilist[i]+". "+str_Dmultiname [i];
+
+                //Toast txt = Toast.makeText(MainActivity.this,firebase_device_sp[i]+"",Toast.LENGTH_SHORT);
+                //txt.show();
+            }
 
 
         } catch (Exception e) {
@@ -148,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         //下拉式選單
         sp_esp32_choice = (Spinner)findViewById(R.id.sp_esp32_choice); //選擇該esp32的哪一個
         beacon_spinner  = (Spinner)findViewById(R.id.environment_choice); //選擇環境
-        beacon_idnum_spinner = (Spinner)findViewById(R.id.beacon_id_spinner); //用選擇編號替代寫入編號
+        beacon_id_num_spinner = (Spinner)findViewById(R.id.beacon_id_spinner); //用選擇編號替代寫入編號
 
         //細節(外觀文字)
         detail = (TextView)findViewById(R.id.detail);
@@ -167,19 +196,26 @@ public class MainActivity extends AppCompatActivity {
         sp_esp32_choice.setAdapter(adapternumber2);    //設定資料來源
         sp_esp32_choice.setOnItemSelectedListener(sp_esp32_choice_Listener);
 
-        //Spinner(environment_choice)
-        ArrayAdapter<String> adapternumber_environment_choice =
-                new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,firebase_environment_sp);
-        adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
-        beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
+        try {
 
-        //Spinner(beacon_id_spinner)
-        ArrayAdapter<String> adapternumber_beacon_id_spinner_choice =
-                new ArrayAdapter<String>(this ,R.layout.spinner_value_choice_color,beacon_id_spinner_choice);
-        adapternumber_beacon_id_spinner_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        beacon_idnum_spinner.setAdapter(adapternumber_beacon_id_spinner_choice);    //設定資料來源
-        beacon_idnum_spinner.setOnItemSelectedListener(beacon_id_spinner_choice_Listener);
+            //Spinner(environment_choice)
+            ArrayAdapter<String> adapternumber_environment_choice =
+                    new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,firebase_environment_sp);
+            adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
+            beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
+
+            //Spinner(beacon_id_spinner)
+            ArrayAdapter<String> adapternumber_beacon_id_spinner_choice =
+                    new ArrayAdapter<String>(this ,R.layout.spinner_value_choice_color,firebase_device_sp);
+            adapternumber_beacon_id_spinner_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            beacon_id_num_spinner.setAdapter(adapternumber_beacon_id_spinner_choice);    //設定資料來源
+            beacon_id_num_spinner.setOnItemSelectedListener(beacon_id_spinner_choice_Listener);
+
+        }catch (Exception e)
+        {
+
+        }
 
         //button
         btStatus = (Button)findViewById(R.id.btStatus);
@@ -280,9 +316,10 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_1 = rssi1.toString();
 
                                     double A = 0, n = 0;
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 62.00; n = 3.40; } //原本59，改62
-                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.40; }
-                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.40; } //原本75，改70
+
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //原本59，改62
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.85; }
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //原本75，改70
 
                                     //if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
                                     //if(room_choice == 1) { A = 65.00; n = 3.40; }
@@ -315,9 +352,9 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 62.00; n = 3.40; } //原本59，改62
-                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.40; }
-                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.40; } //原本75，改70
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //原本59，改62
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.85; }
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //原本75，改70
 
                                     /*
                                     if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
@@ -352,9 +389,10 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_3 = rssi3.toString();
 
                                     double A = 0, n = 0;
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 62.00; n = 3.40; } //原本59，改62
-                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.40; }
-                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.40; } //原本75，改70
+
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //原本59，改62
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.85; }
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //原本75，改70
 
                                     /*
                                     if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
@@ -785,13 +823,11 @@ public class MainActivity extends AppCompatActivity {
             int room_place_number_dot = room_place.indexOf('.'); //第一次的.在第幾個位置
 
             room_choice = Integer.parseInt(room_place.substring(0,room_place_number_dot))-1; //選項1時，使他輸出為0
-
             room_place = room_place.substring(room_place_number_dot+1);
 
             try {
-
-                strength_choice = str_Estrength.substring(position2,position2+1);
-                door_choice = str_Door.substring(position2,position2+1);
+                strength_choice = str_Estrength.substring(position2,position2+1); //環境
+                door_choice = str_Door.substring(position2,position2+1); //門
                 //Toast error = Toast.makeText(MainActivity.this,strength_choice+"",Toast.LENGTH_SHORT);
                 //error.show();
             }catch (Exception e){
@@ -805,14 +841,12 @@ public class MainActivity extends AppCompatActivity {
     Spinner.OnItemSelectedListener beacon_id_spinner_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int beacon_num, long id3) {
 
-            beacon_number_choice = beacon_num + 1; //當我選16號時，beacon_num = 15，+1是為了textview方便設定
-
-            int Position_string = 1; //文字字元數，如果為10號以後就處理3個字元
-            if(beacon_number_choice >= 10){
-                Position_string = 2;
-            }
             beacon_name = parent.getItemAtPosition(beacon_num).toString(); //擷取選項的文字
-            beacon_name = beacon_name.substring(Position_string+1); //處理文字
+            int device_number_dot = beacon_name.indexOf('.'); //第一次的.在第幾個位置
+            beacon_name = beacon_name.substring(device_number_dot+1); //處理文字
+
+            beacon_number_choice = Integer.parseInt(parent.getItemAtPosition(beacon_num).toString().substring(0,device_number_dot));
+
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};

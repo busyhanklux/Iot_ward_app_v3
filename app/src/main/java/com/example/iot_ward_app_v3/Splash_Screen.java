@@ -923,8 +923,8 @@ public class Splash_Screen extends AppCompatActivity {
                                                 if (run_count_D == D_number) {
                                                     FileOutputStream D_N_N = null;
                                                     try {
-                                                        hint = Toast.makeText(Splash_Screen.this, d_name, Toast.LENGTH_SHORT);
-                                                        hint.show();
+                                                        //hint = Toast.makeText(Splash_Screen.this, d_name, Toast.LENGTH_SHORT);
+                                                        //hint.show();
 
                                                         D_N_N = new FileOutputStream(device_txt_name);
                                                         D_N_N.write(d_name.getBytes());
