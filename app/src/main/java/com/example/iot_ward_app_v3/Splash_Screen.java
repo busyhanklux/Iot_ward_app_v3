@@ -52,12 +52,7 @@ public class Splash_Screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
 
-        //時間檔案(有兩個)，
-        //如果Database的內容被改的時間等.大於這個text的時間，改動他，並將這個text的時間更新 => 檢測變動的參數變 1
-        //如果Database的內容被改的時間小於這個text的時間，不理他
-        //如果沒有text檔案，那就將text時間判定為0
-
-        //流程，先檢查 device_txt_time 和 environment_txt_time 是否存在
+        //流程，先檢查 device_txt_number 和 environment_txt_number  是否存在
 
         File device_txt_name = new File(getFilesDir(), "device_name.txt");   //設備名稱
         File device_txt_number = new File(getFilesDir(), "device_number.txt"); //設備數量
@@ -315,7 +310,7 @@ public class Splash_Screen extends AppCompatActivity {
         }
 
 
-        //如果 device_txt_time(存在) 但 environment_txt_time(不存在)，跑這段
+        //如果 device_txt_number (存在) 但 environment_txt_number (不存在)，跑這段
 
         if (device_txt_number.exists() && !environment_txt_number.exists()) {
             //D
@@ -576,7 +571,7 @@ public class Splash_Screen extends AppCompatActivity {
                 }
             }
 
-            //如果 device_txt_time(不存在) 但 environment_txt_time(存在)，跑這段
+            //如果 device_txt_number (不存在) 但 environment_txt_number (存在)，跑這段
 
             if (!device_txt_number.exists() && environment_txt_number.exists()) {
 
@@ -1123,12 +1118,6 @@ public class Splash_Screen extends AppCompatActivity {
             {
                 check_time_for_text = 2;
             }
-
-        /*
-        Dictionary environment = new Hashtable(); //字典，環境
-        environment.put("1","大型空間");
-        environment.put("2","樂得兒產房");
-         */
 
             //檢查完畢後(2)，傳送
             if (check_time_for_text == 2) {

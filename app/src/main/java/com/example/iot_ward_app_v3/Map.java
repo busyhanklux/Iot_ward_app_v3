@@ -33,7 +33,7 @@ public class Map extends AppCompatActivity {
     String description;
 
     Button bt_back;
-    private TextView rule_keep,door_keep,remind_text;
+    private TextView rule_keep,door_keep,remind_text,remind_device_L,remind_device_R,remind_room_L,remind_room_R,dir;
     private RadioButton left_door,right_door;
     private RadioGroup  select_door;
     private Button pre_display,display;
@@ -46,19 +46,15 @@ public class Map extends AppCompatActivity {
         setContentView(R.layout.activity_map);
         rule_keep = (TextView) findViewById(R.id.rule_keep);
         door_keep = (TextView) findViewById(R.id.door_keep);
+
         remind_text = (TextView) findViewById(R.id.remind_text); //提醒訊息
-
-        //單選按鈕
-        left_door  = (RadioButton)findViewById(R.id.left_door);
-        right_door = (RadioButton)findViewById(R.id.right_door);
-        select_door = (RadioGroup)findViewById(R.id.select_door);
-
-        //設定 RadioGroup
-        select_door.setOnCheckedChangeListener(select_door_L);
+        remind_device_L = findViewById(R.id.remind_device_L);
+        remind_device_R = findViewById(R.id.remind_device_R);
+        remind_room_L = findViewById(R.id.remind_room_L);
+        remind_room_R = findViewById(R.id.remind_room_R);
+        dir = findViewById(R.id.dir);
 
         //設定按鈕
-        pre_display = (Button)findViewById(R.id.check_door);
-        pre_display.setOnClickListener(pre_display_L);
         display = (Button)findViewById(R.id.display);
         display.setOnClickListener(display_L);
         //圖片
@@ -83,6 +79,27 @@ public class Map extends AppCompatActivity {
             //在某某房間的情形
             select_room = bundle.getString("select_room");
 
+            //門的方向
+            door = bundle.getInt("select_door");
+
+            if (door == 1)
+            {
+                remind_text.setText("提醒：點擊「展示」按鈕觀看地圖\n");
+                remind_device_R.setText(select_number+"號，" + beacon_name );
+                remind_room_R.setText(select_room);
+                dir.setText("\n該環境的門在左側");
+                pre_place.setImageResource(R.drawable.place1);
+            }
+            if (door == 2)
+            {
+                remind_text.setText("提醒：點擊「展示」按鈕觀看地圖\n");
+                remind_device_R.setText(select_number+"號，" + beacon_name );
+                remind_room_R.setText(select_room);
+                dir.setText("\n該環境的門在右側");
+                pre_place.setImageResource(R.drawable.place2);
+            }
+
+
             Bundle bundle2 = new Bundle();
             bundle2.putLong("check_time1",check1);
             bundle2.putLong("check_time2",check2);
@@ -90,6 +107,7 @@ public class Map extends AppCompatActivity {
 
             bundle2.putInt("select_number",select_number);
             bundle2.putString("select_room",select_room);
+            bundle2.putInt("select_door",door);
 
             bundle2.putInt("rssi_1",rssi_1);
             bundle2.putInt("rssi_2",rssi_2);
@@ -280,32 +298,6 @@ public class Map extends AppCompatActivity {
         bt_back.setOnClickListener(bt_backListener);
     }
 
-
-    private RadioGroup.OnCheckedChangeListener select_door_L = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            if (checkedId == R.id.left_door){ //左側門
-                door = 1;
-                remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+"號 " + beacon_name + "\n在 "+select_room+" 的情形");
-            }
-            if (checkedId == R.id.right_door){ //右側門
-                door = 2;
-                remind_text.setText("提醒訊息：點擊「展示」按鈕，觀看\n"+select_number+"號 " + beacon_name + "\n在 "+select_room+" 的情形");
-            }}};
-
-
-    //預覽左門還是右門
-    public View.OnClickListener pre_display_L = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(door == 1){//左門
-                pre_place.setImageResource(R.drawable.place1);
-            }
-            if(door == 2){//右門
-                pre_place.setImageResource(R.drawable.place2);
-            }
-        }};
-
     //回到首頁重新查詢
     private  View.OnClickListener bt_backListener = new View.OnClickListener()
     {
@@ -352,6 +344,7 @@ public class Map extends AppCompatActivity {
 
                 //傳給下一頁：門的方向資料
                 bundle2.putInt("door2",door);
+                bundle2.putInt("select_door",door);
 
                 //傳給下一頁：點的放置資料
                 int rule2 = Integer.parseInt((String) rule_keep.getText());

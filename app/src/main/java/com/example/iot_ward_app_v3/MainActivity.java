@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -70,27 +71,74 @@ public class MainActivity extends AppCompatActivity {
             "16.點滴架","17.調試用編號，僅供測試使用"
     };
 
+    ArrayList<String> firebase_device_sp = new ArrayList<String>();
+    String firebase_environment_sp[];
+    Toast txt;
+
+    String str_Estrength,strength_choice,str_Door,door_choice;
+    int Button_lock = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        File device_txt_name = new File(getFilesDir(), "device_name.txt");   //設備名稱
+        File device_txt_number = new File(getFilesDir(), "device_number.txt"); //設備數量
+        File device_txt_list = new File(getFilesDir(), "device_list.txt");   //設備的數字代碼
 
-        //試試讀 text檔
+        File environment_txt_name = new File(getFilesDir(), "environment_name.txt");   //環境名稱
+        File environment_txt_number = new File(getFilesDir(), "environment_number.txt"); //環境總數
+        File environment_txt_list = new File(getFilesDir(), "environment_list.txt");   //環境的數字代碼
+        File environment_txt_door = new File(getFilesDir(), "environment_door.txt");   //門口
+        File environment_txt_strength = new File(getFilesDir(), "environment_strength.txt");   //環境的強度代碼
+
+        //text檔
         try {
-            File file = new File(getFilesDir(), "times.txt");
-            FileInputStream fis = new FileInputStream(file);
-            byte[] b = new byte[1024];
-            int len = fis.read(b);
-            String str2 = new String(b, 0, len);
+            FileInputStream fis_Enumber = new FileInputStream(environment_txt_number);
+            FileInputStream fis_Ename = new FileInputStream(environment_txt_name);
+            FileInputStream fis_Elist = new FileInputStream(environment_txt_list);
+            FileInputStream fis_Edoor = new FileInputStream(environment_txt_door);
+            FileInputStream fis_Estrength = new FileInputStream(environment_txt_strength);
 
-            //Toast txt = Toast.makeText(MainActivity.this,str2,Toast.LENGTH_SHORT);
-            //txt.show();
+            byte[] E_number = new byte[1024];
+            int len_Enumber = fis_Enumber.read(E_number );
+            String str_Enumber = new String(E_number , 0,len_Enumber);
+
+            byte[] E_name = new byte[100000];
+            int len_Ename = fis_Ename.read(E_name);
+            String str_Ename = new String(E_name , 0, len_Ename);
+            String str_Emultiname [] = str_Ename.split(" ");
+
+            byte[] E_list = new byte[1024];
+            int len_Elist = fis_Elist.read(E_list);
+            String str_Elist = new String(E_list , 0, len_Elist);
+            String str_Emultilist [] = str_Elist.split(" ");
+
+            firebase_environment_sp = new String[Integer.parseInt(str_Enumber)];
+
+            for (int i = 0; i < Integer.parseInt(str_Enumber); i++) {
+
+                firebase_environment_sp[i] = str_Emultilist[i]+". "+str_Emultiname [i];
+
+                //Toast txt = Toast.makeText(MainActivity.this,firebase_environment_sp[i]+"",Toast.LENGTH_SHORT);
+                //txt.show();
+            }
+
+            byte[] E_strength = new byte[1024];
+            int len_Estrength = fis_Estrength.read(E_strength);
+            str_Estrength = new String(E_strength , 0, len_Estrength);
+
+            byte[] E_door = new byte[1024];
+            int len_Edoor = fis_Edoor.read(E_door);
+            str_Door = new String(E_door , 0, len_Edoor);
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
-            //Toast txt = Toast.makeText(MainActivity.this,"錯誤",Toast.LENGTH_SHORT);
-            //txt.show();
+            Toast txt = Toast.makeText(MainActivity.this,"錯誤",Toast.LENGTH_SHORT);
+            txt.show();
         }
 
         //圖片的imageview_onclick，沒錯! imageview可以onclick
@@ -121,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Spinner(environment_choice)
         ArrayAdapter<String> adapternumber_environment_choice =
-                new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,environment_choice);
+                new ArrayAdapter<String>(this,R.layout.spinner_value_choice_color,firebase_environment_sp);
         adapternumber_environment_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         beacon_spinner.setAdapter(adapternumber_environment_choice);    //設定資料來源
         beacon_spinner.setOnItemSelectedListener(environment_choice_Listener);
@@ -153,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
                     int select_major = beacon_number_choice;
                     number_decided = beacon_number_choice;
                     select_room = room_place;
+
+                    //Toast error = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
+                    //error.show();
 
                     //當我選擇環境時，他們的room_choice會被選項跟著改動(0：大型空間、1：產房、2：ICU)
                     int firebase_number_1 = room_choice*3 + 1;
@@ -189,22 +240,28 @@ public class MainActivity extends AppCompatActivity {
                                                                     if(major == null){
                                                                         //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
                                                                         tv_ei.setText("三個esp32裝置都沒有上傳過 "+ select_major +"號 "+ beacon_name + " 的資料，請換編號查詢");
-                                                                        detail.setText("請重新選擇要查詢的設備(beacon)編號");}
+                                                                        detail.setText("請重新選擇要查詢的設備(beacon)編號");
+                                                                        Button_lock = 0;
+                                                                    }
                                                                     else{
                                                                         //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
                                                                         tv_ei.setText("至少有一個esp32裝置有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
-                                                                        detail.setText("查找完畢");}
+                                                                        detail.setText("查找完畢");
+                                                                        Button_lock = 1;
+                                                                    }
                                                             }
                                                                 public void onCancelled(DatabaseError error) { }});}
                                                         }else{
                                                         //tv_ei.setText(firebase_number_1+"號、"+firebase_number_2+"號、"+firebase_number_3+"號、"+"至少有一個esp32有 "+select_major+"號的資料，請接續後續步驟");
                                                         tv_ei.setText("至少有一個esp32裝置有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                                         detail.setText("查找完畢");
+                                                        Button_lock = 1;
                                                     }}
                                                 public void onCancelled(DatabaseError error) { }});
                                                 }}else{
                                         tv_ei.setText("至少有一個esp32裝置有上傳過 "+select_major+"號 " + beacon_name + " 的資料，請接續後續步驟");
                                         detail.setText("查找完畢");
+                                        Button_lock = 1;
                                     }}
                                 public void onCancelled(DatabaseError error) { }});
 
@@ -223,9 +280,14 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_1 = rssi1.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
-                                    if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 62.00; n = 3.40; } //原本59，改62
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.40; }
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.40; } //原本75，改70
+
+                                    //if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
+                                    //if(room_choice == 1) { A = 65.00; n = 3.40; }
+                                    //if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
+
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -252,9 +314,17 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_2 = rssi2.toString();
 
                                     double A = 0, n = 0;
+
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 62.00; n = 3.40; } //原本59，改62
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.40; }
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.40; } //原本75，改70
+
+                                    /*
                                     if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
                                     if(room_choice == 1) { A = 65.00; n = 3.85; } //產房
                                     if(room_choice == 2) { A = 70.00; n = 3.60; } //原本75，改70，ICU
+                                     */
+
                                     double M_2 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -282,9 +352,15 @@ public class MainActivity extends AppCompatActivity {
                                     String_rssi_3 = rssi3.toString();
 
                                     double A = 0, n = 0;
-                                    if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
-                                    if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 62.00; n = 3.40; } //原本59，改62
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.40; }
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.40; } //原本75，改70
+
+                                    /*
+                                    if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
+                                    if(room_choice == 1) { A = 65.00; n = 3.85; } //產房
+                                    if(room_choice == 2) { A = 70.00; n = 3.60; } //原本75，改70，ICU
+                                     */
                                     double M_3 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -511,6 +587,15 @@ public class MainActivity extends AppCompatActivity {
         {
             @SuppressLint("SetTextI18n")
             public void onClick(View v){
+
+                if(Button_lock == 0)
+                {
+                    Toast hint = Toast.makeText(MainActivity.this, "請先找到一個有資料的設備",Toast.LENGTH_SHORT);
+                    hint.show();
+
+                    return;
+                }
+
                 //條件一：三個同時10分內，或其中兩個10分內
                 //過：
                 //規則一：純粹的比rssi哪個為最小，它就是最靠近的
@@ -643,12 +728,22 @@ public class MainActivity extends AppCompatActivity {
     //按下按鈕，跳轉至第二頁
     private  View.OnClickListener btMapListener = new View.OnClickListener() {
         public void onClick(View v){
+
+            if (Button_lock == 0)
+            {
+                Toast hint = Toast.makeText(MainActivity.this, "請先找到一個有資料的設備再傳送",Toast.LENGTH_SHORT);
+                hint.show();
+
+                return;
+            }
+
             try{
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
                 bundle.putInt("select_number", number_decided);
                 bundle.putString("select_room", select_room);
+                bundle.putInt("select_door", Integer.parseInt(door_choice));
 
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
@@ -683,11 +778,25 @@ public class MainActivity extends AppCompatActivity {
     //選擇哪個環境
     Spinner.OnItemSelectedListener environment_choice_Listener = new Spinner.OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent, View view, int position2, long id2) {
-            room_choice = position2 ; //選項1時，使他輸出為0
+
             room_place = parent.getItemAtPosition(position2).toString(); //取得文字
             //將前面阿拉伯數字和點去掉，例如：1.大型空間 => 大型空間
-            int Position_string = 1;
-            room_place = room_place.substring(Position_string+1);
+
+            int room_place_number_dot = room_place.indexOf('.'); //第一次的.在第幾個位置
+
+            room_choice = Integer.parseInt(room_place.substring(0,room_place_number_dot))-1; //選項1時，使他輸出為0
+
+            room_place = room_place.substring(room_place_number_dot+1);
+
+            try {
+
+                strength_choice = str_Estrength.substring(position2,position2+1);
+                door_choice = str_Door.substring(position2,position2+1);
+                //Toast error = Toast.makeText(MainActivity.this,strength_choice+"",Toast.LENGTH_SHORT);
+                //error.show();
+            }catch (Exception e){
+
+            };
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) { }};

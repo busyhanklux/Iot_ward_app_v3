@@ -179,7 +179,7 @@ public class change_page__device extends AppCompatActivity {
 
                  */
 
-                Toast hint = Toast.makeText(change_page__device.this, d_time+"",Toast.LENGTH_SHORT);
+                //Toast hint = Toast.makeText(change_page__device.this, d_time+"",Toast.LENGTH_SHORT);
                 //hint.show();
                 check_for_device_text = 1;
 
@@ -378,6 +378,17 @@ public class change_page__device extends AppCompatActivity {
         String ed_add_CPD_number_C = ed_add_CPD_number.getText().toString();
 
         if ((!ed_add_CPD_name_C.equals("")) && (!ed_add_CPD_number_C.equals(""))) {
+
+            if(ed_add_CPD_number_C.charAt(0) == '0')
+            {
+                hint = Toast.makeText(change_page__device.this, "編號的第一位數字請勿是 0", Toast.LENGTH_SHORT);
+                hint.show();
+
+                ADD_lock = 0;
+
+                return;
+            }
+
             ADD_lock = 1;
             BT_add_CPD_Decide.setVisibility(View.VISIBLE);
 
@@ -444,8 +455,8 @@ public class change_page__device extends AppCompatActivity {
                         }
                     }
 
-                    hint = Toast.makeText(change_page__device.this, new_list, Toast.LENGTH_SHORT);
-                    hint.show(); //都這邊都沒問題
+                    //hint = Toast.makeText(change_page__device.this, new_list, Toast.LENGTH_SHORT);
+                    //hint.show(); //都這邊都沒問題
 
                     //firebase_name_ADD.child("list").setValue(new_list); //把新的list傳上去
                     FB_ADD_list = new_list;
@@ -594,8 +605,8 @@ public class change_page__device extends AppCompatActivity {
 
             change_room_place_list = chagne_CPD;
 
-            hint = Toast.makeText(change_page__device.this, change_room_place_list+"",Toast.LENGTH_SHORT);
-            hint.show();
+            //hint = Toast.makeText(change_page__device.this, change_room_place_list+"",Toast.LENGTH_SHORT);
+            //hint.show();
 
         }
         @Override
@@ -686,8 +697,8 @@ public class change_page__device extends AppCompatActivity {
                         }
                     }
 
-                    hint = Toast.makeText(change_page__device.this, new_list, Toast.LENGTH_SHORT);
-                    hint.show(); //都這邊都沒問題
+                    //hint = Toast.makeText(change_page__device.this, new_list, Toast.LENGTH_SHORT);
+                    //hint.show(); //都這邊都沒問題
 
                     FB_DELETE_list = new_list;
                     Delete_number = Integer.parseInt(Hint.getText().toString()) - 1;

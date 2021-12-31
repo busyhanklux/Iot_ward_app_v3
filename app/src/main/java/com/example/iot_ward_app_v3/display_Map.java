@@ -79,6 +79,7 @@ public class display_Map extends AppCompatActivity {
         door_number = (TextView)findViewById(R.id.door_number);
         door_number.setText(String.valueOf(door));
 
+
         rule = bundle2.getInt("rule2");
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
@@ -380,6 +381,8 @@ public class display_Map extends AppCompatActivity {
                 bundle.putInt("select_number",select_number);
                 bundle.putString("select_room",select_room);
                 bundle.putString("beacon_name",beacon_name);
+
+                bundle.putInt("select_door",door);
 
                 intent2.putExtras(bundle);
                 intent2.setClass(display_Map.this,Map.class);
