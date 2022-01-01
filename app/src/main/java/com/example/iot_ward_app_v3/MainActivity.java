@@ -317,9 +317,9 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //原本59，改62
-                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.85; }
-                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //原本75，改70
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //大型
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
                                     //if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
                                     //if(room_choice == 1) { A = 65.00; n = 3.40; }
@@ -352,9 +352,9 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //原本59，改62
-                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.85; }
-                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //原本75，改70
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //大型
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
                                     /*
                                     if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
@@ -390,9 +390,9 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //原本59，改62
-                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 3.85; }
-                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //原本75，改70
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //大型
+                                    if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
+                                    if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
                                     /*
                                     if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
