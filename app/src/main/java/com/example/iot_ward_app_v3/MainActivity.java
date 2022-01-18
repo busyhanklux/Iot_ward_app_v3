@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //大型
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.00; } //大型
                                     if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
                                     if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //大型
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.00; } //大型
                                     if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
                                     if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     double A = 0, n = 0;
 
-                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.35; } //大型
+                                    if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.00; } //大型
                                     if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
                                     if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
