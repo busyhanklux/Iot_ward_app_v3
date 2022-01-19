@@ -3,6 +3,7 @@ package com.example.iot_ward_app_v3;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -43,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
     int room_choice,beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
-    int rssi_1,rssi_2,rssi_3; //存放rssi
+    int rssi_1,rssi_2,rssi_3,rssi_sup; //存放rssi
     int To_adminster_page_TapCount = 0; //如同成為開發者一般
 
     String sw_number; //放esp32切換
-    String String_rssi_1,String_rssi_2,String_rssi_3; //存放rssi，用於顯示在esp32切換
+    String String_rssi_1,String_rssi_2,String_rssi_3,String_rssi_sup; //存放rssi，用於顯示在esp32切換
     String String_distance_1,String_distance_2,String_distance_3; //存放距離，用於顯示儀器測距
     String String_displaytime_1 , String_displaytime_2 , String_displaytime_3; //存放時間，用來顯示時間
     Long unixtime_check1,unixtime_check2,unixtime_check3; //存放unix時間，用來判定時間
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
     //下拉式選單
-    String[] esp32_num = new String[]{ "1.門前牆角","2.斜對牆角","3.門平行牆角" }; //esp32切換
+    String[] esp32_num = new String[]{ "1.門前牆角","2.斜對牆角","3.門平行牆角"}; //esp32切換
 
     String[] environment_choice = new String[]{ "1.大型空間","2.樂得兒產房","3.ICU" }; //環境選擇
 
@@ -302,6 +303,59 @@ public class MainActivity extends AppCompatActivity {
                                 public void onCancelled(DatabaseError error) { }});
 
                         FirebaseDatabase database_sw = FirebaseDatabase.getInstance();
+
+                        int sup = room_choice +1;
+                        DatabaseReference esp32_sup_setcheck = database_sw.getReference("esp32_sup" + sup).child("time").child("time");
+                        DatabaseReference esp32_sup_RSSIcheck = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(select_major)).child("RSSI");
+                        esp32_sup_setcheck.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot1) {
+                                try {
+                                    long time = dataSnapshot1.getValue(Integer.class);
+
+                                    long time_now = System.currentTimeMillis() / 1000;
+
+                                    if((time_now - time) > 600)
+                                    {
+                                        Toast txt = Toast.makeText(MainActivity.this,"注意，未在門口設置或啟動esp32，可能使部分結果準確度下降",Toast.LENGTH_SHORT);
+                                        txt.show();
+
+                                        rssi_sup = -150;
+                                    }else{
+
+                                        esp32_sup_RSSIcheck.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot2) {
+                                                try {
+                                                    Integer rssisup = dataSnapshot2.getValue(Integer.class);
+
+                                                    rssi_sup = rssisup; //把這個區域(無_) 丟給 全域(有_)
+                                                    String_rssi_sup = rssisup.toString();
+
+                                                } catch (Exception device_not_found) {
+
+                                                    rssi_sup = -150;
+                                                    Toast txt = Toast.makeText(MainActivity.this,"門口沒找到此設備",Toast.LENGTH_SHORT);
+                                                    txt.show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) { }
+                                        });
+
+                                    }
+                                } catch (Exception time_not_found) {
+                                    Toast txt = Toast.makeText(MainActivity.this,"注意，未在門口設置或啟動esp32，可能使部分結果準確度下降",Toast.LENGTH_SHORT);
+                                    txt.show();
+
+                                    rssi_sup = -150;
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError error) { }
+                        });
+
                         DatabaseReference esp32_no1_RSSI = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(select_major)).child("RSSI");
                         DatabaseReference esp32_no2_RSSI = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(select_major)).child("RSSI");
                         DatabaseReference esp32_no3_RSSI = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(select_major)).child("RSSI");
@@ -320,10 +374,6 @@ public class MainActivity extends AppCompatActivity {
                                     if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.00; } //大型
                                     if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
                                     if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
-
-                                    //if(room_choice == 0) { A = 62.00; n = 3.40; } //原本59，改62
-                                    //if(room_choice == 1) { A = 65.00; n = 3.40; }
-                                    //if(room_choice == 2) { A = 70.00; n = 3.40; } //原本75，改70
 
                                     double M_1 = pow(10, ((abs(rssi1) - A) / (10 * n)));
 
@@ -355,12 +405,6 @@ public class MainActivity extends AppCompatActivity {
                                     if(Integer.parseInt(strength_choice) == 1) { A = 59.00; n = 3.00; } //大型
                                     if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
                                     if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
-
-                                    /*
-                                    if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
-                                    if(room_choice == 1) { A = 65.00; n = 3.85; } //產房
-                                    if(room_choice == 2) { A = 70.00; n = 3.60; } //原本75，改70，ICU
-                                     */
 
                                     double M_2 = pow(10, ((abs(rssi2) - A) / (10 * n)));
 
@@ -394,11 +438,6 @@ public class MainActivity extends AppCompatActivity {
                                     if(Integer.parseInt(strength_choice) == 2) { A = 65.00; n = 4.00; } //產房
                                     if(Integer.parseInt(strength_choice) == 3) { A = 70.00; n = 3.60; } //ICU
 
-                                    /*
-                                    if(room_choice == 0) { A = 59.00; n = 3.35; } //原本59，改62，大型
-                                    if(room_choice == 1) { A = 65.00; n = 3.85; } //產房
-                                    if(room_choice == 2) { A = 70.00; n = 3.60; } //原本75，改70，ICU
-                                     */
                                     double M_3 = pow(10, ((abs(rssi3) - A) / (10 * n)));
 
                                     NumberFormat nf = NumberFormat.getInstance();
@@ -648,6 +687,10 @@ public class MainActivity extends AppCompatActivity {
                     int gap1_3 = abs(rssi_1) - abs(rssi_3); //13之距離
                     int gap2_3 = abs(rssi_2) - abs(rssi_3); //23之距離
 
+                    //特定條件下，啟用第二個三角形
+                    int gapsup_1 = abs(rssi_sup) - abs(rssi_1);
+                    int gapsup_3 = abs(rssi_sup) - abs(rssi_3);
+
                     //esp32：1、門口前方牆角(第一個esp) 2、門口斜對牆角(第二個esp) 3、門口平行牆角(第三個esp)
                     //三個同時超過10分鐘，就是沒有
                     if((time_now - unixtime_check1 > 600) & (time_now - unixtime_check2 > 600) & (time_now - unixtime_check3 > 600)){
@@ -714,9 +757,25 @@ public class MainActivity extends AppCompatActivity {
                                     "\n或可能位於 \"門口前方牆角(第一個esp) 或 門口斜對牆角(第二個esp)\" 之間的牆外"); }
 
                     }else {
+                        //20220119
                         if ((gap2_3 < 4) & (gap2_3 > -4) & (gap1_3 < 4) & (gap1_3 > -4) & (gap1_2 < 4) & (gap1_2 > -4)
                                 & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                            conclude.setText("你要找的設備可能位於該空間的中心"); }
+                            //conclude.setText("你要找的設備可能位於該空間的中心");
+
+                            //啟用第二個三角形
+                            if ((gapsup_1 < 4) & (gapsup_1 > -4) & (gapsup_3 < 4) & (gapsup_3 > -4) & (rssi_sup > -140))
+                            {
+                                conclude.setText("你要找的設備可能位於該空間的中心");
+                            }
+                            else if((rssi_1 < rssi_sup) & (rssi_3 < rssi_sup) & (rssi_sup > -140))
+                            {
+                                conclude.setText("你要找的設備可能靠近門口");
+                            }
+                            else if(rssi_sup < -140)
+                            {
+                                conclude.setText("因為門口esp32未啟動或設置，你要找的設備可能在門口或空間中心");
+                            }
+                        }
 
                         else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1最近
                             if((gap2_3 < 4) & (gap2_3 > -4)){ // 2,3 相似
@@ -727,8 +786,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2最近
                             if((gap1_3 < 4) & (gap1_3 > -4)){ // 1,3 相似
-                                conclude.setText("該設備靠近 \"門口斜對牆角(第二個esp)\" " +
-                                        "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似");
+                                    conclude.setText("該設備靠近 \"門口斜對牆角(第二個esp)\" " +
+                                            "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似");
                             }else{
                                 conclude.setText("該設備靠近 \"門口斜對牆角(第二個esp)\" "); }
                         }
@@ -746,9 +805,15 @@ public class MainActivity extends AppCompatActivity {
 
                         else if((rssi_2 < rssi_1) & (rssi_2 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
                                 & (gap1_3 < 4) & (gap1_3 > -4)){ //1,3 相似，2最遠
-                            conclude.setText("該設備遠離 \"門口斜對牆角(第二個esp)\" " +
-                                    "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似"); }
-
+                            if (rssi_sup > rssi_2)
+                            {
+                                conclude.setText("該設備可能靠近門口");
+                            }else
+                            {
+                                conclude.setText("該設備遠離 \"門口斜對牆角(第二個esp)\" " +
+                                        "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似");
+                            }
+                        }
                         else if((rssi_3 < rssi_2) & (rssi_3 < rssi_1) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
                                 & (gap1_2 < 4) & (gap1_2 > -4)){ //1,2 相似，3最遠
                             conclude.setText("該設備遠離 \"門口平行牆角(第三個esp)\" " +
@@ -786,6 +851,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
                 bundle.putInt("rssi_3",rssi_3);
+                bundle.putInt("rssi_sup",rssi_sup);
 
                 bundle.putLong("check_time1",unixtime_check1);
                 bundle.putLong("check_time2",unixtime_check2);

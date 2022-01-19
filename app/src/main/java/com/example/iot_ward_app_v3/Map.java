@@ -29,7 +29,7 @@ public class Map extends AppCompatActivity {
 
     //你必須在這裡創立全域變數，這可能是最簡單的bundle方法，不然程式會誤認為 0 或 null
     Long check1,check2,check3;
-    int rssi_1,rssi_2,rssi_3;
+    int rssi_1,rssi_2,rssi_3,rssi_sup;
     String description;
 
     Button bt_back;
@@ -67,6 +67,7 @@ public class Map extends AppCompatActivity {
             rssi_1 = bundle.getInt("rssi_1");
             rssi_2 = bundle.getInt("rssi_2");
             rssi_3 = bundle.getInt("rssi_3");
+            rssi_sup = bundle.getInt("rssi_sup");
 
             check1 = bundle.getLong("check_time1");
             check2 = bundle.getLong("check_time2");
@@ -87,7 +88,14 @@ public class Map extends AppCompatActivity {
                 remind_text.setText("提醒：點擊「展示」按鈕觀看地圖\n");
                 remind_device_R.setText(select_number+"號，" + beacon_name );
                 remind_room_R.setText(select_room);
-                dir.setText("\n該環境的門在左側");
+
+                if(rssi_sup < -140)
+                {
+                    dir.setText("\n該環境的門在左側，門口未設置偵測裝置");
+                }else
+                {
+                    dir.setText("\n該環境的門在左側");
+                }
                 pre_place.setImageResource(R.drawable.place1);
             }
             if (door == 2)
@@ -95,7 +103,14 @@ public class Map extends AppCompatActivity {
                 remind_text.setText("提醒：點擊「展示」按鈕觀看地圖\n");
                 remind_device_R.setText(select_number+"號，" + beacon_name );
                 remind_room_R.setText(select_room);
-                dir.setText("\n該環境的門在右側");
+
+                if(rssi_sup < -140)
+                {
+                    dir.setText("\n該環境的門在右側，門口未設置偵測裝置");
+                }else
+                {
+                    dir.setText("\n該環境的門在右側");
+                }
                 pre_place.setImageResource(R.drawable.place2);
             }
 
@@ -112,6 +127,7 @@ public class Map extends AppCompatActivity {
             bundle2.putInt("rssi_1",rssi_1);
             bundle2.putInt("rssi_2",rssi_2);
             bundle2.putInt("rssi_3",rssi_3);
+            bundle2.putInt("rssi_sup",rssi_sup);
 
             long time_now=System.currentTimeMillis() / 1000; //獲取app系統時間
 
@@ -127,6 +143,10 @@ public class Map extends AppCompatActivity {
             int gap1_2 = abs(rssi_1) - abs(rssi_2); //12之距離
             int gap1_3 = abs(rssi_1) - abs(rssi_3); //13之距離
             int gap2_3 = abs(rssi_2) - abs(rssi_3); //23之距離
+
+            //特定條件下，啟用第二個三角形
+            int gapsup_1 = abs(rssi_sup) - abs(rssi_1);
+            int gapsup_3 = abs(rssi_sup) - abs(rssi_3);
 
             //rule的數字：代碼，如果有負，其一不在，三者不在為0
             //第一：為第幾個附近
@@ -221,8 +241,25 @@ public class Map extends AppCompatActivity {
             }else {
                 if ((gap2_3 < 4) & (gap2_3 > -4) & (gap1_3 < 4) & (gap1_3 > -4) & (gap1_2 < 4) & (gap1_2 > -4)
                         & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){
-                    description = "你要找的設備可能位於該空間的中心";
-                    rule = 66;       rule_keep.setText("66");
+
+                    //啟用第二個三角形
+                    if ((gapsup_1 < 4) & (gapsup_1 > -4) & (gapsup_3 < 4) & (gapsup_3 > -4) & (rssi_sup > -140))
+                    {
+                        description = "你要找的設備可能位於該空間的中心";
+                        rule = 66;       rule_keep.setText("66");
+                    }
+                    else if((rssi_1 < rssi_sup) & (rssi_3 < rssi_sup) & (rssi_sup > -140))
+                    {
+                        //20220119
+                        description = "你要找的設備可能靠近門口";
+                        rule = 660;       rule_keep.setText("660");
+                    }
+                    else if(rssi_sup < -140)
+                    {
+                        //20220119
+                        description = "因為門口esp32未啟動或設置，你要找的設備可能在門口或空間中心";
+                        rule = 661;       rule_keep.setText("661");
+                    }
 
                 }else if((rssi_1 > rssi_2) & (rssi_1 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 1最近
                     if((gap2_3 < 4) & (gap2_3 > -4) ){ // 2,3 相似
@@ -268,9 +305,17 @@ public class Map extends AppCompatActivity {
                 }else if((rssi_2 < rssi_1) & (rssi_2 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
                         & (gap1_3 < 4) & (gap1_3 > -4)){ //1,3 相似，2最遠
                     //conclude.setText("你要找的beacon遠離第二個esp32，離第一與第三的距離相似");
-                    description = "該設備遠離 \"門口斜對牆角(第二個esp)\" " +
-                            "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
-                    rule = 22;      rule_keep.setText("22");
+                    if (rssi_sup > rssi_2)
+                    {
+                        //20220119
+                        description = "該設備可能靠近門口";
+                        rule = 29;      rule_keep.setText("29");
+                    }else
+                    {
+                        description = "該設備遠離 \"門口斜對牆角(第二個esp)\" " +
+                                "\n但離 \"門口前方牆角(第一個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
+                        rule = 22;      rule_keep.setText("22");
+                    }
 
                 }else if((rssi_3 < rssi_2) & (rssi_3 < rssi_1) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
                         & (gap1_2 < 4) & (gap1_2 > -4)){ //1,2 相似，3最遠
@@ -328,6 +373,7 @@ public class Map extends AppCompatActivity {
                 bundle2.putInt("rssi_1",rssi_1);
                 bundle2.putInt("rssi_2",rssi_2);
                 bundle2.putInt("rssi_3",rssi_3);
+                bundle2.putInt("rssi_sup",rssi_sup);
 
                 //這個是給回上一頁準備資料用的
                 //首先從1獲取，再丟入2

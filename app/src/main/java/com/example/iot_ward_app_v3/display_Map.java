@@ -240,7 +240,13 @@ public class display_Map extends AppCompatActivity {
                 if (rule == 66) { //中心
                     canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 250, 20, circle); //(500,450)
                 }
-
+                if (rule == 660 || rule == 29) { //門口
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 400, 20, circle); //(350,600)
+                }
+                if (rule == 661) { //門口esp32未啟動或設置，你要找的設備可能在門口或空間中心
+                    canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 250, 20, circle); //(500,450)
+                    canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 400, 20, circle); //(350,600)
+                }
             }
 
             if (door == 2) {//右門
@@ -348,7 +354,15 @@ public class display_Map extends AppCompatActivity {
                     canvas.drawCircle(door2_triangle_2_x + 100, door2_triangle_2_y - 100, 20, circle);
                 }
                 if (rule == 66) { //中心
-                    canvas.drawCircle(door2_triangle_1_x - 250, door2_triangle_1_y + 250, 20, circle); }
+                    canvas.drawCircle(door2_triangle_2_x + 250, door2_triangle_1_y + 250, 20, circle); //(500,450)
+                }
+                if (rule == 660 || rule == 29) { //門口
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 400, 20, circle); //(650,600)
+                }
+                if (rule == 661) { //門口esp32未啟動或設置，你要找的設備可能在門口或空間中心
+                    canvas.drawCircle(door2_triangle_2_x + 250, door2_triangle_1_y + 250, 20, circle); //(500,450)
+                    canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 400, 20, circle); //(650,600)
+                }
             }
         }}
 
