@@ -327,8 +327,8 @@ public class MainActivity extends AppCompatActivity {
                                                     if ((time_now - (time + time_ing)) > 600)
                                                     {
                                                         rssi_sup = -150;
-                                                        Toast txt = Toast.makeText(MainActivity.this,"門口沒啟用或未找到此設備",Toast.LENGTH_SHORT);
-                                                        txt.show();
+                                                        //Toast txt = Toast.makeText(MainActivity.this,"門口沒啟用或未找到此設備",Toast.LENGTH_SHORT);
+                                                        //txt.show();
                                                     }else{
 
                                                         esp32_sup_RSSIcheck.addValueEventListener(new ValueEventListener() {
@@ -343,8 +343,8 @@ public class MainActivity extends AppCompatActivity {
                                                                 } catch (Exception device_not_found) {
 
                                                                     rssi_sup = -150;
-                                                                    Toast txt = Toast.makeText(MainActivity.this,"門口沒找到此設備",Toast.LENGTH_SHORT);
-                                                                    txt.show();
+                                                                    //Toast txt = Toast.makeText(MainActivity.this,"門口沒找到此設備",Toast.LENGTH_SHORT);
+                                                                    //txt.show();
                                                                 }
                                                             }
 
@@ -356,8 +356,8 @@ public class MainActivity extends AppCompatActivity {
                                                 } catch (Exception device_not_found) {
 
                                                     rssi_sup = -150;
-                                                    Toast txt = Toast.makeText(MainActivity.this,"門口沒啟用或未找到此設備",Toast.LENGTH_SHORT);
-                                                    txt.show();
+                                                    //Toast txt = Toast.makeText(MainActivity.this,"門口沒啟用或未找到此設備",Toast.LENGTH_SHORT);
+                                                    //txt.show();
                                                 }
                                             }
 
@@ -383,8 +383,8 @@ public class MainActivity extends AppCompatActivity {
                                                 } catch (Exception device_not_found) {
 
                                                     rssi_sup = -150;
-                                                    Toast txt = Toast.makeText(MainActivity.this,"門口沒找到此設備",Toast.LENGTH_SHORT);
-                                                    txt.show();
+                                                    //Toast txt = Toast.makeText(MainActivity.this,"門口沒找到此設備",Toast.LENGTH_SHORT);
+                                                    //txt.show();
                                                 }
                                             }
 
@@ -394,8 +394,8 @@ public class MainActivity extends AppCompatActivity {
 
                                     }
                                 } catch (Exception time_not_found) {
-                                    Toast txt = Toast.makeText(MainActivity.this,"注意，未在門口設置或啟動esp32，可能使部分結果準確度下降",Toast.LENGTH_SHORT);
-                                    txt.show();
+                                    //Toast txt = Toast.makeText(MainActivity.this,"注意，未在門口設置或啟動esp32，可能使部分結果準確度下降",Toast.LENGTH_SHORT);
+                                    //txt.show();
 
                                     rssi_sup = -150;
                                 }
@@ -830,7 +830,12 @@ public class MainActivity extends AppCompatActivity {
                                 conclude.setText("該設備靠近 \"門口前方牆角(第一個esp)\" " +
                                         "\n但離 \"門口斜對牆角(第二個esp) 與 門口平行牆角(第三個esp)\" 的距離相似"); }
                             else{
-                                conclude.setText("該設備靠近 \"門口前方牆角(第一個esp)\" "); }
+                                if (rssi_1 < rssi_sup) { //是門口較近，還是第一個較近?
+                                    conclude.setText("該設備靠近門口，稍微接近 \"門口前方牆角(第一個esp)\" ");
+                                } else {
+                                    conclude.setText("該設備靠近 \"門口前方牆角(第一個esp)\" ");
+                                }
+                            }
                         }
                         else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2最近
                             if((gap1_3 < 4) & (gap1_3 > -4)){ // 1,3 相似
@@ -843,8 +848,8 @@ public class MainActivity extends AppCompatActivity {
                             if ((gap1_2 < 4) & (gap1_2 > -4)) { // 1,2 相似
                                 conclude.setText("該設備靠近 \"門口平行牆角(第三個esp)\" " +
                                         "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似");
-                            }else{
-                                if (rssi_3 < rssi_sup) {
+                            }else{ //如果1,2不相似，開啟第二個三角形
+                                if (rssi_3 < rssi_sup) { //是門口較近，還是第三個較近?
                                     conclude.setText("該設備靠近門口，稍微接近 \"門口平行牆角(第三個esp)\" ");
                                 } else {
                                     conclude.setText("該設備靠近 \"門口平行牆角(第三個esp)\" ");

@@ -268,9 +268,15 @@ public class Map extends AppCompatActivity {
                                 "\n但離 \"門口斜對牆角(第二個esp) 與 門口平行牆角(第三個esp)\" 的距離相似";
                         rule = 11;      rule_keep.setText("11");
                     }else{
-                        //conclude.setText("你要找的beacon靠近第一個esp32");
-                        description = "該設備靠近 \"門口前方牆角(第一個esp)\" ";
-                        rule = 1;       rule_keep.setText("1");
+                        if (rssi_1 < rssi_sup) { //是門口較近，還是第一個較近?
+                            //conclude.setText("該設備靠近門口，稍微接近 \"門口前方牆角(第一個esp)\" ");
+                            description = "該設備靠近門口，稍微接近 \"門口前方牆角(第一個esp)\" ";
+                            rule = 10;       rule_keep.setText("10");
+                        } else {
+                            //conclude.setText("該設備靠近 \"門口前方牆角(第一個esp)\" ");
+                            description = "該設備靠近 \"門口前方牆角(第一個esp)\" ";
+                            rule = 1;       rule_keep.setText("1");
+                        }
                     }
                 }else if((rssi_2 > rssi_1) & (rssi_2 > rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)){ // 2最近
                     if((gap1_3 < 4) & (gap1_3 > -4) ){ // 1,3 相似

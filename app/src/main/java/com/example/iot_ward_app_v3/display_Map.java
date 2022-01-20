@@ -22,7 +22,7 @@ public class display_Map extends AppCompatActivity {
     Context context = display_Map.this;
 
     int door,rule;
-    int rssi_1,rssi_2,rssi_3;
+    int rssi_1,rssi_2,rssi_3,rssi_sup;
     Long check1,check2,check3;
     int select_number;
     String select_room,beacon_name,description;
@@ -50,6 +50,7 @@ public class display_Map extends AppCompatActivity {
         rssi_1 = bundle2.getInt("rssi_1");
         rssi_2 = bundle2.getInt("rssi_2");
         rssi_3 = bundle2.getInt("rssi_3");
+        rssi_sup = bundle2.getInt("rssi_sup");
         check1 = bundle2.getLong("check_time1");
         check2 = bundle2.getLong("check_time2");
         check3 = bundle2.getLong("check_time3");
@@ -59,6 +60,7 @@ public class display_Map extends AppCompatActivity {
         bundle.putInt("rssi_1",rssi_1);
         bundle.putInt("rssi_2",rssi_2);
         bundle.putInt("rssi_3",rssi_3);
+        bundle.putInt("rssi_sup",rssi_sup);
         bundle.putLong("check_time1",check1);
         bundle.putLong("check_time2",check2);
         bundle.putLong("check_time3",check3);
@@ -81,7 +83,7 @@ public class display_Map extends AppCompatActivity {
 
 
         rule = bundle2.getInt("rule2");
-        //rule = 30;
+        //rule = 10;
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
@@ -248,8 +250,11 @@ public class display_Map extends AppCompatActivity {
                     canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 250, 20, circle); //(500,450)
                     canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 400, 20, circle); //(350,600)
                 }
-                if (rule == 30) {
-                    canvas.drawCircle(door1_triangle_2_x - 350, door1_triangle_1_y + 400, 20, circle); //(500,450)
+                if (rule == 30) { //門口，接近第三
+                    canvas.drawCircle(door1_triangle_2_x - 325, door1_triangle_1_y + 400, 20, circle); //(425,600)
+                }
+                if (rule == 10) { //門口，接近第一
+                    canvas.drawCircle(door1_triangle_2_x - 350, door1_triangle_1_y + 225, 20, circle); //(600,425)
                 }
             }
 
@@ -370,6 +375,9 @@ public class display_Map extends AppCompatActivity {
                 if (rule == 30) {
                     canvas.drawCircle(door2_triangle_2_x + 350, door2_triangle_1_y + 400, 20, circle); //(500,450)
                 }
+                if (rule == 10) { //門口，接近第一
+                    canvas.drawCircle(door2_triangle_2_x + 350, door2_triangle_1_y + 225, 20, circle); //(600,425)
+                }
             }
         }}
 
@@ -395,6 +403,8 @@ public class display_Map extends AppCompatActivity {
                 bundle.putInt("rssi_1",rssi_1);
                 bundle.putInt("rssi_2",rssi_2);
                 bundle.putInt("rssi_3",rssi_3);
+                bundle.putInt("rssi_sup",rssi_sup);
+
                 bundle.putLong("check_time1",check1);
                 bundle.putLong("check_time2",check2);
                 bundle.putLong("check_time3",check3);
