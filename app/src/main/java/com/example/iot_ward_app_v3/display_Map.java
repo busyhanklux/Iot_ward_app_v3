@@ -81,9 +81,8 @@ public class display_Map extends AppCompatActivity {
         door_number = (TextView)findViewById(R.id.door_number);
         door_number.setText(String.valueOf(door));
 
-
         rule = bundle2.getInt("rule2");
-        //rule = 10;
+        //rule = 30;
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
@@ -157,7 +156,7 @@ public class display_Map extends AppCompatActivity {
 
                 p.setColor(Color.WHITE);							// 設置白色
                 //建議：圖例
-                p.setTextSize(40);
+                p.setTextSize(45);
                 canvas.drawText("1.門前牆角" ,150,100,p);
                 canvas.drawText("2.門斜牆角" ,675,100,p);
                 canvas.drawText("3.門平行牆角",650,800,p);
@@ -279,7 +278,7 @@ public class display_Map extends AppCompatActivity {
 
                 p.setColor(Color.WHITE);							// 設置白色
                 //建議：圖例
-                p.setTextSize(40);
+                p.setTextSize(45);
                 canvas.drawText("1.門前牆角" ,675,100,p);
                 canvas.drawText("2.門斜牆角" ,150,100,p);
                 canvas.drawText("3.門平行牆角",125,800,p);
@@ -373,7 +372,7 @@ public class display_Map extends AppCompatActivity {
                     canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 400, 20, circle); //(650,600)
                 }
                 if (rule == 30) {
-                    canvas.drawCircle(door2_triangle_2_x + 350, door2_triangle_1_y + 400, 20, circle); //(500,450)
+                    canvas.drawCircle(door2_triangle_2_x + 325, door2_triangle_1_y + 400, 20, circle); //(575,600)
                 }
                 if (rule == 10) { //門口，接近第一
                     canvas.drawCircle(door2_triangle_2_x + 350, door2_triangle_1_y + 225, 20, circle); //(600,425)
