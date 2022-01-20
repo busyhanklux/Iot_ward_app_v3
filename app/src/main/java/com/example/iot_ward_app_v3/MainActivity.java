@@ -307,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
                         int sup = room_choice +1;
                         DatabaseReference esp32_sup_setcheck = database_sw.getReference("esp32_sup" + sup).child("time").child("time");
                         DatabaseReference esp32_sup_RSSIcheck = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(select_major)).child("RSSI");
+                        DatabaseReference esp32_sup_timecheck = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(select_major)).child("time");
                         esp32_sup_setcheck.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot1) {
@@ -317,10 +318,57 @@ public class MainActivity extends AppCompatActivity {
 
                                     if((time_now - time) > 600)
                                     {
-                                        Toast txt = Toast.makeText(MainActivity.this,"注意，未在門口設置或啟動esp32，可能使部分結果準確度下降",Toast.LENGTH_SHORT);
-                                        txt.show();
+                                        esp32_sup_timecheck.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot3) {
+                                                try {
+                                                    long time_ing = dataSnapshot3.getValue(Integer.class);
 
-                                        rssi_sup = -150;
+                                                    if ((time_now - (time + time_ing)) > 600)
+                                                    {
+                                                        rssi_sup = -150;
+                                                        Toast txt = Toast.makeText(MainActivity.this,"門口沒啟用或未找到此設備",Toast.LENGTH_SHORT);
+                                                        txt.show();
+                                                    }else{
+
+                                                        esp32_sup_RSSIcheck.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot2) {
+                                                                try {
+                                                                    Integer rssisup = dataSnapshot2.getValue(Integer.class);
+
+                                                                    rssi_sup = rssisup; //把這個區域(無_) 丟給 全域(有_)
+                                                                    String_rssi_sup = rssisup.toString();
+
+                                                                } catch (Exception device_not_found) {
+
+                                                                    rssi_sup = -150;
+                                                                    Toast txt = Toast.makeText(MainActivity.this,"門口沒找到此設備",Toast.LENGTH_SHORT);
+                                                                    txt.show();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) { }
+                                                        });
+                                                    }
+
+                                                } catch (Exception device_not_found) {
+
+                                                    rssi_sup = -150;
+                                                    Toast txt = Toast.makeText(MainActivity.this,"門口沒啟用或未找到此設備",Toast.LENGTH_SHORT);
+                                                    txt.show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) { }
+                                        });
+
+                                        //Toast txt = Toast.makeText(MainActivity.this,"注意，未在門口設置或啟動esp32，可能使部分結果準確度下降",Toast.LENGTH_SHORT);
+                                        //txt.show();
+
+                                        //rssi_sup = -150;
                                     }else{
 
                                         esp32_sup_RSSIcheck.addValueEventListener(new ValueEventListener() {
@@ -771,7 +819,7 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 conclude.setText("你要找的設備可能靠近門口");
                             }
-                            else if(rssi_sup < -140)
+                            else //if(rssi_sup < -140)
                             {
                                 conclude.setText("因為門口esp32未啟動或設置，你要找的設備可能在門口或空間中心");
                             }
@@ -796,7 +844,12 @@ public class MainActivity extends AppCompatActivity {
                                 conclude.setText("該設備靠近 \"門口平行牆角(第三個esp)\" " +
                                         "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似");
                             }else{
-                                conclude.setText("該設備靠近 \"門口平行牆角(第三個esp)\" "); }
+                                if (rssi_3 < rssi_sup) {
+                                    conclude.setText("該設備靠近門口，稍微接近 \"門口平行牆角(第三個esp)\" ");
+                                } else {
+                                    conclude.setText("該設備靠近 \"門口平行牆角(第三個esp)\" ");
+                                }
+                            }
                         }//此時檢查完畢
                         else if((rssi_1 < rssi_2) & (rssi_1 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)
                                 & (gap2_3 < 4) & (gap2_3 > -4)){ //2,3 相似，1最遠

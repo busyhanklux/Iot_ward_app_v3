@@ -254,7 +254,7 @@ public class Map extends AppCompatActivity {
                         description = "你要找的設備可能靠近門口";
                         rule = 660;       rule_keep.setText("660");
                     }
-                    else if(rssi_sup < -140)
+                    else //if(rssi_sup < -140)
                     {
                         //20220119
                         description = "因為門口esp32未啟動或設置，你要找的設備可能在門口或空間中心";
@@ -290,9 +290,15 @@ public class Map extends AppCompatActivity {
                                 "\n但離 \"門口前方牆角(第一個esp) 與 門口斜對牆角(第二個esp)\" 的距離相似";
                         rule = 31;      rule_keep.setText("31");
                     } else {
-                        //conclude.setText("你要找的beacon靠近第三個esp32");
-                        description = "該設備靠近 \"門口平行牆角(第三個esp)\" ";
-                        rule = 3;       rule_keep.setText("3");
+                        if (rssi_3 < rssi_sup) {
+                            //conclude.setText("你要找的beacon靠近第三個esp32");
+                            description = "該設備靠近門口，稍微接近 \"門口平行牆角(第三個esp)\" ";
+                            rule = 30;       rule_keep.setText("30");
+                        } else {
+                            //conclude.setText("你要找的beacon靠近第三個esp32");
+                            description = "該設備靠近 \"門口平行牆角(第三個esp)\" ";
+                            rule = 3;       rule_keep.setText("3");
+                        }
                     }
                     //此時1,2檢查完畢
                 }else if((rssi_1 < rssi_2) & (rssi_1 < rssi_3) & (rssi_1 > -140) & (rssi_2 > -140) & (rssi_3 > -140)

@@ -81,6 +81,7 @@ public class display_Map extends AppCompatActivity {
 
 
         rule = bundle2.getInt("rule2");
+        //rule = 30;
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
@@ -247,6 +248,9 @@ public class display_Map extends AppCompatActivity {
                     canvas.drawCircle(door1_triangle_1_x + 250, door1_triangle_1_y + 250, 20, circle); //(500,450)
                     canvas.drawCircle(door1_triangle_1_x + 100, door1_triangle_1_y + 400, 20, circle); //(350,600)
                 }
+                if (rule == 30) {
+                    canvas.drawCircle(door1_triangle_2_x - 350, door1_triangle_1_y + 400, 20, circle); //(500,450)
+                }
             }
 
             if (door == 2) {//右門
@@ -362,6 +366,9 @@ public class display_Map extends AppCompatActivity {
                 if (rule == 661) { //門口esp32未啟動或設置，你要找的設備可能在門口或空間中心
                     canvas.drawCircle(door2_triangle_2_x + 250, door2_triangle_1_y + 250, 20, circle); //(500,450)
                     canvas.drawCircle(door2_triangle_1_x - 100, door2_triangle_1_y + 400, 20, circle); //(650,600)
+                }
+                if (rule == 30) {
+                    canvas.drawCircle(door2_triangle_2_x + 350, door2_triangle_1_y + 400, 20, circle); //(500,450)
                 }
             }
         }}
