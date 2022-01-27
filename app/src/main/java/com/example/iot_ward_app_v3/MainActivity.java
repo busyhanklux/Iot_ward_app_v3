@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btMap,btStatus,esp32_switch,find_major;
     private ImageView To_adminster_page;
 
+    private Button BT_device_ALL;//測試用按鈕
+
     int room_choice,beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
     int rssi_1,rssi_2,rssi_3,rssi_sup; //存放rssi
@@ -227,6 +229,9 @@ public class MainActivity extends AppCompatActivity {
         esp32_switch.setOnClickListener(esp32_switchListener);
         find_major = (Button)findViewById(R.id.find_major);
         find_major.setOnClickListener(find_major_L);
+
+        BT_device_ALL = findViewById(R.id.BT_device_ALL);
+        BT_device_ALL.setOnClickListener(BT_device_ALL_L);
         }
 
         //按下「查找按鈕」
@@ -1035,6 +1040,17 @@ public class MainActivity extends AppCompatActivity {
                 Toast hint = Toast.makeText(MainActivity.this,"你已點擊"+ To_adminster_page_TapCount +"次該圖，進入管理者頁面需要再點擊" + (3-To_adminster_page_TapCount) + "次！",Toast.LENGTH_SHORT);
                 hint.show();
             }
+        }
+    };
+
+    //挑轉到那個葉面
+    private  View.OnClickListener BT_device_ALL_L = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this,find_mode_choose.class);
+            startActivity(intent);
+            finish();
         }
     };
 }

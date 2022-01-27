@@ -14,54 +14,50 @@
         android:roundIcon="@drawable/logo4"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
+        <activity
+            android:name=".Multi_main"
+            android:exported="false" />
+        <activity
+            android:name=".find_mode_choose"
+            android:exported="false" />
         <activity
             android:name=".Splash_Screen"
             android:exported="true"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".display_Map"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Map"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".adminster_page"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".change_page__environment"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".change_page__device"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Text"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

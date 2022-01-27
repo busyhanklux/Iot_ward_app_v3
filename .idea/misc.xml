@@ -6,12 +6,14 @@
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.265625" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/drawable/ic_launcher_background.xml" value="0.265625" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_display_map.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_find_mode_choose.xml" value="0.264" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main_old.xml" value="0.2246376811594203" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_map.xml" value="0.264" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_main.xml" value="0.2125" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_text.xml" value="0.14754098360655737" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/adminster_page.xml" value="0.536" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__device.xml" value="0.4" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__device.xml" value="0.2609860664523044" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__environment.xml" value="0.536" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page_device.xml" value="0.16019736842105264" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/splash_screen.xml" value="0.1" />
