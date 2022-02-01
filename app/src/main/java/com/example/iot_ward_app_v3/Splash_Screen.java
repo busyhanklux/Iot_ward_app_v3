@@ -303,7 +303,8 @@ public class Splash_Screen extends AppCompatActivity {
             if ((check_time_for_environment_text == 2) && (check_time_for_device_text == 2)) {
 
                 Intent splash_to_main = new Intent();
-                splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                //splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                splash_to_main.setClass(Splash_Screen.this, find_mode_choose.class);
                 startActivity(splash_to_main);
                 finish();
             }
@@ -565,7 +566,8 @@ public class Splash_Screen extends AppCompatActivity {
                     }
 
                     Intent splash_to_main = new Intent();
-                    splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                    //splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                    splash_to_main.setClass(Splash_Screen.this, find_mode_choose.class);
                     startActivity(splash_to_main);
                     finish();
                 }
@@ -838,7 +840,8 @@ public class Splash_Screen extends AppCompatActivity {
                 if (check_time_for_environment_text == 2) {
 
                     Intent splash_to_main = new Intent();
-                    splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                    //splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                    splash_to_main.setClass(Splash_Screen.this, find_mode_choose.class);
                     startActivity(splash_to_main);
                     finish();
                 }
@@ -1122,7 +1125,8 @@ public class Splash_Screen extends AppCompatActivity {
             //檢查完畢後(2)，傳送
             if (check_time_for_text == 2) {
                 Intent splash_to_main = new Intent();
-                splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                //splash_to_main.setClass(Splash_Screen.this, MainActivity.class);
+                splash_to_main.setClass(Splash_Screen.this, find_mode_choose.class);
                 startActivity(splash_to_main);
                 finish();
             }

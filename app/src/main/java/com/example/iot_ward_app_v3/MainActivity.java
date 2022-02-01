@@ -28,10 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 //https://you2be.pixnet.net/blog/post/41235995 -> imageview_onclick
 
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btMap,btStatus,esp32_switch,find_major;
     private ImageView To_adminster_page;
 
-    private Button BT_device_ALL;//測試用按鈕
+    private Button BT_FMC;//回選單
 
     int room_choice,beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
@@ -169,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast txt = Toast.makeText(MainActivity.this,"錯誤",Toast.LENGTH_SHORT);
+            Toast txt = Toast.makeText(MainActivity.this,"錯誤或是安裝後第一次開啟，請完全關閉後再啟動一次",Toast.LENGTH_SHORT);
             txt.show();
         }
 
@@ -186,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         detail = (TextView)findViewById(R.id.detail);
 
         //顯示要尋找的beacon的uuid值
-        tv_ei = (TextView)findViewById(R.id.equipment_information_tv);
+        tv_ei = (TextView)findViewById(R.id.search_hint);
 
         //文字的位置判定
         conclude = (TextView)findViewById(R.id.conclude);
@@ -227,11 +224,11 @@ public class MainActivity extends AppCompatActivity {
         btMap.setOnClickListener(btMapListener);
         esp32_switch = (Button)findViewById(R.id.esp32_switch);
         esp32_switch.setOnClickListener(esp32_switchListener);
-        find_major = (Button)findViewById(R.id.find_major);
+        find_major = (Button)findViewById(R.id.BT_find);
         find_major.setOnClickListener(find_major_L);
 
-        BT_device_ALL = findViewById(R.id.BT_device_ALL);
-        BT_device_ALL.setOnClickListener(BT_device_ALL_L);
+        BT_FMC = findViewById(R.id.BT_FMC);
+        BT_FMC.setOnClickListener(BT_FMC_L);
         }
 
         //按下「查找按鈕」
@@ -242,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     int select_major = beacon_number_choice;
                     number_decided = beacon_number_choice;
-                    select_room = room_place;
+                    select_room = room_place; //房間號碼
 
                     //Toast error = Toast.makeText(MainActivity.this,room_choice+"",Toast.LENGTH_SHORT);
                     //error.show();
@@ -252,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                     int firebase_number_2 = room_choice*3 + 2;
                     int firebase_number_3 = room_choice*3 + 3;
 
-                    if( (select_major > 0) & (select_major < 20) ){
+                    if( (select_major > 0) & (select_major < 50) ){
                         //搜尋有沒有該major，沒有就換找下一個
                             DatabaseReference major1 = database_get.getReference("esp32 no_" + firebase_number_1)
                                     .child(String.valueOf(select_major)).child("Major");
@@ -1044,7 +1041,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     //挑轉到那個葉面
-    private  View.OnClickListener BT_device_ALL_L = new View.OnClickListener() {
+    private  View.OnClickListener BT_FMC_L = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();

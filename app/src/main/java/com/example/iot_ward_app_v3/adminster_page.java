@@ -1156,7 +1156,8 @@ public class adminster_page extends AppCompatActivity {
     public View.OnClickListener BT_adminster_back_L = view ->
     {
         Intent intent = new Intent();
-        intent.setClass(adminster_page.this,MainActivity.class);
+        //intent.setClass(adminster_page.this,MainActivity.class);
+        intent.setClass(adminster_page.this,find_mode_choose.class);
         startActivity(intent);
         finish();
     };

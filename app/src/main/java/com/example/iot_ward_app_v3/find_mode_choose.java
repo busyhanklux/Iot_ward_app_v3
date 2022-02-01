@@ -56,6 +56,10 @@ public class find_mode_choose extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
+            Intent intent = new Intent();
+            intent.setClass(find_mode_choose.this,Multi_main.class);
+            startActivity(intent);
+            finish();
         }
     };
 
@@ -63,6 +67,11 @@ public class find_mode_choose extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
+
+            Intent intent = new Intent();
+            intent.setClass(find_mode_choose.this,adminster_page.class);
+            startActivity(intent);
+            finish();
 
         }
     };
