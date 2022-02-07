@@ -37,6 +37,7 @@ public class Multi_main extends AppCompatActivity {
     int number_decided; //1.用來丟入下一頁使用 2.防呆
     int rssi_1, rssi_2, rssi_3, rssi_sup; //存放rssi
     int To_adminster_page_TapCount = 0; //如同成為開發者一般
+    Long Time1,Time2,Time3;
 
     String sw_number; //放esp32切換
     String String_rssi_1, String_rssi_2, String_rssi_3, String_rssi_sup; //存放rssi，用於顯示在esp32切換
@@ -129,15 +130,18 @@ public class Multi_main extends AppCompatActivity {
             FileInputStream fis_Dname = new FileInputStream(device_txt_name);
             FileInputStream fis_Dlist = new FileInputStream(device_txt_list);
 
+            //設備數量的陣列
             byte[] D_number = new byte[1024];
             int len_Dnumber = fis_Dnumber.read(D_number);
             String str_Dnumber = new String(D_number, 0, len_Dnumber);
 
+            //設備名稱的陣列
             byte[] D_name = new byte[100000];
             int len_Dname = fis_Dname.read(D_name);
             String str_Dname = new String(D_name, 0, len_Dname);
             String str_Dmultiname[] = str_Dname.split(" ");
 
+            //設備編號的陣列
             byte[] D_list = new byte[1024];
             int len_Dlist = fis_Dlist.read(D_list);
             String str_Dlist = new String(D_list, 0, len_Dlist);
@@ -227,6 +231,9 @@ public class Multi_main extends AppCompatActivity {
                 DatabaseReference esp32_no1 = database_get.getReference("esp32 no_" + firebase_number_1).child("time").child("time");
                 DatabaseReference esp32_no2 = database_get.getReference("esp32 no_" + firebase_number_2).child("time").child("time");
                 DatabaseReference esp32_no3 = database_get.getReference("esp32 no_" + firebase_number_3).child("time").child("time");
+                DatabaseReference esp32_no1_second = database_get.getReference("esp32 no_" + firebase_number_1).child("time").child("second");
+                DatabaseReference esp32_no2_second = database_get.getReference("esp32 no_" + firebase_number_2).child("time").child("second");
+                DatabaseReference esp32_no3_second = database_get.getReference("esp32 no_" + firebase_number_3).child("time").child("second");
 
                 //第一個
                 esp32_no1.addValueEventListener(new ValueEventListener() {
@@ -235,7 +242,8 @@ public class Multi_main extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot time1_get) {
 
                         try {
-                            int time1 = time1_get.getValue(Integer.class);
+                            long time1 = time1_get.getValue(Integer.class);
+                            Time1 = time1;
 
                             //沒問題就第二個
                             esp32_no2.addValueEventListener(new ValueEventListener() {
@@ -244,37 +252,157 @@ public class Multi_main extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot time2_get) {
 
                                     try {
-                                        int time2 = time2_get.getValue(Integer.class);
+                                        long time2 = time2_get.getValue(Integer.class);
+                                        Time2 = time2;
 
-                                    } catch (Exception No_esp32_found) {
+                                        //沒問題就第三個
+                                        esp32_no3.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot time3_get) {
+
+                                                try {
+                                                    long time3 = time3_get.getValue(Integer.class);
+                                                    Time3 = time3;
+
+                                                    //如果第三個沒問題了
+                                                    //確認有了，第二步，看esp32有沒有開
+                                                    //根據esp32的運作，掃描6秒上傳一次，他會在上傳時刷新時間
+                                                    //如果他沒開或怎樣的，基本上三分鐘就沒了
+
+                                                    long time_now = System.currentTimeMillis() / 1000; //現在時間
+
+                                                    //步驟2-1：第一個esp32
+                                                    esp32_no1_second.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot second_1_get) {
+                                                            try {
+                                                                long second_1 = second_1_get.getValue(Integer.class);
+
+                                                                //超時一
+                                                                if ((time_now - (Time1 + second_1)) > 180) {
+                                                                    search_hint.setText("code2-1：沒有該環境的即時資料，請先運行該環境");
+
+                                                                    //long test1 = time_now - (Time1 + second_1);
+                                                                    //search_hint.setText(test1+"中道1");
+
+                                                                } else {
+
+                                                                    //步驟2-2：第二個esp32
+                                                                    esp32_no2_second.addValueEventListener(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(@NonNull DataSnapshot second_2_get) {
+                                                                            try {
+                                                                                long second_2 = second_2_get.getValue(Integer.class);
+
+                                                                                //超時二
+                                                                                if ((time_now - (Time2 + second_2)) > 180) {
+                                                                                    search_hint.setText("code2-2：沒有該環境的即時資料，請先運行該環境");
+
+                                                                                } else {
+
+                                                                                    //步驟2-3：第三個esp32
+                                                                                    esp32_no3_second.addValueEventListener(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot second_3_get) {
+                                                                                            try {
+                                                                                                long second_3 = second_3_get.getValue(Integer.class);
+
+                                                                                                //超時三
+                                                                                                if ((time_now - (Time3 + second_3)) > 180) {
+                                                                                                    search_hint.setText("code2-3：沒有該環境的即時資料，請先運行該環境");
+
+                                                                                                }else {
+
+                                                                                                    search_hint.setText("檢查點2");
+                                                                                                    //long A = time_now - (Time1 + second_1);
+                                                                                                    //search_hint.setText(Time1+"檢查點");
+
+                                                                                                    //可以開始尋找beacon了
+                                                                                                    //步驟3：尋找90秒內的beacon
+                                                                                                    //3-1：先將所有包含在firebase設定庫的device輪過一遍
+
+                                                                                                }
+
+                                                                                            } catch (Exception second_3_404) {
+                                                                                                //找不到第三個的second數值
+                                                                                                search_hint.setText("Ecode2-3：沒有該環境的即時資料，請先運行該環境");
+                                                                                            }
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                        }
+                                                                                    });
+                                                                                }//二和三的else結束
+
+                                                                            } catch (Exception second_2_404) {
+                                                                                //找不到第二個的second數值
+                                                                                search_hint.setText("Ecode2-2：沒有該環境的即時資料，請先運行該環境");
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                        }
+                                                                    });
+                                                                }//一和二的else結束
+
+
+                                                            } catch (Exception second_1_404) {
+                                                                //找不到第一個的second數值
+                                                                search_hint.setText("Ecode2-1：沒有該環境的即時資料，請先運行該環境");
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
+
+
+                                                } catch (Exception No_esp32_found_3) {
+
+                                                    //第三個失敗
+                                                    search_hint.setText("code1-3：沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                            }
+                                        });
+
+                                    } catch (Exception No_esp32_found_2) {
+
                                         //第二個失敗
-                                        search_hint.setText("沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
+                                        search_hint.setText("code1-2：沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-
                                 }
                             });
 
-                        } catch (Exception No_esp32_found) {
+                        } catch (Exception No_esp32_found_1) {
+
                             //第一個失敗
-                            search_hint.setText("沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
+                            search_hint.setText("code1-1：沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
-
 
             } catch (Exception e) {
 
             }
-            //首先，先看esp32有沒有開
         }
     };
 
