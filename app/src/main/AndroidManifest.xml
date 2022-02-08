@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".Multi_deal_with"
+            android:exported="false" />
+        <activity
             android:name=".Multi_main"
             android:exported="false" />
         <activity

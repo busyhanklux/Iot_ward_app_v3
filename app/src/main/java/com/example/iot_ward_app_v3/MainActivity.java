@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
             byte[] E_door = new byte[1024];
             int len_Edoor = fis_Edoor.read(E_door);
-            str_Door = new String(E_door , 0, len_Edoor);
+            str_Door = new String(E_door , 0, len_Edoor); //門的動態陣列，型態為字串
 
             //-------------------------------------------------------
 
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         //button
         btStatus = (Button)findViewById(R.id.btStatus);
         btStatus.setOnClickListener(btStatusListener);
-        btMap = (Button)findViewById(R.id.btMap);
+        btMap = (Button)findViewById(R.id.BT_Map_Open);
         btMap.setOnClickListener(btMapListener);
         esp32_switch = (Button)findViewById(R.id.esp32_switch);
         esp32_switch.setOnClickListener(esp32_switchListener);

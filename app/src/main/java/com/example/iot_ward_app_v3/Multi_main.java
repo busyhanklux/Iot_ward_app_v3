@@ -30,8 +30,8 @@ public class Multi_main extends AppCompatActivity {
     private Button btMap, btStatus, esp32_switch, find_major;
     private ImageView To_adminster_page;
 
-    private Button BT_FMC, BT_find;
-    private TextView search_hint;
+    private Button BT_FMC, BT_find,BT_Map_Open;
+    private TextView search_hint,search_hint_map;
 
     int room_choice, beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
@@ -47,6 +47,7 @@ public class Multi_main extends AppCompatActivity {
     String Major_1, Major_2, Major_3; //存放Major，用來顯示Major
     String Minor_1, Minor_2, Minor_3; //存放Minor，用來顯示Minor
     String room_place, select_room; //存放房間的選擇，前：隨選單控制，後：隨按鈕控制
+    String search_hint_map_Strength,search_hint_map_Door;
 
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
@@ -62,14 +63,20 @@ public class Multi_main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_main);
-
+        //「回功能選單」
         BT_FMC = findViewById(R.id.BT_FMC);
         BT_FMC.setOnClickListener(BT_FMC_L);
-
+        //「查找」
         BT_find = findViewById(R.id.BT_find);
         BT_find.setOnClickListener(BT_find_L);
+        //「開啟地圖」
+        BT_Map_Open = findViewById(R.id.BT_Map_Open);
+        BT_Map_Open.setOnClickListener(BT_Map_Open_L);
 
         search_hint = findViewById(R.id.search_hint);
+        search_hint_map = findViewById(R.id.search_hint_map);
+
+        search_hint_map.setText("\n請先選擇一個環境");
 
         //說明：從下載資料完後的設定檔案
         //首先找環境 -> 先搜尋esp32的啟動時間 -> 之後查訪所有設備的時間 -> 如果符合，進行方位判定，反之，忽略
@@ -122,7 +129,7 @@ public class Multi_main extends AppCompatActivity {
 
             byte[] E_door = new byte[1024];
             int len_Edoor = fis_Edoor.read(E_door);
-            str_Door = new String(E_door, 0, len_Edoor);
+            str_Door = new String(E_door, 0, len_Edoor); //門的動態陣列，型態為字串
 
             //-------------------------------------------------------
 
@@ -215,6 +222,8 @@ public class Multi_main extends AppCompatActivity {
 
             try {
                 select_room = room_place; //房間號碼
+                //Toast txt = Toast.makeText(Multi_main.this, select_room+"", Toast.LENGTH_SHORT);
+                //txt.show();
 
                 //當我選擇環境時，他們的room_choice會被選項跟著改動(0：大型空間、1：產房、2：ICU)
                 int firebase_number_1 = room_choice * 3 + 1;
@@ -280,8 +289,9 @@ public class Multi_main extends AppCompatActivity {
 
                                                                 //超時一
                                                                 if ((time_now - (Time1 + second_1)) > 180) {
-                                                                    search_hint.setText("code2-1：沒有該環境的即時資料，請先運行該環境");
-
+                                                                    search_hint.setText("code2-1：沒有該環境的即時資料，\n請先運行該環境");
+                                                                    search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                                    Button_lock = 0;
                                                                     //long test1 = time_now - (Time1 + second_1);
                                                                     //search_hint.setText(test1+"中道1");
 
@@ -296,7 +306,9 @@ public class Multi_main extends AppCompatActivity {
 
                                                                                 //超時二
                                                                                 if ((time_now - (Time2 + second_2)) > 180) {
-                                                                                    search_hint.setText("code2-2：沒有該環境的即時資料，請先運行該環境");
+                                                                                    search_hint.setText("code2-2：沒有該環境的即時資料，\n請先運行該環境");
+                                                                                    search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                                                    Button_lock = 0;
 
                                                                                 } else {
 
@@ -309,11 +321,13 @@ public class Multi_main extends AppCompatActivity {
 
                                                                                                 //超時三
                                                                                                 if ((time_now - (Time3 + second_3)) > 180) {
-                                                                                                    search_hint.setText("code2-3：沒有該環境的即時資料，請先運行該環境");
+                                                                                                    search_hint.setText("code2-3：沒有該環境的即時資料，\n請先運行該環境");
+                                                                                                    search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                                                                    Button_lock = 0;
 
                                                                                                 }else {
 
-                                                                                                    search_hint.setText("檢查點2");
+                                                                                                    search_hint.setText("檢查完成，有該環境的即時資料");
                                                                                                     //long A = time_now - (Time1 + second_1);
                                                                                                     //search_hint.setText(Time1+"檢查點");
 
@@ -321,11 +335,32 @@ public class Multi_main extends AppCompatActivity {
                                                                                                     //步驟3：尋找90秒內的beacon
                                                                                                     //3-1：先將所有包含在firebase設定庫的device輪過一遍
 
+                                                                                                    if (strength_choice.equals("1")) {
+                                                                                                        search_hint_map_Strength = "強";
+                                                                                                    }
+                                                                                                    if (strength_choice.equals("2")) {
+                                                                                                        search_hint_map_Strength = "中";
+                                                                                                    }
+                                                                                                    if (strength_choice.equals("3")) {
+                                                                                                        search_hint_map_Strength = "弱";
+                                                                                                    }
+
+                                                                                                    if (door_choice.equals("1")){
+                                                                                                        search_hint_map_Door = "左";
+                                                                                                    }
+                                                                                                    if (door_choice.equals("2")){
+                                                                                                        search_hint_map_Door = "右";
+                                                                                                    }
+
+                                                                                                    search_hint_map.setText("\n該環境規格如下：\n藍芽訊號："+ search_hint_map_Strength+"\n門："+search_hint_map_Door+"\n準備就緒，你可以開啟地圖了");
+                                                                                                    Button_lock = 1;
                                                                                                 }
 
                                                                                             } catch (Exception second_3_404) {
                                                                                                 //找不到第三個的second數值
-                                                                                                search_hint.setText("Ecode2-3：沒有該環境的即時資料，請先運行該環境");
+                                                                                                search_hint.setText("Ecode2-3：沒有該環境的即時資料，\n請先運行該環境");
+                                                                                                search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                                                                Button_lock = 0;
                                                                                             }
                                                                                         }
 
@@ -338,7 +373,9 @@ public class Multi_main extends AppCompatActivity {
 
                                                                             } catch (Exception second_2_404) {
                                                                                 //找不到第二個的second數值
-                                                                                search_hint.setText("Ecode2-2：沒有該環境的即時資料，請先運行該環境");
+                                                                                search_hint.setText("Ecode2-2：沒有該環境的即時資料，\n請先運行該環境");
+                                                                                search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                                                Button_lock = 0;
                                                                             }
                                                                         }
 
@@ -352,7 +389,9 @@ public class Multi_main extends AppCompatActivity {
 
                                                             } catch (Exception second_1_404) {
                                                                 //找不到第一個的second數值
-                                                                search_hint.setText("Ecode2-1：沒有該環境的即時資料，請先運行該環境");
+                                                                search_hint.setText("Ecode2-1：沒有該環境的即時資料，\n請先運行該環境");
+                                                                search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                                Button_lock = 0;
                                                             }
 
                                                         }
@@ -367,7 +406,9 @@ public class Multi_main extends AppCompatActivity {
                                                 } catch (Exception No_esp32_found_3) {
 
                                                     //第三個失敗
-                                                    search_hint.setText("code1-3：沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
+                                                    search_hint.setText("code1-3：沒有任何關於該環境的資料，\n請確認是否在該處架設過環境\n若無，請先架設環境");
+                                                    search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                                    Button_lock = 0;
                                                 }
                                             }
 
@@ -379,7 +420,9 @@ public class Multi_main extends AppCompatActivity {
                                     } catch (Exception No_esp32_found_2) {
 
                                         //第二個失敗
-                                        search_hint.setText("code1-2：沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
+                                        search_hint.setText("code1-2：沒有任何關於該環境的資料，\n請確認是否在該處架設過環境\n若無，請先架設環境");
+                                        search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                                        Button_lock = 0;
                                     }
                                 }
 
@@ -391,7 +434,9 @@ public class Multi_main extends AppCompatActivity {
                         } catch (Exception No_esp32_found_1) {
 
                             //第一個失敗
-                            search_hint.setText("code1-1：沒有任何關於該環境的資料，請確認是否在該處架設過環境\n若無，請先架設環境");
+                            search_hint.setText("code1-1：沒有任何關於該環境的資料，\n請確認是否在該處架設過環境\n若無，請先架設環境");
+                            search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
+                            Button_lock = 0;
                         }
                     }
 
@@ -414,6 +459,36 @@ public class Multi_main extends AppCompatActivity {
             intent.setClass(Multi_main.this, find_mode_choose.class);
             startActivity(intent);
             finish();
+        }
+    };
+
+    private View.OnClickListener BT_Map_Open_L = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if (Button_lock == 1)
+            {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+
+                //你選擇的房間
+                int send_room = room_choice;
+                bundle.putInt("room_choice", send_room);
+
+                //打包，沒寫會出錯
+                intent.putExtras(bundle);
+
+                //跳轉到下一頁，處理資訊
+                intent.setClass(Multi_main.this, Multi_deal_with.class);
+                startActivity(intent);
+                finish();
+            }
+
+            if (Button_lock == 0)
+            {
+                Toast txt = Toast.makeText(Multi_main.this, "使用者別急，請一步一步來", Toast.LENGTH_SHORT);
+                txt.show();
+            }
         }
     };
 }
