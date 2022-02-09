@@ -30,14 +30,14 @@ public class Multi_main extends AppCompatActivity {
     private Button btMap, btStatus, esp32_switch, find_major;
     private ImageView To_adminster_page;
 
-    private Button BT_FMC, BT_find,BT_Map_Open;
-    private TextView search_hint,search_hint_map;
+    private Button BT_FMC, BT_find, BT_Map_Open;
+    private TextView search_hint, search_hint_map;
 
     int room_choice, beacon_number_choice;
     int number_decided; //1.用來丟入下一頁使用 2.防呆
     int rssi_1, rssi_2, rssi_3, rssi_sup; //存放rssi
     int To_adminster_page_TapCount = 0; //如同成為開發者一般
-    Long Time1,Time2,Time3;
+    Long Time1, Time2, Time3, Timesup;
 
     String sw_number; //放esp32切換
     String String_rssi_1, String_rssi_2, String_rssi_3, String_rssi_sup; //存放rssi，用於顯示在esp32切換
@@ -47,7 +47,7 @@ public class Multi_main extends AppCompatActivity {
     String Major_1, Major_2, Major_3; //存放Major，用來顯示Major
     String Minor_1, Minor_2, Minor_3; //存放Minor，用來顯示Minor
     String room_place, select_room; //存放房間的選擇，前：隨選單控制，後：隨按鈕控制
-    String search_hint_map_Strength,search_hint_map_Door;
+    String search_hint_map_Strength, search_hint_map_Door;
 
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
@@ -229,6 +229,7 @@ public class Multi_main extends AppCompatActivity {
                 int firebase_number_1 = room_choice * 3 + 1;
                 int firebase_number_2 = room_choice * 3 + 2;
                 int firebase_number_3 = room_choice * 3 + 3;
+                int sup = room_choice + 1;
 
                 //檢查點1
                 //search_hint.setText("良好，" + firebase_number_1);
@@ -240,9 +241,12 @@ public class Multi_main extends AppCompatActivity {
                 DatabaseReference esp32_no1 = database_get.getReference("esp32 no_" + firebase_number_1).child("time").child("time");
                 DatabaseReference esp32_no2 = database_get.getReference("esp32 no_" + firebase_number_2).child("time").child("time");
                 DatabaseReference esp32_no3 = database_get.getReference("esp32 no_" + firebase_number_3).child("time").child("time");
+                DatabaseReference esp32_sup = database_get.getReference("esp32_sup" + sup).child("time").child("time");
                 DatabaseReference esp32_no1_second = database_get.getReference("esp32 no_" + firebase_number_1).child("time").child("second");
                 DatabaseReference esp32_no2_second = database_get.getReference("esp32 no_" + firebase_number_2).child("time").child("second");
                 DatabaseReference esp32_no3_second = database_get.getReference("esp32 no_" + firebase_number_3).child("time").child("second");
+                DatabaseReference esp32_sup_second = database_get.getReference("esp32_sup" + sup).child("time").child("second");
+
 
                 //第一個
                 esp32_no1.addValueEventListener(new ValueEventListener() {
@@ -325,35 +329,159 @@ public class Multi_main extends AppCompatActivity {
                                                                                                     search_hint_map.setText("\n請先執行「查詢狀態」之說明，\n之後再重新查找一次");
                                                                                                     Button_lock = 0;
 
-                                                                                                }else {
+                                                                                                } else {
 
-                                                                                                    search_hint.setText("檢查完成，有該環境的即時資料");
-                                                                                                    //long A = time_now - (Time1 + second_1);
-                                                                                                    //search_hint.setText(Time1+"檢查點");
+                                                                                                    //步驟2-4：sup在不在?
+                                                                                                    esp32_sup.addValueEventListener(new ValueEventListener() {
+                                                                                                        @Override
+                                                                                                        public void onDataChange(@NonNull DataSnapshot timesup_get) {
 
-                                                                                                    //可以開始尋找beacon了
-                                                                                                    //步驟3：尋找90秒內的beacon
-                                                                                                    //3-1：先將所有包含在firebase設定庫的device輪過一遍
+                                                                                                            try {
 
-                                                                                                    if (strength_choice.equals("1")) {
-                                                                                                        search_hint_map_Strength = "強";
-                                                                                                    }
-                                                                                                    if (strength_choice.equals("2")) {
-                                                                                                        search_hint_map_Strength = "中";
-                                                                                                    }
-                                                                                                    if (strength_choice.equals("3")) {
-                                                                                                        search_hint_map_Strength = "弱";
-                                                                                                    }
+                                                                                                                long timesup = timesup_get.getValue(Integer.class);
+                                                                                                                Timesup = timesup;
 
-                                                                                                    if (door_choice.equals("1")){
-                                                                                                        search_hint_map_Door = "左";
-                                                                                                    }
-                                                                                                    if (door_choice.equals("2")){
-                                                                                                        search_hint_map_Door = "右";
-                                                                                                    }
+                                                                                                                esp32_sup_second.addValueEventListener(new ValueEventListener() {
+                                                                                                                    @Override
+                                                                                                                    public void onDataChange(@NonNull DataSnapshot second_sup_get) {
 
-                                                                                                    search_hint_map.setText("\n該環境規格如下：\n藍芽訊號："+ search_hint_map_Strength+"\n門："+search_hint_map_Door+"\n準備就緒，你可以開啟地圖了");
-                                                                                                    Button_lock = 1;
+                                                                                                                        try {
+
+                                                                                                                            long second_sup = second_sup_get.getValue(Integer.class);
+
+                                                                                                                            //超時sup
+                                                                                                                            if ((time_now - (Timesup + second_sup)) > 180)
+                                                                                                                            {
+                                                                                                                                search_hint.setText("code3-2：檢查完成，有該環境的即時資料");
+                                                                                                                                //long A = time_now - (Time1 + second_1);
+                                                                                                                                //search_hint.setText(Time1+"檢查點");
+
+                                                                                                                                //可以開始尋找beacon了
+
+                                                                                                                                if (strength_choice.equals("1")) {
+                                                                                                                                    search_hint_map_Strength = "強";
+                                                                                                                                }
+                                                                                                                                if (strength_choice.equals("2")) {
+                                                                                                                                    search_hint_map_Strength = "中";
+                                                                                                                                }
+                                                                                                                                if (strength_choice.equals("3")) {
+                                                                                                                                    search_hint_map_Strength = "弱";
+                                                                                                                                }
+
+                                                                                                                                if (door_choice.equals("1")) {
+                                                                                                                                    search_hint_map_Door = "左";
+                                                                                                                                }
+                                                                                                                                if (door_choice.equals("2")) {
+                                                                                                                                    search_hint_map_Door = "右";
+                                                                                                                                }
+
+                                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
+                                                                                                                                Button_lock = 1;
+
+                                                                                                                            }else{
+
+                                                                                                                                search_hint.setText("code3-1：檢查完成，有該環境的即時資料");
+                                                                                                                                //long A = time_now - (Time1 + second_1);
+                                                                                                                                //search_hint.setText(Time1+"檢查點");
+
+                                                                                                                                //可以開始尋找beacon了
+
+                                                                                                                                if (strength_choice.equals("1")) {
+                                                                                                                                    search_hint_map_Strength = "強";
+                                                                                                                                }
+                                                                                                                                if (strength_choice.equals("2")) {
+                                                                                                                                    search_hint_map_Strength = "中";
+                                                                                                                                }
+                                                                                                                                if (strength_choice.equals("3")) {
+                                                                                                                                    search_hint_map_Strength = "弱";
+                                                                                                                                }
+
+                                                                                                                                if (door_choice.equals("1")) {
+                                                                                                                                    search_hint_map_Door = "左";
+                                                                                                                                }
+                                                                                                                                if (door_choice.equals("2")) {
+                                                                                                                                    search_hint_map_Door = "右";
+                                                                                                                                }
+
+                                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口有設置esp32\n準備就緒，你可以開啟地圖了");
+                                                                                                                                Button_lock = 1;
+                                                                                                                            }
+
+                                                                                                                        }catch (Exception sup_404) {
+
+                                                                                                                            search_hint.setText("Ecode3-2：檢查完成，有該環境的即時資料");
+                                                                                                                            //long A = time_now - (Time1 + second_1);
+                                                                                                                            //search_hint.setText(Time1+"檢查點");
+
+                                                                                                                            //可以開始尋找beacon了
+
+                                                                                                                            if (strength_choice.equals("1")) {
+                                                                                                                                search_hint_map_Strength = "強";
+                                                                                                                            }
+                                                                                                                            if (strength_choice.equals("2")) {
+                                                                                                                                search_hint_map_Strength = "中";
+                                                                                                                            }
+                                                                                                                            if (strength_choice.equals("3")) {
+                                                                                                                                search_hint_map_Strength = "弱";
+                                                                                                                            }
+
+                                                                                                                            if (door_choice.equals("1")) {
+                                                                                                                                search_hint_map_Door = "左";
+                                                                                                                            }
+                                                                                                                            if (door_choice.equals("2")) {
+                                                                                                                                search_hint_map_Door = "右";
+                                                                                                                            }
+
+                                                                                                                            search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
+                                                                                                                            Button_lock = 1;
+                                                                                                                        }
+                                                                                                                    }
+
+                                                                                                                    @Override
+                                                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                                    }
+                                                                                                                });
+
+                                                                                                            } catch (Exception sup_404) {
+
+                                                                                                                search_hint.setText("Ecode3-1：檢查完成，有該環境的即時資料");
+                                                                                                                //long A = time_now - (Time1 + second_1);
+                                                                                                                //search_hint.setText(Time1+"檢查點");
+
+                                                                                                                //可以開始尋找beacon了
+
+                                                                                                                if (strength_choice.equals("1")) {
+                                                                                                                    search_hint_map_Strength = "強";
+                                                                                                                }
+                                                                                                                if (strength_choice.equals("2")) {
+                                                                                                                    search_hint_map_Strength = "中";
+                                                                                                                }
+                                                                                                                if (strength_choice.equals("3")) {
+                                                                                                                    search_hint_map_Strength = "弱";
+                                                                                                                }
+
+                                                                                                                if (door_choice.equals("1")) {
+                                                                                                                    search_hint_map_Door = "左";
+                                                                                                                }
+                                                                                                                if (door_choice.equals("2")) {
+                                                                                                                    search_hint_map_Door = "右";
+                                                                                                                }
+
+                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
+                                                                                                                Button_lock = 1;
+
+                                                                                                            }
+
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                        }
+                                                                                                    });
+
+
                                                                                                 }
 
                                                                                             } catch (Exception second_3_404) {
@@ -466,8 +594,7 @@ public class Multi_main extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            if (Button_lock == 1)
-            {
+            if (Button_lock == 1) {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
@@ -484,8 +611,7 @@ public class Multi_main extends AppCompatActivity {
                 finish();
             }
 
-            if (Button_lock == 0)
-            {
+            if (Button_lock == 0) {
                 Toast txt = Toast.makeText(Multi_main.this, "使用者別急，請一步一步來", Toast.LENGTH_SHORT);
                 txt.show();
             }

@@ -218,10 +218,10 @@
                 <TextView
                     android:id="@+id/search_hint_map"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="180dp"
                     android:gravity="center|center_horizontal|top|left"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     tools:text="請先選擇一個環境"
                     tools:visibility="visible" />
 
