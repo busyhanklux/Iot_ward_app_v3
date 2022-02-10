@@ -58,6 +58,7 @@ public class Multi_main extends AppCompatActivity {
 
     String str_Estrength, strength_choice, str_Door, door_choice;
     int Button_lock = 0;
+    int sup_adjust = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -377,6 +378,7 @@ public class Multi_main extends AppCompatActivity {
 
                                                                                                                                 search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
                                                                                                                                 Button_lock = 1;
+                                                                                                                                sup_adjust = 0;
 
                                                                                                                             }else{
 
@@ -405,6 +407,7 @@ public class Multi_main extends AppCompatActivity {
 
                                                                                                                                 search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口有設置esp32\n準備就緒，你可以開啟地圖了");
                                                                                                                                 Button_lock = 1;
+                                                                                                                                sup_adjust = 1;
                                                                                                                             }
 
                                                                                                                         }catch (Exception sup_404) {
@@ -434,6 +437,7 @@ public class Multi_main extends AppCompatActivity {
 
                                                                                                                             search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
                                                                                                                             Button_lock = 1;
+                                                                                                                            sup_adjust = 0;
                                                                                                                         }
                                                                                                                     }
 
@@ -600,7 +604,9 @@ public class Multi_main extends AppCompatActivity {
 
                 //你選擇的房間
                 int send_room = room_choice;
+                int need_sup = sup_adjust;
                 bundle.putInt("room_choice", send_room);
+                bundle.putInt("sup_adjust" , need_sup );
 
                 //打包，沒寫會出錯
                 intent.putExtras(bundle);
