@@ -68,7 +68,7 @@ public class change_page__device extends AppCompatActivity {
 
     ArrayList E_device_name = new ArrayList();
 
-    int device_number; //確認有幾個環境，會影響迴圈次數
+    int device_number; //確認有幾個設備，會影響迴圈次數
     int check_for_device_text;
 
     int run_count,trun_count = 0;
@@ -245,6 +245,16 @@ public class change_page__device extends AppCompatActivity {
 
                                                      */
 
+                                                    /*
+                                                    ArrayList<String> real_device_name = new ArrayList<String>();
+
+                                                    for (int j = 0; j < room_name.size()-1; j++) {
+
+                                                        real_device_name.add(room_name.get(j));
+                                                    }
+
+                                                     */
+
                                                     //spinner相關，你需要一個xml來調整大小(把android拿掉
                                                     //Spinner(sp_look_CPD_name_S)
                                                     ArrayAdapter<String> sp_look_CPD_name_S =
@@ -356,8 +366,16 @@ public class change_page__device extends AppCompatActivity {
                 public void onDataChange(DataSnapshot D_1) {
 
                     String name = D_1.getValue(String.class);
-                    L_N_R.setText(name);
-                    L_Nu_R.setText(room_place_number);
+                    if (!room_place_number.equals("100000"))
+                    {
+                        L_N_R.setText(name);
+                        L_Nu_R.setText(room_place_number);
+                    }else{
+
+                        hint = Toast.makeText(change_page__device.this, "本號為系統保留編號",Toast.LENGTH_SHORT);
+                        hint.show();
+                    }
+
                 }
                 @Override
                 public void onCancelled(DatabaseError error) { }
@@ -382,6 +400,17 @@ public class change_page__device extends AppCompatActivity {
             if(ed_add_CPD_number_C.charAt(0) == '0')
             {
                 hint = Toast.makeText(change_page__device.this, "編號的第一位數字請勿是 0", Toast.LENGTH_SHORT);
+                hint.show();
+
+                ADD_lock = 0;
+
+                return;
+            }
+
+            if (Integer.parseInt(ed_add_CPD_number_C) > 65530)
+            {
+
+                hint = Toast.makeText(change_page__device.this, "你輸入的編號過大，請輸入0~65529之間", Toast.LENGTH_SHORT);
                 hint.show();
 
                 ADD_lock = 0;
@@ -545,6 +574,16 @@ public class change_page__device extends AppCompatActivity {
             //如果想改名稱
             if(!ed_change_CPD_name_C.equals(""))
             {
+                if (Integer.parseInt(change_room_place_number) == 100000)
+                {
+                    hint = Toast.makeText(change_page__device.this, "此為系統保留，無法更改", Toast.LENGTH_SHORT);
+                    hint.show();
+
+                    Change_name_lock = 0;
+
+                    return;
+                }
+
                 for (int i = 0; i < ed_change_CPD_name_C.length(); i++) {
                     if(ed_change_CPD_name_C.charAt(i) == ' ')
                     {
@@ -666,20 +705,34 @@ public class change_page__device extends AppCompatActivity {
 
         if(delete_room_place_list != 0 )
         {
-            FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
-            DatabaseReference firebase_name_find = database_environment_name.getReference("device").child(delete_room_place_number);
-            firebase_name_find.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot_1) {
+            if (Integer.parseInt(delete_room_place_number) == 100000)
+            {
 
-                    String name = dataSnapshot_1.getValue(String.class);
-                    D_N_R.setText(name);
-                    D_Nu_R.setText(delete_room_place_number);
+                hint = Toast.makeText(change_page__device.this, "此為系統保留，無法更改", Toast.LENGTH_SHORT);
+                hint.show();
 
-                }
-                @Override
-                public void onCancelled(DatabaseError error) { }
-            });
+                Delete_lock = 0;
+
+                return;
+
+            }else {
+
+                FirebaseDatabase database_environment_name = FirebaseDatabase.getInstance();
+                DatabaseReference firebase_name_find = database_environment_name.getReference("device").child(delete_room_place_number);
+                firebase_name_find.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot_1) {
+
+                        String name = dataSnapshot_1.getValue(String.class);
+                        D_N_R.setText(name);
+                        D_Nu_R.setText(delete_room_place_number);
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError error) { }
+                });
+            }
+
         }else{
 
             hint = Toast.makeText(change_page__device.this, "請先選擇目標",Toast.LENGTH_SHORT);
@@ -690,6 +743,19 @@ public class change_page__device extends AppCompatActivity {
 
     public View.OnClickListener BT_delete_CPD_L = view ->
     {
+
+        if (Integer.parseInt(delete_room_place_number) == 100000)
+        {
+
+            hint = Toast.makeText(change_page__device.this, "此為系統保留，無法刪除", Toast.LENGTH_SHORT);
+            hint.show();
+
+            Delete_lock = 0;
+
+            return;
+
+        }
+
         Delete_lock = 1;
         BT_delete_CPD_decide.setVisibility(View.VISIBLE);
 

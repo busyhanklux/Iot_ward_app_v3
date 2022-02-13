@@ -20,15 +20,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Multi_deal_with extends AppCompatActivity {
 
     //畫板參考https://lowren.pixnet.net/blog/post/92267045
     int rule, door, select_number, room_choice, sup_adjust;
-    int point_decide = 0; //有幾個點的資料
+    int point_decide; //有幾個點的資料
     String select_room, beacon_name;
 
     TextView Messageeeeeeeeee;
@@ -49,6 +57,9 @@ public class Multi_deal_with extends AppCompatActivity {
     ArrayList<String> deal_with_number_2 = new ArrayList<String>();
     ArrayList<String> deal_with_number_3 = new ArrayList<String>();
     ArrayList<String> deal_with_number_ALL = new ArrayList<String>();
+
+    ArrayList<String> deal_array_des = new ArrayList<String>();
+    ArrayList<Integer> deal_array_code = new ArrayList<Integer>();
 
     Button bt_back;
     private TextView rule_keep, door_keep, remind_text, remind_device_L, remind_device_R, remind_room_L, remind_room_R, dir;
@@ -89,6 +100,8 @@ public class Multi_deal_with extends AppCompatActivity {
             File environment_txt_list = new File(getFilesDir(), "environment_list.txt");   //環境的數字代碼
             File environment_txt_door = new File(getFilesDir(), "environment_door.txt");   //門口
             File environment_txt_strength = new File(getFilesDir(), "environment_strength.txt");   //
+
+            File place_des = new File(getFilesDir(), "place_des.txt");   //位置的代碼
 
             FileInputStream fis_Enumber = new FileInputStream(environment_txt_number);
             FileInputStream fis_Ename = new FileInputStream(environment_txt_name);
@@ -175,27 +188,27 @@ public class Multi_deal_with extends AppCompatActivity {
             try {
                 DatabaseReference beacon_tp_1 = database_sw.getReference("esp32 no_" + firebase_number_1);
 
-                beacon_tp_1.child("10000").child("RSSI").setValue(-150);
-                beacon_tp_1.child("10000").child("epochTime_temp").setValue(2000000000);
-                beacon_tp_1.child("10000").child("time").setValue(0);
+                beacon_tp_1.child("100000").child("RSSI").setValue(-150);
+                beacon_tp_1.child("100000").child("epochTime_temp").setValue(2000000000);
+                beacon_tp_1.child("100000").child("time").setValue(0);
 
                 DatabaseReference beacon_tp_2 = database_sw.getReference("esp32 no_" + firebase_number_2);
 
-                beacon_tp_2.child("10000").child("RSSI").setValue(-150);
-                beacon_tp_2.child("10000").child("epochTime_temp").setValue(2000000000);
-                beacon_tp_2.child("10000").child("time").setValue(0);
+                beacon_tp_2.child("100000").child("RSSI").setValue(-150);
+                beacon_tp_2.child("100000").child("epochTime_temp").setValue(2000000000);
+                beacon_tp_2.child("100000").child("time").setValue(0);
 
                 DatabaseReference beacon_tp_3 = database_sw.getReference("esp32 no_" + firebase_number_3);
 
-                beacon_tp_3.child("10000").child("RSSI").setValue(-150);
-                beacon_tp_3.child("10000").child("epochTime_temp").setValue(2000000000);
-                beacon_tp_3.child("10000").child("time").setValue(0);
+                beacon_tp_3.child("100000").child("RSSI").setValue(-150);
+                beacon_tp_3.child("100000").child("epochTime_temp").setValue(2000000000);
+                beacon_tp_3.child("100000").child("time").setValue(0);
 
                 DatabaseReference sup_tp = database_sw.getReference("esp32_sup" + sup);
 
-                sup_tp.child("10000").child("RSSI").setValue(-150);
-                sup_tp.child("10000").child("epochTime_temp").setValue(2000000000);
-                sup_tp.child("10000").child("second").setValue(0);
+                sup_tp.child("100000").child("RSSI").setValue(-150);
+                sup_tp.child("100000").child("epochTime_temp").setValue(2000000000);
+                sup_tp.child("100000").child("second").setValue(0);
 
 
             }catch (Exception exist) {
@@ -237,7 +250,7 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                     long second_1 = B_second1.getValue(Integer.class);
 
-                                    Toast txt = Toast.makeText(Multi_deal_with.this, time1 + "", Toast.LENGTH_SHORT);
+                                    //Toast txt = Toast.makeText(Multi_deal_with.this, time1 + "", Toast.LENGTH_SHORT);
                                     //txt.show();
                                     //txt = Toast.makeText(Multi_deal_with.this, second_1+"", Toast.LENGTH_SHORT);
                                     //txt.show();
@@ -246,7 +259,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                     if ((time_now - (time1 + second_1)) < 120) {
                                         deal_with_number_1.add(str_Dmultilist[part_i]);
 
-                                        txt = Toast.makeText(Multi_deal_with.this, deal_with_number_1 + "", Toast.LENGTH_SHORT);
+                                        //txt = Toast.makeText(Multi_deal_with.this, deal_with_number_1 + "", Toast.LENGTH_SHORT);
                                         //txt.show();
 
                                         //第二次
@@ -261,7 +274,7 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                                         long second_2 = B_second2.getValue(Integer.class);
 
-                                                        Toast txt = Toast.makeText(Multi_deal_with.this, time2 + "", Toast.LENGTH_SHORT);
+                                                        //Toast txt = Toast.makeText(Multi_deal_with.this, time2 + "", Toast.LENGTH_SHORT);
                                                         //txt.show();
                                                         //txt = Toast.makeText(Multi_deal_with.this, second_2+"", Toast.LENGTH_SHORT);
                                                         //txt.show();
@@ -294,8 +307,8 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                             if ((time_now - (time3 + second_3)) < 120) {
                                                                                 deal_with_number_3.add(str_Dmultilist[part_i]);
 
-                                                                                txt = Toast.makeText(Multi_deal_with.this, deal_with_number_3 + "", Toast.LENGTH_SHORT);
-                                                                                txt.show();
+                                                                                //txt = Toast.makeText(Multi_deal_with.this, deal_with_number_3 + "", Toast.LENGTH_SHORT);
+                                                                                //txt.show();
 
                                                                                 //RSSI判定(2/10)
 
@@ -315,12 +328,14 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                         rssi_2 = RSSI_2.getValue(Integer.class);
                                                                                                         rssi_3 = RSSI_3.getValue(Integer.class);
 
-                                                                                                        if (sup_adjust == 1) {
-                                                                                                            Toast txt = Toast.makeText(Multi_deal_with.this, "有", Toast.LENGTH_SHORT);
-                                                                                                            txt.show();
+                                                                                                        point_decide++;
 
-                                                                                                            txt = Toast.makeText(Multi_deal_with.this, part_i+"", Toast.LENGTH_SHORT);
-                                                                                                            txt.show();
+                                                                                                        if (sup_adjust == 1) {
+                                                                                                            //Toast txt = Toast.makeText(Multi_deal_with.this, "有", Toast.LENGTH_SHORT);
+                                                                                                            //txt.show();
+
+                                                                                                            //txt = Toast.makeText(Multi_deal_with.this, part_i+"", Toast.LENGTH_SHORT);
+                                                                                                            //txt.show();
 
                                                                                                             beacon_RSSI_sup.addValueEventListener(new ValueEventListener() {
                                                                                                                 @Override
@@ -451,17 +466,57 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                                                                                                         }
 
-                                                                                                                        point_decide++;
+                                                                                                                        String str_rule = String.valueOf(rule);
+                                                                                                                        String old_rule = "";
 
-                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, point_decide + "", Toast.LENGTH_SHORT);
+                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則", Toast.LENGTH_SHORT);
                                                                                                                         txt.show();
+
+                                                                                                                        try {
+
+                                                                                                                            FileWriter fw = new FileWriter(place_des,true);
+
+                                                                                                                            fw.write(str_rule);
+                                                                                                                            fw.write('\n');
+
+                                                                                                                            fw.close();
+
+                                                                                                                            /*
+                                                                                                                            FileInputStream objI = new FileInputStream(place_des);
+                                                                                                                            int b = objI.read();
+                                                                                                                            while ((b = objI.read()) != 1)
+                                                                                                                            {
+                                                                                                                                old_rule = (char)b;
+                                                                                                                            }
+
+                                                                                                                            FileOutputStream objO = new FileOutputStream(place_des);
+                                                                                                                            byte[] bArray = str_rule.getBytes();
+                                                                                                                            objO.write(bArray);
+                                                                                                                            objO.close();
+
+                                                                                                                             */
+
+                                                                                                                        } catch (IOException e) {
+                                                                                                                            e.printStackTrace();
+
+                                                                                                                        }
+
+                                                                                                                        //Toast txt = Toast.makeText(Multi_deal_with.this, point_decide + "中道", Toast.LENGTH_SHORT);
+                                                                                                                        //txt.show();
 
                                                                                                                         if (part_i == str_Dmultilist.length-1 ) //實際用：str_Dmultilist.length-1 測試用：3
                                                                                                                         {
                                                                                                                             Intent intent = new Intent();
                                                                                                                             Bundle bundle = new Bundle();
 
-                                                                                                                            bundle.putInt("point_decide", point_decide);
+                                                                                                                            //point_decide--;
+
+                                                                                                                            int P_D = deal_with_number_3.size();
+
+                                                                                                                            //txt = Toast.makeText(Multi_deal_with.this, P_D + "中道尾" +  deal_array_code, Toast.LENGTH_SHORT);
+                                                                                                                            //txt.show();
+
+                                                                                                                            bundle.putInt("point_decide", P_D);
 
                                                                                                                             //打包，沒寫會出錯
                                                                                                                             intent.putExtras(bundle);
@@ -566,17 +621,42 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                                                                                                         }
 
-                                                                                                                        point_decide++;
+                                                                                                                        String str_rule = String.valueOf(rule);
+                                                                                                                        String line = "";
 
-                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, point_decide + "", Toast.LENGTH_SHORT);
+                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則", Toast.LENGTH_SHORT);
                                                                                                                         txt.show();
+
+                                                                                                                        try {
+
+                                                                                                                            FileWriter fw = new FileWriter(place_des,true);
+
+                                                                                                                            fw.write(str_rule);
+                                                                                                                            fw.write('\n');
+
+                                                                                                                            fw.close();
+
+                                                                                                                        } catch (IOException e) {
+                                                                                                                            e.printStackTrace();
+
+                                                                                                                        }
+
+                                                                                                                        //Toast txt = Toast.makeText(Multi_deal_with.this, point_decide + "中道", Toast.LENGTH_SHORT);
+                                                                                                                        //txt.show();
 
                                                                                                                         if (part_i == str_Dmultilist.length-1) //實際用：str_Dmultilist.length-1 測試用：3
                                                                                                                         {
                                                                                                                             Intent intent = new Intent();
                                                                                                                             Bundle bundle = new Bundle();
 
-                                                                                                                            bundle.putInt("point_decide", point_decide);
+                                                                                                                            //point_decide--;
+
+                                                                                                                            int P_D = deal_with_number_3.size();;
+
+                                                                                                                            //txt = Toast.makeText(Multi_deal_with.this, P_D + "中道尾" +  deal_array_code, Toast.LENGTH_SHORT);
+                                                                                                                            //txt.show();
+
+                                                                                                                            bundle.putInt("point_decide", P_D);
 
                                                                                                                             //打包，沒寫會出錯
                                                                                                                             intent.putExtras(bundle);
@@ -587,8 +667,8 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                                             finish();
                                                                                                                         }
 
-                                                                                                                        txt = Toast.makeText(Multi_deal_with.this, "並沒有", Toast.LENGTH_SHORT);
-                                                                                                                        txt.show();
+                                                                                                                        //txt = Toast.makeText(Multi_deal_with.this, "並沒有", Toast.LENGTH_SHORT);
+                                                                                                                        //txt.show();
                                                                                                                     }
                                                                                                                 }
 
@@ -692,17 +772,45 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                                                                                             }
 
-                                                                                                            point_decide++;
+                                                                                                            deal_array_code.add(rule);
+                                                                                                            deal_array_des.add(description);
 
-                                                                                                            Toast txt = Toast.makeText(Multi_deal_with.this, point_decide + "", Toast.LENGTH_SHORT);
+                                                                                                            String str_rule = String.valueOf(rule);
+                                                                                                            String line = "";
+
+                                                                                                            Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則", Toast.LENGTH_SHORT);
                                                                                                             txt.show();
+
+                                                                                                            try {
+
+                                                                                                                FileWriter fw = new FileWriter(place_des,true);
+
+                                                                                                                fw.write(str_rule);
+                                                                                                                fw.write('\n');
+
+                                                                                                                fw.close();
+
+                                                                                                            } catch (IOException e) {
+                                                                                                                e.printStackTrace();
+
+                                                                                                            }
+
+                                                                                                            //Toast txt = Toast.makeText(Multi_deal_with.this, point_decide + "中道", Toast.LENGTH_SHORT);
+                                                                                                            //txt.show();
 
                                                                                                             if (part_i == str_Dmultilist.length-1) //實際用：str_Dmultilist.length-1 測試用：3
                                                                                                             {
                                                                                                                 Intent intent = new Intent();
                                                                                                                 Bundle bundle = new Bundle();
 
-                                                                                                                bundle.putInt("point_decide", point_decide);
+                                                                                                                //point_decide--;
+
+                                                                                                                int P_D = deal_with_number_3.size();
+
+                                                                                                                //txt = Toast.makeText(Multi_deal_with.this, P_D + "中道尾" +  deal_array_code, Toast.LENGTH_SHORT);
+                                                                                                                //txt.show();
+
+                                                                                                                bundle.putInt("point_decide", P_D);
 
                                                                                                                 //打包，沒寫會出錯
                                                                                                                 intent.putExtras(bundle);
@@ -713,8 +821,8 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                                 finish();
                                                                                                             }
 
-                                                                                                            txt = Toast.makeText(Multi_deal_with.this, "沒有", Toast.LENGTH_SHORT);
-                                                                                                            txt.show();
+                                                                                                            //txt = Toast.makeText(Multi_deal_with.this, "沒有", Toast.LENGTH_SHORT);
+                                                                                                            //txt.show();
                                                                                                         }
 
                                                                                                     }

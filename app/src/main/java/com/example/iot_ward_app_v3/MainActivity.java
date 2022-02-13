@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     String firebase_environment_sp[];
+    String firebase_device_real_sp[];
     String firebase_device_sp[];
+
     Toast txt;
 
     String str_Estrength,strength_choice,str_Door,door_choice;
@@ -163,6 +165,15 @@ public class MainActivity extends AppCompatActivity {
                 //txt.show();
             }
 
+            //把 No.100000 號隱藏
+            firebase_device_real_sp = new String[Integer.parseInt(str_Dnumber)-1];
+
+            for(int i = 0; i < firebase_device_real_sp.length ; i++)
+            {
+
+                firebase_device_real_sp[i] = firebase_device_sp[i]+"";
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Spinner(beacon_id_spinner)
             ArrayAdapter<String> adapternumber_beacon_id_spinner_choice =
-                    new ArrayAdapter<String>(this ,R.layout.spinner_value_choice_color,firebase_device_sp);
+                    new ArrayAdapter<String>(this ,R.layout.spinner_value_choice_color,firebase_device_real_sp);
             adapternumber_beacon_id_spinner_choice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             beacon_id_num_spinner.setAdapter(adapternumber_beacon_id_spinner_choice);    //設定資料來源
             beacon_id_num_spinner.setOnItemSelectedListener(beacon_id_spinner_choice_Listener);

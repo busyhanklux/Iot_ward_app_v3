@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 public class Multi_main extends AppCompatActivity {
 
@@ -91,6 +92,15 @@ public class Multi_main extends AppCompatActivity {
         File environment_txt_list = new File(getFilesDir(), "environment_list.txt");   //環境的數字代碼
         File environment_txt_door = new File(getFilesDir(), "environment_door.txt");   //門口
         File environment_txt_strength = new File(getFilesDir(), "environment_strength.txt");   //環境的強度代碼
+
+        File place_des = new File(getFilesDir(), "place_des.txt");   //位置的代碼
+        try {
+
+            place_des.createNewFile(); //環境數量
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //text檔
         try {
