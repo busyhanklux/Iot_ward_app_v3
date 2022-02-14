@@ -36,7 +36,7 @@ public class Multi_deal_with extends AppCompatActivity {
 
     //畫板參考https://lowren.pixnet.net/blog/post/92267045
     int rule, door, select_number, room_choice, sup_adjust;
-    int point_decide; //有幾個點的資料
+    int point_decide,count = 0; //有幾個點的資料
     String select_room, beacon_name;
 
     TextView Messageeeeeeeeee;
@@ -102,6 +102,22 @@ public class Multi_deal_with extends AppCompatActivity {
             File environment_txt_strength = new File(getFilesDir(), "environment_strength.txt");   //
 
             File place_des = new File(getFilesDir(), "place_des.txt");   //位置的代碼
+
+            //初始化place_des的txt檔案
+            FileOutputStream fos_place_des = new FileOutputStream(place_des);
+            String nothing = "";
+            byte[] nothing_array = nothing.getBytes();
+            fos_place_des.write(nothing_array);
+            fos_place_des.close();
+
+            File deal_number = new File(getFilesDir(), "deal_number.txt");   //待處理的序號
+
+            //初始化place_des的txt檔案
+            FileOutputStream fos_deal_number = new FileOutputStream(deal_number);
+            String nothing_number = "";
+            byte[] nothing_number_array = nothing_number.getBytes();
+            fos_deal_number.write(nothing_number_array);
+            fos_deal_number.close();
 
             FileInputStream fis_Enumber = new FileInputStream(environment_txt_number);
             FileInputStream fis_Ename = new FileInputStream(environment_txt_name);
@@ -211,11 +227,11 @@ public class Multi_deal_with extends AppCompatActivity {
                 sup_tp.child("100000").child("second").setValue(0);
 
 
-            }catch (Exception exist) {
+            } catch (Exception exist) {
 
             }
 
-            for (int i = 0; i < str_Dmultilist.length ; i++) { //實際用：str_Dmultilist.length  測試用：4
+            for (int i = 0; i < str_Dmultilist.length; i++) { //實際用：str_Dmultilist.length  測試用：4
 
                 //抓編號，因為有三個esp32，所以一圈要做三次
                 //Toast txt = Toast.makeText(Multi_deal_with.this,str_Dmultilist[i]+"",Toast.LENGTH_SHORT);
@@ -224,10 +240,12 @@ public class Multi_deal_with extends AppCompatActivity {
                 DatabaseReference beacon_time_check_1 = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
                 DatabaseReference beacon_time_check_2 = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
                 DatabaseReference beacon_time_check_3 = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
+                DatabaseReference beacon_time_check_sup = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
 
                 DatabaseReference beacon_time_check_second_1 = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(str_Dmultilist[i])).child("time");
                 DatabaseReference beacon_time_check_second_2 = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(str_Dmultilist[i])).child("time");
                 DatabaseReference beacon_time_check_second_3 = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(str_Dmultilist[i])).child("time");
+                DatabaseReference beacon_time_check_second_sup = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(str_Dmultilist[i])).child("time");
 
                 DatabaseReference beacon_RSSI_1 = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(str_Dmultilist[i])).child("RSSI");
                 DatabaseReference beacon_RSSI_2 = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(str_Dmultilist[i])).child("RSSI");
@@ -307,10 +325,43 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                             if ((time_now - (time3 + second_3)) < 120) {
                                                                                 deal_with_number_3.add(str_Dmultilist[part_i]);
 
-                                                                                //txt = Toast.makeText(Multi_deal_with.this, deal_with_number_3 + "", Toast.LENGTH_SHORT);
+                                                                                //txt = Toast.makeText(Multi_deal_with.this, part_i + "", Toast.LENGTH_SHORT);
                                                                                 //txt.show();
 
+
+                                                                                if (sup_adjust == 0)
+                                                                                {
+                                                                                    try {
+                                                                                        FileWriter fw = new FileWriter(deal_number, true);
+
+                                                                                        //String str = deal_with_number_3.get(j);
+
+                                                                                        fw.write(str_Dmultilist[part_i]);
+                                                                                        fw.write(' ');
+
+                                                                                        fw.close();
+
+                                                                                        //txt = Toast.makeText(Multi_deal_with.this, "寫入?", Toast.LENGTH_SHORT);
+                                                                                        //txt.show();
+
+                                                                                    } catch (Exception e) {
+
+                                                                                        txt = Toast.makeText(Multi_deal_with.this, "寫入失敗", Toast.LENGTH_SHORT);
+                                                                                        txt.show();
+
+                                                                                    }
+                                                                                }
+
+                                                                                //2022-2-15
+                                                                                if(sup_adjust == 1)
+                                                                                {
+                                                                                    txt = Toast.makeText(Multi_deal_with.this, "還沒寫", Toast.LENGTH_SHORT);
+                                                                                    txt.show();
+                                                                                }
+
+
                                                                                 //RSSI判定(2/10)
+/*
 
                                                                                 beacon_RSSI_1.addValueEventListener(new ValueEventListener() {
                                                                                     @Override
@@ -334,8 +385,9 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                             //Toast txt = Toast.makeText(Multi_deal_with.this, "有", Toast.LENGTH_SHORT);
                                                                                                             //txt.show();
 
-                                                                                                            //txt = Toast.makeText(Multi_deal_with.this, part_i+"", Toast.LENGTH_SHORT);
-                                                                                                            //txt.show();
+                                                                                                            //換算之後是3.4.11.100000
+                                                                                                            Toast txt = Toast.makeText(Multi_deal_with.this, part_i+"最終圈", Toast.LENGTH_SHORT);
+                                                                                                            txt.show();
 
                                                                                                             beacon_RSSI_sup.addValueEventListener(new ValueEventListener() {
                                                                                                                 @Override
@@ -469,7 +521,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                                         String str_rule = String.valueOf(rule);
                                                                                                                         String old_rule = "";
 
-                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則", Toast.LENGTH_SHORT);
+                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則"+ part_i+"順位", Toast.LENGTH_SHORT);
                                                                                                                         txt.show();
 
                                                                                                                         try {
@@ -494,7 +546,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                                             objO.write(bArray);
                                                                                                                             objO.close();
 
-                                                                                                                             */
+
 
                                                                                                                         } catch (IOException e) {
                                                                                                                             e.printStackTrace();
@@ -528,6 +580,12 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                                         }
 
                                                                                                                     } catch (Exception sup_junk) {
+
+                                                                                                                        /*rssi_1 = RSSI_1.getValue(Integer.class);
+                                                                                                                        rssi_2 = RSSI_2.getValue(Integer.class);
+                                                                                                                        rssi_3 = RSSI_3.getValue(Integer.class);
+
+
 
                                                                                                                         int gap1_2 = abs(rssi_1) - abs(rssi_2); //12之距離
                                                                                                                         int gap1_3 = abs(rssi_1) - abs(rssi_3); //13之距離
@@ -624,7 +682,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                                         String str_rule = String.valueOf(rule);
                                                                                                                         String line = "";
 
-                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則", Toast.LENGTH_SHORT);
+                                                                                                                        Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則" + part_i+"順位", Toast.LENGTH_SHORT);
                                                                                                                         txt.show();
 
                                                                                                                         try {
@@ -778,7 +836,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                                             String str_rule = String.valueOf(rule);
                                                                                                             String line = "";
 
-                                                                                                            Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則", Toast.LENGTH_SHORT);
+                                                                                                            Toast txt = Toast.makeText(Multi_deal_with.this, rule+ "規則"+ part_i+"順位", Toast.LENGTH_SHORT);
                                                                                                             txt.show();
 
                                                                                                             try {
@@ -848,7 +906,7 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                                                                     }
                                                                                 });
-
+*/
                                                                             }
                                                                         }
 
@@ -901,6 +959,16 @@ public class Multi_deal_with extends AppCompatActivity {
                 });
 
             }
+
+            count++;
+
+
+            if (count == 1)
+            {
+
+
+            }
+
 
             /*
             txt = Toast.makeText(Multi_deal_with.this, firebase_deal_with_number_1+"", Toast.LENGTH_SHORT);

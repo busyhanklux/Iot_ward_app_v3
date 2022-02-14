@@ -94,9 +94,20 @@ public class Multi_main extends AppCompatActivity {
         File environment_txt_strength = new File(getFilesDir(), "environment_strength.txt");   //環境的強度代碼
 
         File place_des = new File(getFilesDir(), "place_des.txt");   //位置的代碼
+
         try {
 
             place_des.createNewFile(); //環境數量
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File deal_number = new File(getFilesDir(), "deal_number.txt");   //位置的代碼
+
+        try {
+
+            deal_number.createNewFile(); //環境數量
 
         } catch (IOException e) {
             e.printStackTrace();
