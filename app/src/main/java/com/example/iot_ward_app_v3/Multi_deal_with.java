@@ -341,8 +341,8 @@ public class Multi_deal_with extends AppCompatActivity {
 
                                                                                         fw.close();
 
-                                                                                        //txt = Toast.makeText(Multi_deal_with.this, "寫入?", Toast.LENGTH_SHORT);
-                                                                                        //txt.show();
+                                                                                        txt = Toast.makeText(Multi_deal_with.this, "寫入", Toast.LENGTH_SHORT);
+                                                                                        txt.show();
 
                                                                                     } catch (Exception e) {
 
@@ -355,8 +355,25 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                 //2022-2-15
                                                                                 if(sup_adjust == 1)
                                                                                 {
-                                                                                    txt = Toast.makeText(Multi_deal_with.this, "還沒寫", Toast.LENGTH_SHORT);
-                                                                                    txt.show();
+                                                                                    try {
+                                                                                        FileWriter fw = new FileWriter(deal_number, true);
+
+                                                                                        //String str = deal_with_number_3.get(j);
+
+                                                                                        fw.write(str_Dmultilist[part_i]);
+                                                                                        fw.write(' ');
+
+                                                                                        fw.close();
+
+                                                                                        txt = Toast.makeText(Multi_deal_with.this, "寫入", Toast.LENGTH_SHORT);
+                                                                                        txt.show();
+
+                                                                                    } catch (Exception e) {
+
+                                                                                        txt = Toast.makeText(Multi_deal_with.this, "寫入失敗", Toast.LENGTH_SHORT);
+                                                                                        txt.show();
+
+                                                                                    }
                                                                                 }
 
 
@@ -966,6 +983,23 @@ public class Multi_deal_with extends AppCompatActivity {
             if (count == 1)
             {
 
+                Intent intent2 = new Intent();
+
+                Bundle bundle2 = new Bundle();
+
+                //你選擇的房間
+                int send_room = room_choice;
+                int need_sup = sup_adjust;
+
+                bundle2.putInt("room_choice", send_room);
+                bundle2.putInt("sup_adjust" , need_sup );
+
+                //打包，沒寫會出錯
+                intent2.putExtras(bundle2);
+
+                intent2.setClass(Multi_deal_with.this, Multi_deal_with2.class);
+                startActivity(intent2);
+                finish();
 
             }
 
