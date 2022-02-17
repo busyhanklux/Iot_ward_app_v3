@@ -22,7 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Multi_main extends AppCompatActivity {
 
@@ -50,6 +54,10 @@ public class Multi_main extends AppCompatActivity {
     String room_place, select_room; //存放房間的選擇，前：隨選單控制，後：隨按鈕控制
     String search_hint_map_Strength, search_hint_map_Door;
 
+    ArrayList<String> deal_with_number_1 = new ArrayList<String>();
+    ArrayList<String> deal_with_number_2 = new ArrayList<String>();
+    ArrayList<String> deal_with_number_3 = new ArrayList<String>();
+
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
 
@@ -76,7 +84,7 @@ public class Multi_main extends AppCompatActivity {
         BT_Map_Open.setOnClickListener(BT_Map_Open_L);
 
         search_hint = findViewById(R.id.search_hint);
-        search_hint_map = findViewById(R.id.search_hint_map);
+        search_hint_map = findViewById(R.id.check);
 
         search_hint_map.setText("\n請先選擇一個環境");
 
@@ -401,6 +409,15 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                                 Button_lock = 1;
                                                                                                                                 sup_adjust = 0;
 
+                                                                                                                                File deal_number = new File(getFilesDir(), "deal_number.txt");   //待處理的序號
+
+                                                                                                                                //初始化deal_number的txt檔案
+                                                                                                                                FileOutputStream fos_deal_number = new FileOutputStream(deal_number);
+                                                                                                                                String nothing_number = "";
+                                                                                                                                byte[] nothing_number_array = nothing_number.getBytes();
+                                                                                                                                fos_deal_number.write(nothing_number_array);
+                                                                                                                                fos_deal_number.close();
+
                                                                                                                             }else{
 
                                                                                                                                 search_hint.setText("code3-1：檢查完成，有該環境的即時資料");
@@ -426,9 +443,18 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                                     search_hint_map_Door = "右";
                                                                                                                                 }
 
-                                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口有設置esp32\n準備就緒，你可以開啟地圖了");
+                                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口有設置esp32\n準備就緒，可以搜尋設備了");
                                                                                                                                 Button_lock = 1;
                                                                                                                                 sup_adjust = 1;
+
+                                                                                                                                File deal_number = new File(getFilesDir(), "deal_number.txt");   //待處理的序號
+
+                                                                                                                                //初始化deal_number的txt檔案
+                                                                                                                                FileOutputStream fos_deal_number = new FileOutputStream(deal_number);
+                                                                                                                                String nothing_number = "";
+                                                                                                                                byte[] nothing_number_array = nothing_number.getBytes();
+                                                                                                                                fos_deal_number.write(nothing_number_array);
+                                                                                                                                fos_deal_number.close();
                                                                                                                             }
 
                                                                                                                         }catch (Exception sup_404) {
@@ -456,9 +482,32 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                                 search_hint_map_Door = "右";
                                                                                                                             }
 
-                                                                                                                            search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
+                                                                                                                            search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，可以搜尋設備了");
                                                                                                                             Button_lock = 1;
                                                                                                                             sup_adjust = 0;
+
+                                                                                                                            File deal_number = new File(getFilesDir(), "deal_number.txt");   //待處理的序號
+
+                                                                                                                            //初始化deal_number的txt檔案
+                                                                                                                            FileOutputStream fos_deal_number = null;
+                                                                                                                            try {
+                                                                                                                                fos_deal_number = new FileOutputStream(deal_number);
+                                                                                                                            } catch (FileNotFoundException e) {
+                                                                                                                                e.printStackTrace();
+                                                                                                                            }
+                                                                                                                            String nothing_number = "";
+                                                                                                                            byte[] nothing_number_array = nothing_number.getBytes();
+                                                                                                                            try {
+                                                                                                                                fos_deal_number.write(nothing_number_array);
+                                                                                                                            } catch (IOException e) {
+                                                                                                                                e.printStackTrace();
+                                                                                                                            }
+                                                                                                                            try {
+                                                                                                                                fos_deal_number.close();
+                                                                                                                            } catch (IOException e) {
+                                                                                                                                e.printStackTrace();
+                                                                                                                            }
+
                                                                                                                         }
                                                                                                                     }
 
@@ -493,8 +542,31 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                     search_hint_map_Door = "右";
                                                                                                                 }
 
-                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，你可以開啟地圖了");
+                                                                                                                search_hint_map.setText("\n該環境規格如下：\n藍芽訊號：" + search_hint_map_Strength + "\n門：" + search_hint_map_Door + "\n門口無設置esp32可能導致部分結果有誤差\n準備就緒，可以搜尋設備了");
                                                                                                                 Button_lock = 1;
+                                                                                                                sup_adjust = 0;
+
+                                                                                                                File deal_number = new File(getFilesDir(), "deal_number.txt");   //待處理的序號
+
+                                                                                                                //初始化deal_number的txt檔案
+                                                                                                                FileOutputStream fos_deal_number = null;
+                                                                                                                try {
+                                                                                                                    fos_deal_number = new FileOutputStream(deal_number);
+                                                                                                                } catch (FileNotFoundException e) {
+                                                                                                                    e.printStackTrace();
+                                                                                                                }
+                                                                                                                String nothing_number = "";
+                                                                                                                byte[] nothing_number_array = nothing_number.getBytes();
+                                                                                                                try {
+                                                                                                                    fos_deal_number.write(nothing_number_array);
+                                                                                                                } catch (IOException e) {
+                                                                                                                    e.printStackTrace();
+                                                                                                                }
+                                                                                                                try {
+                                                                                                                    fos_deal_number.close();
+                                                                                                                } catch (IOException e) {
+                                                                                                                    e.printStackTrace();
+                                                                                                                }
 
                                                                                                             }
 
@@ -620,6 +692,264 @@ public class Multi_main extends AppCompatActivity {
         public void onClick(View v) {
 
             if (Button_lock == 1) {
+
+                File device_txt_list = new File(getFilesDir(), "device_list.txt");   //設備的數字代碼
+                FileInputStream fis_Dlist = null;
+                try {
+                    fis_Dlist = new FileInputStream(device_txt_list);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                //設備編號的陣列
+                byte[] D_list = new byte[1024];
+                int len_Dlist = 0;
+                try {
+                    len_Dlist = fis_Dlist.read(D_list);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String str_Dlist = new String(D_list, 0, len_Dlist);
+                String str_Dmultilist[] = str_Dlist.split(" ");
+
+                FirebaseDatabase database_sw = FirebaseDatabase.getInstance();
+
+                int firebase_number_1 = room_choice * 3 + 1;
+                int firebase_number_2 = room_choice * 3 + 2;
+                int firebase_number_3 = room_choice * 3 + 3;
+                int sup = room_choice + 1;
+
+                long time_now = System.currentTimeMillis() / 1000; //現在時間
+
+                try {
+                    DatabaseReference beacon_tp_1 = database_sw.getReference("esp32 no_" + firebase_number_1);
+
+                    beacon_tp_1.child("100000").child("RSSI").setValue(-150);
+                    beacon_tp_1.child("100000").child("epochTime_temp").setValue(2000000000);
+                    beacon_tp_1.child("100000").child("time").setValue(0);
+
+                    DatabaseReference beacon_tp_2 = database_sw.getReference("esp32 no_" + firebase_number_2);
+
+                    beacon_tp_2.child("100000").child("RSSI").setValue(-150);
+                    beacon_tp_2.child("100000").child("epochTime_temp").setValue(2000000000);
+                    beacon_tp_2.child("100000").child("time").setValue(0);
+
+                    DatabaseReference beacon_tp_3 = database_sw.getReference("esp32 no_" + firebase_number_3);
+
+                    beacon_tp_3.child("100000").child("RSSI").setValue(-150);
+                    beacon_tp_3.child("100000").child("epochTime_temp").setValue(2000000000);
+                    beacon_tp_3.child("100000").child("time").setValue(0);
+
+                    DatabaseReference sup_tp = database_sw.getReference("esp32_sup" + sup);
+
+                    sup_tp.child("100000").child("RSSI").setValue(-150);
+                    sup_tp.child("100000").child("epochTime_temp").setValue(2000000000);
+                    sup_tp.child("100000").child("second").setValue(0);
+
+                } catch (Exception exist) {
+
+                }
+
+                for (int i = 0; i < str_Dmultilist.length; i++) { //實際用：str_Dmultilist.length  測試用：4
+
+                    //抓編號，因為有三個esp32，所以一圈要做三次
+                    //Toast txt = Toast.makeText(Multi_deal_with.this,str_Dmultilist[i]+"",Toast.LENGTH_SHORT);
+                    //txt.show();
+
+                    DatabaseReference beacon_time_check_1 = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
+                    DatabaseReference beacon_time_check_2 = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
+                    DatabaseReference beacon_time_check_3 = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
+                    DatabaseReference beacon_time_check_sup = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(str_Dmultilist[i])).child("epochTime_temp");
+
+                    DatabaseReference beacon_time_check_second_1 = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(str_Dmultilist[i])).child("time");
+                    DatabaseReference beacon_time_check_second_2 = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(str_Dmultilist[i])).child("time");
+                    DatabaseReference beacon_time_check_second_3 = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(str_Dmultilist[i])).child("time");
+                    DatabaseReference beacon_time_check_second_sup = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(str_Dmultilist[i])).child("time");
+
+                    DatabaseReference beacon_RSSI_1 = database_sw.getReference("esp32 no_" + firebase_number_1).child(String.valueOf(str_Dmultilist[i])).child("RSSI");
+                    DatabaseReference beacon_RSSI_2 = database_sw.getReference("esp32 no_" + firebase_number_2).child(String.valueOf(str_Dmultilist[i])).child("RSSI");
+                    DatabaseReference beacon_RSSI_3 = database_sw.getReference("esp32 no_" + firebase_number_3).child(String.valueOf(str_Dmultilist[i])).child("RSSI");
+                    DatabaseReference beacon_RSSI_sup = database_sw.getReference("esp32_sup" + sup).child(String.valueOf(str_Dmultilist[i])).child("RSSI");
+
+                    int part_i = i;
+
+                    //第一次
+                    beacon_time_check_1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot B_time1) {
+
+                            try {
+                                long time1 = B_time1.getValue(Integer.class);
+
+                                beacon_time_check_second_1.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot B_second1) {
+
+                                        long second_1 = B_second1.getValue(Integer.class);
+
+                                        //Toast txt = Toast.makeText(Multi_deal_with.this, time1 + "", Toast.LENGTH_SHORT);
+                                        //txt.show();
+                                        //txt = Toast.makeText(Multi_deal_with.this, second_1+"", Toast.LENGTH_SHORT);
+                                        //txt.show();
+
+                                        //第一個esp32偵測他的時間差小於120秒，開始第二個
+                                        if ((time_now - (time1 + second_1)) < 120) {
+                                            deal_with_number_1.add(str_Dmultilist[part_i]);
+
+                                            //txt = Toast.makeText(Multi_deal_with.this, deal_with_number_1 + "", Toast.LENGTH_SHORT);
+                                            //txt.show();
+
+                                            //第二次
+                                            beacon_time_check_2.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot B_time2) {
+                                                    long time2 = B_time2.getValue(Integer.class);
+
+                                                    beacon_time_check_second_2.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot B_second2) {
+
+                                                            long second_2 = B_second2.getValue(Integer.class);
+
+                                                            //Toast txt = Toast.makeText(Multi_deal_with.this, time2 + "", Toast.LENGTH_SHORT);
+                                                            //txt.show();
+                                                            //txt = Toast.makeText(Multi_deal_with.this, second_2+"", Toast.LENGTH_SHORT);
+                                                            //txt.show();
+
+                                                            //第二個esp32偵測他的時間差小於120秒，開始第三個
+                                                            if ((time_now - (time2 + second_2)) < 120) {
+                                                                deal_with_number_2.add(str_Dmultilist[part_i]);
+
+                                                                txt = Toast.makeText(Multi_main.this, deal_with_number_2 + "", Toast.LENGTH_SHORT);
+                                                                //txt.show();
+
+                                                                //第三次
+                                                                beacon_time_check_3.addValueEventListener(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot B_time3) {
+                                                                        long time3 = B_time3.getValue(Integer.class);
+
+                                                                        beacon_time_check_second_3.addValueEventListener(new ValueEventListener() {
+                                                                            @Override
+                                                                            public void onDataChange(@NonNull DataSnapshot B_second3) {
+
+                                                                                long second_3 = B_second3.getValue(Integer.class);
+
+                                                                                Toast txt = Toast.makeText(Multi_main.this, time3 + "", Toast.LENGTH_SHORT);
+                                                                                //txt.show();
+                                                                                //txt = Toast.makeText(Multi_deal_with.this, second_3+"", Toast.LENGTH_SHORT);
+                                                                                //txt.show();
+
+                                                                                //第三個esp32偵測他的時間差小於120秒，開始判斷
+                                                                                if ((time_now - (time3 + second_3)) < 120) {
+                                                                                    deal_with_number_3.add(str_Dmultilist[part_i]);
+
+                                                                                    //txt = Toast.makeText(Multi_deal_with.this, part_i + "", Toast.LENGTH_SHORT);
+                                                                                    //txt.show();
+
+
+                                                                                    if (sup_adjust == 0)
+                                                                                    {
+                                                                                        try {
+                                                                                            File deal_number = new File(getFilesDir(), "deal_number.txt");
+                                                                                            FileWriter fw = new FileWriter(deal_number, true);
+
+                                                                                            //String str = deal_with_number_3.get(j);
+
+                                                                                            fw.write(str_Dmultilist[part_i]);
+                                                                                            fw.write(' ');
+
+                                                                                            fw.close();
+
+                                                                                            //txt = Toast.makeText(Multi_main.this, "寫入", Toast.LENGTH_SHORT);
+                                                                                            //txt.show();
+
+                                                                                        } catch (Exception e) {
+
+                                                                                            //txt = Toast.makeText(Multi_main.this, "寫入失敗", Toast.LENGTH_SHORT);
+                                                                                            //txt.show();
+
+                                                                                        }
+                                                                                    }
+
+                                                                                    //2022-2-15
+                                                                                    if(sup_adjust == 1)
+                                                                                    {
+                                                                                        try {
+                                                                                            File deal_number = new File(getFilesDir(), "deal_number.txt");
+                                                                                            FileWriter fw = new FileWriter(deal_number, true);
+
+                                                                                            //String str = deal_with_number_3.get(j);
+
+                                                                                            fw.write(str_Dmultilist[part_i]);
+                                                                                            fw.write(' ');
+
+                                                                                            fw.close();
+
+                                                                                            //txt = Toast.makeText(Multi_main.this, "寫入", Toast.LENGTH_SHORT);
+                                                                                            //txt.show();
+
+                                                                                        } catch (Exception e) {
+
+                                                                                            //txt = Toast.makeText(Multi_main.this, "寫入失敗", Toast.LENGTH_SHORT);
+                                                                                            //txt.show();
+
+                                                                                        }
+                                                                                    }
+
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                            }
+                                                                        });
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                            } catch (Exception b404) {
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
@@ -633,7 +963,7 @@ public class Multi_main extends AppCompatActivity {
                 intent.putExtras(bundle);
 
                 //跳轉到下一頁，處理資訊
-                intent.setClass(Multi_main.this, Multi_deal_with.class);
+                intent.setClass(Multi_main.this, MDW.class);
                 startActivity(intent);
                 finish();
             }

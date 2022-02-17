@@ -110,15 +110,6 @@ public class Multi_deal_with extends AppCompatActivity {
             fos_place_des.write(nothing_array);
             fos_place_des.close();
 
-            File deal_number = new File(getFilesDir(), "deal_number.txt");   //待處理的序號
-
-            //初始化place_des的txt檔案
-            FileOutputStream fos_deal_number = new FileOutputStream(deal_number);
-            String nothing_number = "";
-            byte[] nothing_number_array = nothing_number.getBytes();
-            fos_deal_number.write(nothing_number_array);
-            fos_deal_number.close();
-
             FileInputStream fis_Enumber = new FileInputStream(environment_txt_number);
             FileInputStream fis_Ename = new FileInputStream(environment_txt_name);
             FileInputStream fis_Elist = new FileInputStream(environment_txt_list);
@@ -332,6 +323,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                 if (sup_adjust == 0)
                                                                                 {
                                                                                     try {
+                                                                                        File deal_number = new File(getFilesDir(), "deal_number.txt");
                                                                                         FileWriter fw = new FileWriter(deal_number, true);
 
                                                                                         //String str = deal_with_number_3.get(j);
@@ -356,6 +348,7 @@ public class Multi_deal_with extends AppCompatActivity {
                                                                                 if(sup_adjust == 1)
                                                                                 {
                                                                                     try {
+                                                                                        File deal_number = new File(getFilesDir(), "deal_number.txt");
                                                                                         FileWriter fw = new FileWriter(deal_number, true);
 
                                                                                         //String str = deal_with_number_3.get(j);

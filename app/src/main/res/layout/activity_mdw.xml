@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical"
-    tools:context=".Multi_main">
+    tools:context=".MDW">
 
 
     <ScrollView
@@ -68,123 +68,6 @@
                 android:orientation="horizontal"></LinearLayout>
 
             <LinearLayout
-                android:id="@+id/L_IDhint"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/space_ID"
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/exist_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="環境選擇"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/L_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/L_space_search"
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Spinner
-                        android:id="@+id/environment_choice"
-                        android:layout_width="300dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="0.25"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                </LinearLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/BT_find"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="24dp"
-                        android:layoutDirection="rtl"
-                        android:text="查找"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/L_result_F"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/space_re"
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/tvResult"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="查詢狀態"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/L_equipment_information_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/space_ei"
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/search_hint"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/L_space"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/L_result_M"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -199,7 +82,7 @@
                     android:id="@+id/tvMap"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="環境資訊"
+                    android:text="存在的號碼資訊"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -218,7 +101,7 @@
                 <TextView
                     android:id="@+id/check"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|top|left"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
@@ -244,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="開始搜尋設備"
+                    android:text="開啟地圖"
                     tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView

@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_mdw.xml" value="0.264" />
+        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_main.xml" value="0.21157407407407408" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.265625" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/drawable/ic_launcher_background.xml" value="0.265625" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_display_map.xml" value="0.24947916666666667" />
