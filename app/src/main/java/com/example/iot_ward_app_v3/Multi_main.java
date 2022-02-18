@@ -57,6 +57,7 @@ public class Multi_main extends AppCompatActivity {
     ArrayList<String> deal_with_number_1 = new ArrayList<String>();
     ArrayList<String> deal_with_number_2 = new ArrayList<String>();
     ArrayList<String> deal_with_number_3 = new ArrayList<String>();
+    ArrayList<String> deal_with_number_sup = new ArrayList<String>();
 
     String beacon_name; //設備名稱
     String esp32_switch_unlock = "No"; //beacon選擇的spinner使用
@@ -380,8 +381,7 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                             long second_sup = second_sup_get.getValue(Integer.class);
 
                                                                                                                             //超時sup
-                                                                                                                            if ((time_now - (Timesup + second_sup)) > 180)
-                                                                                                                            {
+                                                                                                                            if ((time_now - (Timesup + second_sup)) > 180) {
                                                                                                                                 search_hint.setText("code3-2：檢查完成，有該環境的即時資料");
                                                                                                                                 //long A = time_now - (Time1 + second_1);
                                                                                                                                 //search_hint.setText(Time1+"檢查點");
@@ -418,7 +418,7 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                                 fos_deal_number.write(nothing_number_array);
                                                                                                                                 fos_deal_number.close();
 
-                                                                                                                            }else{
+                                                                                                                            } else {
 
                                                                                                                                 search_hint.setText("code3-1：檢查完成，有該環境的即時資料");
                                                                                                                                 //long A = time_now - (Time1 + second_1);
@@ -457,7 +457,7 @@ public class Multi_main extends AppCompatActivity {
                                                                                                                                 fos_deal_number.close();
                                                                                                                             }
 
-                                                                                                                        }catch (Exception sup_404) {
+                                                                                                                        } catch (Exception sup_404) {
 
                                                                                                                             search_hint.setText("Ecode3-2：檢查完成，有該環境的即時資料");
                                                                                                                             //long A = time_now - (Time1 + second_1);
@@ -811,11 +811,6 @@ public class Multi_main extends AppCompatActivity {
 
                                                             long second_2 = B_second2.getValue(Integer.class);
 
-                                                            //Toast txt = Toast.makeText(Multi_deal_with.this, time2 + "", Toast.LENGTH_SHORT);
-                                                            //txt.show();
-                                                            //txt = Toast.makeText(Multi_deal_with.this, second_2+"", Toast.LENGTH_SHORT);
-                                                            //txt.show();
-
                                                             //第二個esp32偵測他的時間差小於120秒，開始第三個
                                                             if ((time_now - (time2 + second_2)) < 120) {
                                                                 deal_with_number_2.add(str_Dmultilist[part_i]);
@@ -848,8 +843,7 @@ public class Multi_main extends AppCompatActivity {
                                                                                     //txt.show();
 
 
-                                                                                    if (sup_adjust == 0)
-                                                                                    {
+                                                                                    if (sup_adjust == 0) {
                                                                                         try {
                                                                                             File deal_number = new File(getFilesDir(), "deal_number.txt");
                                                                                             FileWriter fw = new FileWriter(deal_number, true);
@@ -873,18 +867,65 @@ public class Multi_main extends AppCompatActivity {
                                                                                     }
 
                                                                                     //2022-2-15
-                                                                                    if(sup_adjust == 1)
-                                                                                    {
+                                                                                    if (sup_adjust == 1) {
                                                                                         try {
-                                                                                            File deal_number = new File(getFilesDir(), "deal_number.txt");
-                                                                                            FileWriter fw = new FileWriter(deal_number, true);
 
-                                                                                            //String str = deal_with_number_3.get(j);
+                                                                                            beacon_time_check_sup.addValueEventListener(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot B_timesup) {
 
-                                                                                            fw.write(str_Dmultilist[part_i]);
-                                                                                            fw.write(' ');
+                                                                                                    try {
+                                                                                                        long timesup = B_timesup.getValue(Integer.class);
 
-                                                                                            fw.close();
+                                                                                                        beacon_time_check_second_sup.addValueEventListener(new ValueEventListener() {
+                                                                                                            @Override
+                                                                                                            public void onDataChange(@NonNull DataSnapshot B_secondsup) {
+
+                                                                                                                try {
+
+                                                                                                                    long second_sup = B_secondsup.getValue(Integer.class);
+
+                                                                                                                    if ((time_now - (timesup + second_sup)) < 120) {
+                                                                                                                        deal_with_number_sup.add(str_Dmultilist[part_i]);
+
+                                                                                                                        try {
+                                                                                                                            File deal_number = new File(getFilesDir(), "deal_number.txt");
+                                                                                                                            FileWriter fw = new FileWriter(deal_number, true);
+
+                                                                                                                            fw.write(str_Dmultilist[part_i]);
+                                                                                                                            fw.write(' ');
+
+                                                                                                                            fw.close();
+
+                                                                                                                        }catch (Exception e) {
+
+                                                                                                                        }
+
+                                                                                                                    }
+
+                                                                                                                }catch (Exception e) {
+
+                                                                                                                }
+                                                                                                            }
+
+                                                                                                            @Override
+                                                                                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }catch (Exception e) {
+
+                                                                                                    }
+
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                }
+                                                                                            });
+
 
                                                                                             //txt = Toast.makeText(Multi_main.this, "寫入", Toast.LENGTH_SHORT);
                                                                                             //txt.show();
@@ -956,11 +997,55 @@ public class Multi_main extends AppCompatActivity {
                 //你選擇的房間
                 int send_room = room_choice;
                 int need_sup = sup_adjust;
+
+                //Toast txt = Toast.makeText(Multi_main.this,"sup_adjust："+sup_adjust+"", Toast.LENGTH_SHORT);
+                //txt.show();
+
                 bundle.putInt("room_choice", send_room);
-                bundle.putInt("sup_adjust" , need_sup );
+                bundle.putInt("sup_adjust", need_sup);
 
                 //打包，沒寫會出錯
                 intent.putExtras(bundle);
+
+                File RSSI_inf = new File(getFilesDir(), "RSSI_inf.txt");   //待處理的序號
+
+                //初始化RSSI_inf(RSSI資訊)的txt檔案
+                FileOutputStream fos_RSSI_inf = null;
+                try {
+                    fos_RSSI_inf = new FileOutputStream(RSSI_inf);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    String nothing_number = "";
+                    byte[] nothing_number_array = nothing_number.getBytes();
+                    fos_RSSI_inf.write(nothing_number_array);
+                    fos_RSSI_inf.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File place_des = new File(getFilesDir(), "place_des.txt");   //待處理的序號
+
+                //初始化place_des的txt檔案
+                FileOutputStream fos_place_des = null;
+                try {
+                    fos_place_des  = new FileOutputStream(place_des);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    String nothing_number = "";
+                    byte[] nothing_number_array = nothing_number.getBytes();
+                    fos_place_des.write(nothing_number_array);
+                    fos_place_des.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 //跳轉到下一頁，處理資訊
                 intent.setClass(Multi_main.this, MDW.class);
