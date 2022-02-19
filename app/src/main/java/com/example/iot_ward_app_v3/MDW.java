@@ -51,7 +51,7 @@ public class MDW extends AppCompatActivity {
     private void dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示訊息");  //設置標題
-        builder.setIcon(R.mipmap.ic_launcher_round); //標題前面那個小圖示
+        builder.setIcon(R.drawable.logo4); //標題前面那個小圖示
         builder.setMessage("搜尋完成"); //提示訊息
 
         builder.setPositiveButton("確定",((dialog, which) -> {}));
