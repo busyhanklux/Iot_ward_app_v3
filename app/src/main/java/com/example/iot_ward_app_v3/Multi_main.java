@@ -997,12 +997,16 @@ public class Multi_main extends AppCompatActivity {
                 //你選擇的房間
                 int send_room = room_choice;
                 int need_sup = sup_adjust;
+                String door = door_choice;
+                String env_name = firebase_environment_sp[room_choice];
 
                 //Toast txt = Toast.makeText(Multi_main.this,"sup_adjust："+sup_adjust+"", Toast.LENGTH_SHORT);
                 //txt.show();
 
                 bundle.putInt("room_choice", send_room);
                 bundle.putInt("sup_adjust", need_sup);
+                bundle.putString("door_choice" , door);
+                bundle.putString("env_name" , env_name);
 
                 //打包，沒寫會出錯
                 intent.putExtras(bundle);

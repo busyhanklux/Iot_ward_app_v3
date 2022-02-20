@@ -36,25 +36,13 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/BT_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="回上頁"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0" />
-
-    <Button
         android:id="@+id/BT_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="回首頁"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.88"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/draw_pic"
         app:layout_constraintVertical_bias="0.90" />
@@ -66,7 +54,19 @@
         android:text="顏色圖例"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/draw_pic"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <Button
+        android:id="@+id/BT_icon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="描述說明"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/draw_pic"
         app:layout_constraintVertical_bias="0.9" />

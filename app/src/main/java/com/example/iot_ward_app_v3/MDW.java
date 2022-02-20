@@ -26,7 +26,7 @@ import java.io.FileWriter;
 
 public class MDW extends AppCompatActivity {
 
-    TextView check;
+    TextView check,tvMap;
     Button BT_Map_Open,BT_FMC;
     int RSSI1 , RSSI2 , RSSI3 , RSSIs;
     long time_now = System.currentTimeMillis() / 1000; //現在時間
@@ -39,6 +39,7 @@ public class MDW extends AppCompatActivity {
         dialog();
 
         check = findViewById(R.id.check);
+        tvMap = findViewById(R.id.tvMap);
 
         BT_Map_Open = findViewById(R.id.BT_Map_Open);
         BT_Map_Open.setOnClickListener(BT_Map_Open_L);
@@ -61,6 +62,7 @@ public class MDW extends AppCompatActivity {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((v -> {
 
             try {
+
                 File f = new File("/data/data/com.example.iot_ward_app_v3/files/deal_number.txt");
                 FileReader fr = new FileReader(f);
                 char [] fc = new char [(int)f.length()];
@@ -78,7 +80,11 @@ public class MDW extends AppCompatActivity {
 
                 int sup_adjust = bundle.getInt("sup_adjust");
                 int room_choice = bundle.getInt("room_choice");
+                int room_choice_display = room_choice +1;
+                String door_choice = bundle.getString("door_choice");
+                String env_name = bundle.getString("env_name");
 
+                tvMap.setText( "環境：" + env_name  +"\n存在的號碼資訊" + door_choice);
 
                 for (int i = 0; i < text_split.length; i++) {
 
@@ -648,12 +654,16 @@ public class MDW extends AppCompatActivity {
 
                 int sup_adjust = bundle.getInt("sup_adjust");
                 int room_choice = bundle.getInt("room_choice");
+                String door_choice = bundle.getString("door_choice");
+                String env_name = bundle.getString("env_name");
 
                 //你選擇的房間
                 Bundle bundle2 = new Bundle();
 
                 bundle2.putInt("room_choice", room_choice);
                 bundle2.putInt("sup_adjust", sup_adjust);
+                bundle2.putString("door_choice" , door_choice);
+                bundle2.putString("env_name" , env_name);
 
                 intent.putExtras(bundle2);
 

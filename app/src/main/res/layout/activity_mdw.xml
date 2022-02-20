@@ -40,7 +40,7 @@
                     android:id="@+id/BT_FMC"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="回功能選單" />
+                    android:text="回上頁" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -81,7 +81,8 @@
                 <TextView
                     android:id="@+id/tvMap"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="90dp"
+                    android:gravity="center|start"
                     android:text="存在的號碼資訊"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
