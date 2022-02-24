@@ -314,8 +314,8 @@ public class MDW2 extends AppCompatActivity {
                 int sup_adjust = bundle2.getInt("sup_adjust");
                 int room_choice = bundle2.getInt("room_choice");
 
-                Toast txt = Toast.makeText(MDW2.this,"sup_adjust："+sup_adjust+"room_choice："+ room_choice, Toast.LENGTH_SHORT);
-                txt.show();
+                //Toast txt = Toast.makeText(MDW2.this,"sup_adjust："+sup_adjust+"room_choice："+ room_choice, Toast.LENGTH_SHORT);
+                //txt.show();
 
                 //RSSI的資料
 
@@ -606,8 +606,8 @@ public class MDW2 extends AppCompatActivity {
                     }).show();
 
             }catch (Exception error){
-                Toast test = Toast.makeText(MDW2.this,"123",Toast.LENGTH_SHORT);
-                test.show();
+                //Toast test = Toast.makeText(MDW2.this,"123",Toast.LENGTH_SHORT);
+                //test.show();
             }
         }
     };
