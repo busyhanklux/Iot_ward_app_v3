@@ -82,7 +82,7 @@ public class display_Map extends AppCompatActivity {
         door_number.setText(String.valueOf(door));
 
         rule = bundle2.getInt("rule2");
-        //rule = 30;
+        //rule = -130;
 
         LinearLayout layout=(LinearLayout) findViewById(R.id.draw_pic);
         DrawView view=new DrawView(this);
