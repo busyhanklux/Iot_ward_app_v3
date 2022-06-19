@@ -105,7 +105,7 @@
 
                     <Spinner
                         android:id="@+id/beacon_id_spinner"
-                        android:layout_width="300dp"
+                        android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_weight="0.25"
                         tools:ignore="SpeakableTextPresentCheck" />

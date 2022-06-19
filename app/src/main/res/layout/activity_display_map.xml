@@ -23,8 +23,8 @@
 
     <LinearLayout
         android:id="@+id/draw_pic"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="0dp"
+        android:layout_height="426dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,6 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="90dp"
         android:textColor="#FFFFFF"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

@@ -16,25 +16,32 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".MDW2"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MDW"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Multi_deal_with2"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Multi_mapdisplay"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Multi_deal_with"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Multi_main"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".find_mode_choose"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Splash_Screen"
             android:exported="true"
