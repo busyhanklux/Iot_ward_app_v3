@@ -3,45 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_display_map.xml" value="0.22546296296296298" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_find_mode_choose.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_map.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_mdw.xml" value="0.264" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_mdw2.xml" value="0.22" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_deal_with.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_deal_with2.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_main.xml" value="0.21157407407407408" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_mapdisplay.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/activity_text.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/adminster_page.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/change_page__device.xml" value="0.14688675302966986" />
-        <entry key="..\:/Android studio project/Iot_ward_app_v3/app/src/main/res/layout/change_page__environment.xml" value="0.14688675302966986" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.265625" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/drawable/ic_launcher_background.xml" value="0.265625" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_display_map.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_find_mode_choose.xml" value="0.264" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main_old.xml" value="0.2246376811594203" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_map.xml" value="0.264" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_deal_with.xml" value="0.32546296296296295" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_main.xml" value="0.4" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_multi_mapdisplay.xml" value="0.32546296296296295" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_text.xml" value="0.14754098360655737" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/adminster_page.xml" value="0.536" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__device.xml" value="0.2609860664523044" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__device.xml" value="0.4" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__environment.xml" value="0.536" />
         <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page_device.xml" value="0.16019736842105264" />
-        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/splash_screen.xml" value="0.264" />
+        <entry key="..\:/Users/ABC/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/splash_screen.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_display_map.xml" value="0.2" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_find_mode_choose.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_map.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_mdw2.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/activity_text.xml" value="0.10724043715846994" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/Iot_ward_app_v3/app/src/main/res/layout/change_page__environment.xml" value="0.15493421052631579" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

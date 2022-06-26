@@ -212,7 +212,7 @@ public class change_page__device extends AppCompatActivity {
                                     run_count = 0;
 
                                     ArrayList<String> room_name = new ArrayList<String>();
-                                    room_name.add("請選擇環境");
+                                    room_name.add("請選擇設備");
 
                                     for(int i = 0; i < D_multilist.length; i++){
 

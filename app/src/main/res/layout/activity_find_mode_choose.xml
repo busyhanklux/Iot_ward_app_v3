@@ -23,7 +23,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="1350dp">
+                android:layout_height="1292dp">
 
                 <TextView
                     android:id="@+id/choose_title"
@@ -79,8 +79,8 @@
 
                 <ImageView
                     android:id="@+id/One_device_I"
-                    android:layout_width="352dp"
-                    android:layout_height="153dp"
+                    android:layout_width="245dp"
+                    android:layout_height="149dp"
                     android:layout_marginTop="225dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
